@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/home" class="brand">Gestión de Reservas</a>
+  </div>
+
+  <div class="navbar-right">
+    <ng-container *ngIf="isAuthenticated; else guestLinks">
+      <span class="user-info">Hola, {{ nombreCuenta }}</span>
+      <button type="button" (click)="logout()">Cerrar sesión</button>
+    </ng-container>
+
+    <ng-template #guestLinks>
+      <a routerLink="/login">Iniciar sesión</a>
+      <a routerLink="/register">Registrarse</a>
+    </ng-template>
+  </div>
+</nav>

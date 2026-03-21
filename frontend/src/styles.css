@@ -1,1 +1,39 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --bg-dark: #020b1d;
+  --card-dark: #051028;
+  --card-border: rgba(77, 129, 255, 0.18);
+  --input-dark: #1b2b44;
+  --input-focus: #213451;
+  --primary-blue: #2f80ed;
+  --primary-blue-light: #3f8efc;
+  --text-white: #ffffff;
+  --text-soft: #8ea2c3;
+  --text-label: #78a8f0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input {
+  font: inherit;
+}
