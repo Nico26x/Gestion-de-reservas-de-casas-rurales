@@ -1,0 +1,49 @@
+package com.reservas.controller;
+
+import com.reservas.dto.LoginRequestDTO;
+import com.reservas.dto.LoginResponseDTO;
+import com.reservas.security.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
+public class AuthController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getNombreCuenta(),
+                            request.getContrasena()
+                    )
+            );
+
+            String nombreCuenta = authentication.getName();
+            String token = jwtUtil.generarToken(nombreCuenta);
+
+            return ResponseEntity.ok(
+                    new LoginResponseDTO(token, nombreCuenta, "Login exitoso")
+            );
+
+        } catch (BadCredentialsException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponseDTO(null, null, "Credenciales incorrectas"));
+        }
+    }
+}
