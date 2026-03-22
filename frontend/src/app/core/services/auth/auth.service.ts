@@ -4,6 +4,8 @@ import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoginRequest } from '../../models/auth/login-request.model';
 import { AuthResponse } from '../../models/auth/auth-response.model';
+import { RegisterRequest } from '../../models/auth/register-request.model';
+import { RegisterResponse } from '../../models/auth/register-response.model';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -22,6 +24,10 @@ export class AuthService {
         this.storageService.setNombreCuenta(response.nombreCuenta);
       })
     );
+  }
+
+  register(data: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/registro`, data);
   }
 
   logout(): void {

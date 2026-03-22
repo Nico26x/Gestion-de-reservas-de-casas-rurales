@@ -36,16 +36,13 @@ public class AuthController {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getNombreCuenta(),
-                            request.getContrasena()
-                    )
-            );
+                            request.getContrasena()));
 
             String nombreCuenta = authentication.getName();
             String token = jwtUtil.generarToken(nombreCuenta);
 
             return ResponseEntity.ok(
-                    new LoginResponseDTO(token, nombreCuenta, "Login exitoso")
-            );
+                    new LoginResponseDTO(token, nombreCuenta, "Login exitoso"));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity
@@ -59,11 +56,10 @@ public class AuthController {
         try {
             RegistroResponseDTO respuesta = propietarioService.registrarPropietario(dto);
             return ResponseEntity.ok(respuesta);
-         } 
-         catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(new RegistroResponseDTO(e.getMessage(), null));
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new RegistroResponseDTO(e.getMessage(), null));
+        }
     }
-}
 }

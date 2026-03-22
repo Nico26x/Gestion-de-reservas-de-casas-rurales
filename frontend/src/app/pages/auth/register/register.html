@@ -1,0 +1,34 @@
+<div class="register-container">
+  <h2>Registro</h2>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="nombreCuenta">Nombre de cuenta</label>
+      <input
+        id="nombreCuenta"
+        type="text"
+        formControlName="nombreCuenta"
+        placeholder="Ingresa tu nombre de cuenta"
+      />
+    </div>
+
+    <div>
+      <label for="contrasena">Contraseña</label>
+      <input
+        id="contrasena"
+        type="password"
+        formControlName="contrasena"
+        placeholder="Ingresa tu contraseña"
+      />
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Registrando...' : 'Registrarse' }}
+    </button>
+  </form>
+
+  <p>
+    ¿Ya tienes cuenta?
+    <a routerLink="/login">Inicia sesión</a>
+  </p>
+</div>
