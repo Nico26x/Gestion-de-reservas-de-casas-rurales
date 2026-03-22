@@ -2,7 +2,11 @@ package com.reservas.controller;
 
 import com.reservas.dto.LoginRequestDTO;
 import com.reservas.dto.LoginResponseDTO;
+import com.reservas.dto.RegistroRequestDTO;
+import com.reservas.dto.RegistroResponseDTO;
 import com.reservas.security.JwtUtil;
+import com.reservas.service.PropietarioService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +26,9 @@ public class AuthController {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private PropietarioService propietarioService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
@@ -46,4 +53,17 @@ public class AuthController {
                     .body(new LoginResponseDTO(null, null, "Credenciales incorrectas"));
         }
     }
+
+    @PostMapping("/registro")
+    public ResponseEntity<RegistroResponseDTO> registrar(@RequestBody RegistroRequestDTO dto) {
+        try {
+            RegistroResponseDTO respuesta = propietarioService.registrarPropietario(dto);
+            return ResponseEntity.ok(respuesta);
+         } 
+         catch (RuntimeException e) {
+            return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new RegistroResponseDTO(e.getMessage(), null));
+    }
+}
 }
