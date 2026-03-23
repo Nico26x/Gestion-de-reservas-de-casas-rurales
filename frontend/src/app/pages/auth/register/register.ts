@@ -26,8 +26,8 @@ export class RegisterComponent {
   loading = false;
 
   registerForm = this.fb.group({
-    nombreCuenta: ['', [Validators.required, Validators.minLength(3)]],
-    contrasena: ['', [Validators.required, Validators.minLength(5)]]
+    nombreCuenta: ['', [Validators.required]],
+    contrasena: ['', [Validators.required]]
   });
 
   onSubmit(): void {

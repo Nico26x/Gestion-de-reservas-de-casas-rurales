@@ -26,7 +26,7 @@ export class LoginComponent {
 
   loginForm = this.fb.group({
     nombreCuenta: ['', Validators.required],
-    contrasena: ['', [Validators.required, Validators.minLength(5)]]
+    contrasena: ['', [Validators.required]]
   });
 
   onSubmit(): void {
