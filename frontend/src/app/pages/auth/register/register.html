@@ -1,5 +1,28 @@
 <div class="register-container">
+  <div class="rp-scene" aria-hidden="true">
+    <div class="rp-mist"></div>
+    <div class="rp-mist"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+  </div>
+
   <h2>Registro</h2>
+  <p class="rp-subtitle">Gestión de Casas Rurales</p>
+
 
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div>
@@ -11,6 +34,8 @@
         placeholder="Ingresa tu nombre de cuenta"
       />
     </div>
+
+    <div class="rp-divider"><span>acceso seguro</span></div>
 
     <div>
       <label for="contrasena">Contraseña</label>

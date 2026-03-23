@@ -6,9 +6,9 @@ export const fireSuccessAlert = (title: string, text: string) => {
     title,
     text,
     confirmButtonText: 'Continuar',
-    background: '#051028',
-    color: '#ffffff',
-    confirmButtonColor: '#2f80ed'
+    background: '#ffffff',
+    color: '#10243a',
+    confirmButtonColor: '#1f596b'
   });
 };
 
@@ -18,9 +18,9 @@ export const fireErrorAlert = (title: string, text: string) => {
     title,
     text,
     confirmButtonText: 'Entendido',
-    background: '#051028',
-    color: '#ffffff',
-    confirmButtonColor: '#2f80ed'
+    background: '#ffffff',
+    color: '#10213a',
+    confirmButtonColor: '#1f576b'
   });
 };
 
@@ -30,8 +30,8 @@ export const fireWarningAlert = (title: string, text: string) => {
     title,
     text,
     confirmButtonText: 'Entendido',
-    background: '#051028',
-    color: '#ffffff',
-    confirmButtonColor: '#2f80ed'
+    background: '#ffffff',
+    color: '#10223a',
+    confirmButtonColor: '#1f546b'
   });
 };
