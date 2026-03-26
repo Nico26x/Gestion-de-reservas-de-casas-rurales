@@ -2,11 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import Swal from 'sweetalert2';
 
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { LoginRequest } from '../../../core/models/auth/login-request.model';
-
+import {
+  fireErrorAlert,
+  fireSuccessAlert,
+  fireWarningAlert
+} from '../../../shared/utils/sweet-alert.util';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -23,18 +26,17 @@ export class LoginComponent {
 
   loginForm = this.fb.group({
     nombreCuenta: ['', Validators.required],
-    contrasena: ['', [Validators.required, Validators.minLength(5)]]
+    contrasena: ['', [Validators.required]]
   });
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
 
-      Swal.fire({
-        icon: 'warning',
-        title: 'Formulario incompleto',
-        text: 'Debes diligenciar correctamente los campos del login.'
-      });
+      fireWarningAlert(
+      'Formulario incompleto',
+      'Debes diligenciar correctamente los campos del login.'
+    );
 
       return;
     }
@@ -50,26 +52,23 @@ export class LoginComponent {
       next: (response) => {
         this.loading = false;
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Inicio de sesión exitoso',
-          text: response.mensaje || 'Bienvenido al sistema',
-          confirmButtonText: 'Continuar'
-        }).then(() => {
-          this.router.navigate(['/home']);
-        });
-      },
+        fireSuccessAlert(
+        'Inicio de sesión exitoso',
+        response.mensaje || 'Bienvenido al sistema'
+      ).then(() => {
+        this.router.navigate(['/home']);
+      });
+    },
       error: (error) => {
         this.loading = false;
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al iniciar sesión',
-          text:
-            error?.error?.mensaje ||
-            error?.error?.message ||
-            'Credenciales inválidas. Verifica tus datos e inténtalo de nuevo.'
-        });
+        fireErrorAlert(
+        'Error al iniciar sesión',
+        error?.error?.mensaje ||
+          error?.error?.message ||
+          'Credenciales inválidas. Verifica tus datos e inténtalo de nuevo.'
+      );
+
       }
     });
   }

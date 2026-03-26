@@ -1,0 +1,59 @@
+<div class="register-container">
+  <div class="rp-scene" aria-hidden="true">
+    <div class="rp-mist"></div>
+    <div class="rp-mist"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-firefly"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+    <div class="rp-particle"></div>
+  </div>
+
+  <h2>Registro</h2>
+  <p class="rp-subtitle">Gestión de Casas Rurales</p>
+
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="nombreCuenta">Nombre de cuenta</label>
+      <input
+        id="nombreCuenta"
+        type="text"
+        formControlName="nombreCuenta"
+        placeholder="Ingresa tu nombre de cuenta"
+      />
+    </div>
+
+    <div class="rp-divider"><span>acceso seguro</span></div>
+
+    <div>
+      <label for="contrasena">Contraseña</label>
+      <input
+        id="contrasena"
+        type="password"
+        formControlName="contrasena"
+        placeholder="Ingresa tu contraseña"
+      />
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Registrando...' : 'Registrarse' }}
+    </button>
+  </form>
+
+  <p>
+    ¿Ya tienes cuenta?
+    <a routerLink="/login">Inicia sesión</a>
+  </p>
+</div>

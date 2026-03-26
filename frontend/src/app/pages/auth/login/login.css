@@ -1,130 +1,311 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Outfit:wght@300;400;500&display=swap');
+
+/* VARIABLES */
 :host {
   display: block;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
+  font-family: 'Outfit', sans-serif;
 }
 
+/* LAYOUT SPLIT Izquierda/Derecha */
 .login-page {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #020b1d;
-  padding: 24px;
+  background: #f0f4fa;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
 }
 
+/* =======================
+   LADO IZQUIERDO — Escena
+======================== */
+.scene-side {
+  width: 50%;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: #f0f4fa;
+}
+
+.scene-side::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 75%,
+  rgba(80, 120, 180, .1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ──> Anillos tipo orbita */
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px dashed rgba(70, 110, 180, .22);
+  transform: translate(-50%, -50%);
+}
+
+.orbit1 { width: 680px; height: 680px; animation: orbSpin 24s linear infinite; }
+.orbit2 { width: 580px; height: 580px; animation: orbSpin 18s linear infinite reverse; }
+.orbit3 { width: 480px; height: 480px; animation: orbSpin 30s linear infinite; }
+
+@keyframes orbSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.odot {
+  position: absolute;
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.odot1 { width: 20px; height: 20px; background: #5b8dd9; }
+.odot2 { width: 18px; height: 18px; background: #3a6ab8; top: -2.5px; }
+.odot3 { width: 15px; height: 15px; background: #7aaae8; top: -2px; }
+
+/* ──> Casa: flota */
+.house-wrap {
+  position: relative;
+  z-index: 2;
+  perspective: 900px;
+  animation: houseFloat 4s ease-in-out infinite;
+}
+
+@keyframes houseFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+.house-wrap svg {
+  display: block;
+  transform-origin: center center;
+  animation: houseSpin 18s ease-in-out infinite;
+}
+
+/* Sombra bajo la casa */
+.house-shadow {
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 13px;
+  background: rgba(60, 90, 160, .12);
+  border-radius: 50%;
+  filter: blur(5px);
+  animation: shadowPulse 4s ease-in-out infinite;
+}
+
+@keyframes shadowPulse {
+  0%, 100% { width: 110px; opacity: .7; }
+  50%       { width:  85px; opacity: .4; }
+}
+
+/* ──> Partículas de Polvo */
+.dust-wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dust-p {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(80, 120, 200, .25);
+  pointer-events: none;
+  animation: dustUp linear infinite;
+}
+
+@keyframes dustUp {
+  0%   { opacity: 0;   transform: translateY(0)      translateX(0); }
+  10%  { opacity: .8; }
+  90%  { opacity: .2; }
+  100% { opacity: 0;   transform: translateY(-320px) translateX(var(--dx)); }
+}
+
+/* ==========================
+   LADO DERECHO — formulario
+========================== */
 .login-card {
-  width: 100%;
-  max-width: 450px;
-  background: rgba(5, 16, 40, 0.95);
-  border: 1px solid rgba(77, 129, 255, 0.18);
-  border-radius: 16px;
-  padding: 32px 26px 24px;
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(59, 130, 246, 0.04) inset;
+  width: 50%;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  background: #ffffff;
+  border-left: 1px solid #d0ddf0;
 }
 
 .login-icon {
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 22px;
-  border-radius: 16px;
-  background: rgba(25, 52, 105, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #4ea1ff;
-  font-size: 28px;
+  font-size: 2rem;
+  color: #3a6ab8;
+  opacity: .55;
+  margin-bottom: .5rem;
+  text-align: center;
+  line-height: 1;
+}
+
+.welcome-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: #1a2d4a;
+  text-align: center;
+  margin: 0.2rem 0 0.2rem 0;
+  letter-spacing: 0.05em;
 }
 
 .login-title {
-  margin: 0 0 28px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  color: #1a2d4a;
   text-align: center;
-  color: #ffffff;
-  font-size: 1.9rem;
-  font-weight: 700;
   line-height: 1.25;
+  margin-bottom: 0;
+  max-width: 300px;
+}
+
+.login-title::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 2px;
+  background: #5b8dd9;
+  border-radius: 2px;
+  margin: .65rem auto 1.8rem;
+  opacity: .75;
 }
 
 .login-form {
+  width: 100%;
+  max-width: 300px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 1.1rem;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: .4rem;
 }
 
 .form-label {
-  color: #78a8f0;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: .65rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #5a7aaa;
 }
 
 .form-input {
   width: 100%;
-  height: 48px;
-  border: none;
+  padding: .72rem .95rem;
+  background: #f4f7fd;
+  border: 1px solid #c5d4ec;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: .9rem;
+  color: #1a2d4a;
   outline: none;
-  border-radius: 12px;
-  background: #1b2b44;
-  color: #ffffff;
-  padding: 0 14px;
-  font-size: 0.95rem;
+  transition: border-color .2s, box-shadow .2s;
   box-sizing: border-box;
-  transition: all 0.2s ease;
 }
 
-.form-input::placeholder {
-  color: #7f93b4;
-}
+.form-input::placeholder { color: #94aed4; }
 
 .form-input:focus {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.45);
-  background: #213451;
+  border-color: #5b8dd9;
+  box-shadow: 0 0 0 3px rgba(91, 141, 217, .12);
+}
+
+.form-input.ng-invalid.ng-touched {
+  border-color: #d97b5a;
+  box-shadow: 0 0 0 3px rgba(217, 123, 90, .1);
 }
 
 .login-button {
-  margin-top: 4px;
-  height: 48px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #2f80ed, #3f8efc);
-  color: #071426;
-  font-size: 1rem;
-  font-weight: 700;
+  width: 100%;
+  padding: .82rem 1rem;
+  margin-top: .3rem;
+  background: linear-gradient(135deg, #1e4d8c 0%, #163a6e 100%);
+  color: #ddeeff;
+  font-family: 'Outfit', sans-serif;
+  font-size: .85rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(60, 100, 180, .3);
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.18s ease, opacity 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .2s, transform .2s;
 }
 
-.login-button:hover:not(:disabled) {
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent);
+  transition: left .5s;
+}
+
+.login-button:hover:not([disabled])::before { left: 100%; }
+.login-button:hover:not([disabled]) {
+  box-shadow: 0 4px 22px rgba(30, 77, 140, .3);
   transform: translateY(-1px);
 }
-
-.login-button:disabled {
-  opacity: 0.7;
+.login-button:active:not([disabled]) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.login-button[disabled] {
+  opacity: .5;
   cursor: not-allowed;
 }
 
 .login-footer {
-  margin-top: 24px;
-  text-align: center;
-  color: #8ea2c3;
-  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  margin-top: 1.25rem;
+  font-size: .82rem;
+  color: #7a9ac4;
 }
 
 .register-link {
-  margin-left: 6px;
-  color: #3594ff;
+  color: #1e4d8c;
+  font-weight: 500;
   text-decoration: none;
-  font-weight: 700;
+  border-bottom: 1px solid rgba(60, 100, 180, .35);
+  padding-bottom: 1px;
+  transition: color .2s, border-color .2s;
 }
 
 .register-link:hover {
-  text-decoration: underline;
+  color: #2a64b8;
+  border-color: rgba(60, 100, 180, .7);
+}
+
+/* ===============
+   Responsive
+=============== */
+@media (max-width: 700px) {
+  .login-page  { flex-direction: column; }
+  .scene-side  { min-height: 280px; flex: none; border-bottom: 1px solid #d0ddf0; }
+  .login-card  { max-width: 100%; border-left: none; }
+  .orbit1      { width: 220px; height: 220px; }
+  .orbit2      { width: 175px; height: 175px; }
+  .orbit3      { width: 130px; height: 130px; }
 }

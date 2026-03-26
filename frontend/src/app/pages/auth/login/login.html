@@ -1,12 +1,109 @@
 <div class="login-page">
+
+  <!-- ── LADO IZQUIERDO: escena animada ── -->
+  <div class="scene-side" aria-hidden="true">
+
+    <!-- DEFINICIÓN: Anillos orbitales -->
+    <div class="orbit orbit1"><div class="odot odot1"></div></div>
+    <div class="orbit orbit2"><div class="odot odot2"></div></div>
+    <div class="orbit orbit3"><div class="odot odot3"></div></div>
+
+    <!-- DEFINICIÓN: Casa -->
+    <div class="house-wrap">
+      <div class="house-shadow"></div>
+
+      <svg width="540" height="560" viewBox="0 0 180 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- sombra lateral 3D -->
+        <polygon points="140,80 165,65 165,155 140,170" fill="#2a5a9a" opacity="0.45"/>
+        <rect x="140" y="170" width="25" height="8" fill="#1a3a6a" opacity="0.3" rx="1"/>
+        <!-- base lateral (efecto 3D) -->
+        <polygon points="20,170 140,170 165,155 45,155" fill="#5a8ad4" opacity="0.55"/>
+        <!-- cuerpo principal -->
+        <rect x="20" y="80" width="120" height="90" fill="#7aaae8" rx="2"/>
+        <!-- franja horizontal decorativa -->
+        <rect x="20" y="125" width="120" height="4" fill="#4a7ac8" opacity="0.5"/>
+        <!-- techo principal -->
+        <polygon points="10,82 90,28 170,82" fill="#1e4d8c"/>
+        <!-- techo lateral 3D -->
+        <polygon points="170,82 165,65 90,12 90,28" fill="#163a6e" opacity="0.85"/>
+        <!-- borde techo -->
+        <polygon points="10,82 90,28 170,82" fill="none" stroke="#163a6e" stroke-width="1.5"/>
+        <!-- chimenea -->
+        <rect x="115" y="38" width="14" height="28" fill="#2a5a9a" rx="1"/>
+        <rect x="112" y="34" width="20" height="7" fill="#163a6e" rx="1"/>
+        <!-- humo animado -->
+        <circle cx="122" cy="26" r="5" fill="rgba(180,200,240,0.45)">
+          <animateTransform attributeName="transform" type="translate" values="0,0;-3,-18;-5,-35" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0.3;0" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="r" values="5;8;11" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="122" cy="26" r="4" fill="rgba(180,200,240,0.3)">
+          <animateTransform attributeName="transform" type="translate" values="0,0;2,-22;4,-40" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0.2;0" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+          <animate attributeName="r" values="4;7;10" dur="3s" begin="0.8s" repeatCount="indefinite"/>
+        </circle>
+        <!-- puerta -->
+        <rect x="72" y="130" width="28" height="40" fill="#1e4d8c" rx="3"/>
+        <rect x="72" y="130" width="28" height="40" fill="none" stroke="#163a6e" stroke-width="1" rx="3"/>
+        <circle cx="97" cy="151" r="2.5" fill="#7aaae8"/>
+        <!-- arco sobre la puerta -->
+        <path d="M72,132 Q86,118 100,132" fill="#163a6e" opacity="0.4"/>
+        <!-- ventana izquierda -->
+        <rect x="30" y="98" width="30" height="26" fill="#c8dff8" rx="2" opacity="0.85"/>
+        <rect x="30" y="98" width="30" height="26" fill="none" stroke="#3a6ab8" stroke-width="1.5" rx="2"/>
+        <line x1="45" y1="98" x2="45" y2="124" stroke="#3a6ab8" stroke-width="1"/>
+        <line x1="30" y1="111" x2="60" y2="111" stroke="#3a6ab8" stroke-width="1"/>
+        <!-- ventana derecha -->
+        <rect x="100" y="98" width="30" height="26" fill="#c8dff8" rx="2" opacity="0.85"/>
+        <rect x="100" y="98" width="30" height="26" fill="none" stroke="#3a6ab8" stroke-width="1.5" rx="2"/>
+        <line x1="115" y1="98" x2="115" y2="124" stroke="#3a6ab8" stroke-width="1"/>
+        <line x1="100" y1="111" x2="130" y2="111" stroke="#3a6ab8" stroke-width="1"/>
+        <!-- reflejos ventanas -->
+        <rect x="31" y="99" width="6" height="10" fill="white" opacity="0.3" rx="1"/>
+        <rect x="101" y="99" width="6" height="10" fill="white" opacity="0.3" rx="1"/>
+        <!-- base / escalón -->
+        <rect x="15" y="168" width="130" height="8" fill="#4a7ac8" rx="1" opacity="0.7"/>
+        <!-- jardinera izquierda -->
+        <rect x="25" y="164" width="22" height="6" fill="#3a6ab8" rx="1" opacity="0.6"/>
+        <circle cx="29" cy="162" r="3" fill="#d45a5a" opacity="0.8"/>
+        <circle cx="36" cy="161" r="3.5" fill="#e07050" opacity="0.8"/>
+        <circle cx="43" cy="163" r="2.5" fill="#d45a5a" opacity="0.7"/>
+        <!-- jardinera derecha -->
+        <rect x="113" y="164" width="22" height="6" fill="#3a6ab8" rx="1" opacity="0.6"/>
+        <circle cx="117" cy="162" r="3" fill="#e07050" opacity="0.8"/>
+        <circle cx="124" cy="161" r="3.5" fill="#d45a5a" opacity="0.8"/>
+        <circle cx="131" cy="163" r="2.5" fill="#e07050" opacity="0.7"/>
+        <!-- luz parpadeante ventana izq -->
+        <rect x="31" y="99" width="28" height="24" fill="#a0c8f8" rx="1" opacity="0">
+          <animate attributeName="opacity" values="0;0.15;0;0.1;0" dur="5s" begin="2s" repeatCount="indefinite"/>
+        </rect>
+        <!-- luz parpadeante ventana der -->
+        <rect x="101" y="99" width="28" height="24" fill="#a0c8f8" rx="1" opacity="0">
+          <animate attributeName="opacity" values="0;0.12;0;0.18;0" dur="7s" begin="1s" repeatCount="indefinite"/>
+        </rect>
+      </svg>
+    </div>
+
+    <!-- Partículas de polvo -->
+    <div class="dust-wrap" id="dustWrap"></div>
+
+  </div>
+
+  <!-- ── LADO DERECHO: Formulario de Login ── -->
   <div class="login-card">
+
     <div class="login-icon">
       <span>⌂</span>
     </div>
 
-    <h1 class="login-title">Gestión de Reservas de Casas Rurales</h1>
+    <h1 class="welcome-title">¡BIENVENIDO/A!</h1>
+
+    <h2 class="login-title">
+      Sistema de Gestión de Casas Rurales
+    </h2>
 
     <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
       <div class="form-group">
         <label class="form-label" for="nombreCuenta">Usuario</label>
         <input
@@ -32,11 +129,14 @@
       <button class="login-button" type="submit" [disabled]="loading">
         {{ loading ? 'Ingresando...' : 'Iniciar Sesión' }}
       </button>
+
     </form>
 
     <div class="login-footer">
       <span>¿No tienes cuenta?</span>
       <a routerLink="/register" class="register-link">Crea una</a>
     </div>
+
   </div>
+
 </div>
