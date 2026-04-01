@@ -1,13 +1,14 @@
 package com.reservas.service;
 
-import com.reservas.dto.CasaRequestDTO;
-import com.reservas.model.*;
-import com.reservas.repository.CasaRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.reservas.dto.CasaRequestDTO;
+import com.reservas.model.*;
+import com.reservas.repository.CasaRepository;
 
 @Service
 public class CasaService {
@@ -15,9 +16,9 @@ public class CasaService {
     @Autowired
     private CasaRepository casaRepository;
 
-    public Casa crearCasa(CasaRequestDTO dto) {
+    public Casa crearCasa(CasaRequestDTO dto, Propietario propietario) {
 
-        // 🔴 VALIDACIONES
+        // ✅ VALIDACIONES
         if (dto.getNumeroHabitaciones() < 3) {
             throw new RuntimeException("Debe tener al menos 3 habitaciones");
         }
@@ -30,11 +31,15 @@ public class CasaService {
             throw new RuntimeException("Debe tener al menos 1 cocina");
         }
 
+        // ✅ CREAR CASA
         Casa casa = new Casa();
         casa.setNombre(dto.getNombre());
         casa.setDireccion(dto.getDireccion());
 
-        // Crear habitaciones
+        // ✅ ASIGNAR PROPIETARIO
+        casa.setPropietario(propietario);
+
+        // ✅ HABITACIONES
         List<Habitacion> habitaciones = new ArrayList<>();
         for (int i = 0; i < dto.getNumeroHabitaciones(); i++) {
             Habitacion h = new Habitacion();
@@ -42,7 +47,7 @@ public class CasaService {
             habitaciones.add(h);
         }
 
-        // Crear baños
+        // ✅ BAÑOS
         List<Bano> banos = new ArrayList<>();
         for (int i = 0; i < dto.getNumeroBanos(); i++) {
             Bano b = new Bano();
@@ -50,7 +55,7 @@ public class CasaService {
             banos.add(b);
         }
 
-        // Crear cocinas
+        // ✅ COCINAS
         List<Cocina> cocinas = new ArrayList<>();
         for (int i = 0; i < dto.getNumeroCocinas(); i++) {
             Cocina c = new Cocina();
@@ -58,6 +63,7 @@ public class CasaService {
             cocinas.add(c);
         }
 
+        // ✅ ASIGNAR RELACIONES
         casa.setHabitaciones(habitaciones);
         casa.setBanos(banos);
         casa.setCocinas(cocinas);

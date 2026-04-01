@@ -1,7 +1,15 @@
 package com.reservas.model;
+
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "casas")
 public class Casa {
@@ -13,12 +21,14 @@ public class Casa {
     private String nombre;
     private String direccion;
 
+
     // Relación con propietario
     @ManyToOne
     @JoinColumn(name = "propietario_id", nullable = false)
+    @JsonIgnore
     private Propietario propietario;
 
-    // Relaciones (las implementaremos luego)
+    // Relaciones 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Habitacion> habitaciones;
 
@@ -28,5 +38,6 @@ public class Casa {
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Cocina> cocinas;
 
-    // Getters y Setters
+    //@Column(name = "foto")
+    //private String foto;
 }

@@ -21,22 +21,23 @@ public class PropietarioService {
 
     public RegistroResponseDTO registrarPropietario(RegistroRequestDTO dto) {
 
-        // Validar si el usuario ya existe
         if (propietarioRepository.existsByNombreCuenta(dto.getNombreCuenta())) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
 
-        // Encriptar contraseña
         String contrasenaEncriptada = passwordEncoder.encode(dto.getContrasena());
 
-        // Crear propietario
         Propietario propietario = new Propietario();
         propietario.setNombreCuenta(dto.getNombreCuenta());
         propietario.setContrasena(contrasenaEncriptada);
 
-        // Guardar en BD
         propietarioRepository.save(propietario);
 
         return new RegistroResponseDTO("Usuario registrado correctamente", propietario.getNombreCuenta());
+    }
+
+    public Propietario buscarPorUsername(String username) {
+        return propietarioRepository.findByNombreCuenta(username)
+                .orElseThrow(() -> new RuntimeException("Propietario no encontrado"));
     }
 }
