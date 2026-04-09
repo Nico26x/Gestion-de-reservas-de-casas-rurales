@@ -42,13 +42,21 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        // ── RUTAS PÚBLICAS ──────────────────────────────────────────
-                        .requestMatchers("/api/auth/login").permitAll()
+                        //  Públicas
+                       .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/registro").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/casas/**").permitAll()
-                        .requestMatchers("/api/casas/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/disponibilidad/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reservas").permitAll()
+
+                        //  Protegidas
+                        .requestMatchers(HttpMethod.POST, "/api/casas").authenticated()
+                        .requestMatchers("/api/paquetes/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/paquetes").authenticated()
+
+  
+
 
                         // ── TODO LO DEMÁS REQUIERE JWT ──────────────────────────────
                         .anyRequest().authenticated()

@@ -21,6 +21,8 @@ public class Casa {
     private String nombre;
     private String direccion;
 
+    @Column(name = "foto")
+    private String foto;
 
     // Relación con propietario
     @ManyToOne
@@ -38,6 +40,4 @@ public class Casa {
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Cocina> cocinas;
 
-    //@Column(name = "foto")
-    //private String foto;
 }

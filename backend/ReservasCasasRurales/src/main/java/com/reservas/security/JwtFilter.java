@@ -59,8 +59,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails userDetails = userDetailsService.loadUserByUsername(nombreCuenta);
 
             // 5. Validar el token
-            if (jwtUtil.validarToken(token)) {
-
+            if (jwtUtil.validarToken(token) && nombreCuenta.equals(userDetails.getUsername())) {
                 // 6. Crear el objeto de autenticación
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
@@ -76,6 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 // 7. Registrar la autenticación en el contexto de seguridad
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
+            System.out.println("AUTH HEADER: " + authHeader);
         }
 
         // 8. Continuar con el siguiente filtro en la cadena

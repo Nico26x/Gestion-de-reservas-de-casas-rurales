@@ -1,0 +1,38 @@
+package com.reservas.controller;
+
+import com.reservas.dto.PaqueteRequestDTO;
+import com.reservas.model.Paquete;
+import com.reservas.service.PaqueteService;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/paquetes")
+public class PaqueteController {
+
+    private final PaqueteService paqueteService;
+
+    public PaqueteController(PaqueteService paqueteService) {
+        this.paqueteService = paqueteService;
+    }
+
+    /**@PostMapping
+    public Paquete crearPaquete(@RequestBody PaqueteRequestDTO dto, Authentication authentication) {
+
+    String username = authentication.getName();
+    System.out.println("USUARIO AUTH: " + username);
+
+    return paqueteService.crearPaquete(dto);
+    }**//
+    @PostMapping
+    public Paquete crearPaquete(@RequestBody PaqueteRequestDTO dto, Authentication authentication) {
+
+    if (authentication == null) {
+        System.out.println("AUTH ES NULL ❌");
+    } else {
+        System.out.println("USUARIO AUTH: " + authentication.getName());
+    }
+
+    return paqueteService.crearPaquete(dto);
+}
+}
