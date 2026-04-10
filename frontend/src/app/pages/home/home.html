@@ -1,0 +1,16 @@
+<h1>Home</h1>
+
+<p>Bienvenido{{ nombreCuenta ? ', ' + nombreCuenta : '' }} al sistema.</p>
+
+<h2>Páginas disponibles</h2>
+
+<ul>
+  <li><a routerLink="/casas/crear">Ir a crear casa</a></li>
+  <li><a routerLink="/paquetes/crear">Ir a crear paquete</a></li>
+  <li><a routerLink="/reservas/crear">Ir a crear reserva</a></li>
+  <li><a routerLink="/register">Ir a registro</a></li>
+  <li><a routerLink="/login">Ir a login</a></li>
+</ul>
+
+<p *ngIf="isAuthenticated">Ya hay una sesión iniciada.</p>
+<p *ngIf="!isAuthenticated">No hay sesión iniciada.</p>

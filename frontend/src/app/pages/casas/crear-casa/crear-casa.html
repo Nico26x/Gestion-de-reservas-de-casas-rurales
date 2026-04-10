@@ -1,0 +1,39 @@
+<div class="crear-casa-container">
+  <h2>Registrar casa rural</h2>
+
+  <form [formGroup]="crearCasaForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" formControlName="nombre" />
+    </div>
+
+    <div>
+      <label for="direccion">Dirección</label>
+      <input id="direccion" type="text" formControlName="direccion" />
+    </div>
+
+    <div>
+      <label for="numeroHabitaciones">Número de habitaciones</label>
+      <input id="numeroHabitaciones" type="number" formControlName="numeroHabitaciones" />
+    </div>
+
+    <div>
+      <label for="numeroBanos">Número de baños</label>
+      <input id="numeroBanos" type="number" formControlName="numeroBanos" />
+    </div>
+
+    <div>
+      <label for="numeroCocinas">Número de cocinas</label>
+      <input id="numeroCocinas" type="number" formControlName="numeroCocinas" />
+    </div>
+
+    <div>
+      <label for="foto">Foto</label>
+      <input id="foto" type="file" accept="image/*" (change)="onFileSelected($event)" />
+    </div>
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Guardando...' : 'Registrar casa' }}
+    </button>
+  </form>
+</div>

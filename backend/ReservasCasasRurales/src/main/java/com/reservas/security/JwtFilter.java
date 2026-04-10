@@ -34,6 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         System.out.println("JWT FILTER EJECUTADO");
         // 1. Extraer el header Authorization del request
         String authHeader = request.getHeader("Authorization");
@@ -81,5 +86,5 @@ public class JwtFilter extends OncePerRequestFilter {
         // 8. Continuar con el siguiente filtro en la cadena
         filterChain.doFilter(request, response);
     }
-    
+
 }
