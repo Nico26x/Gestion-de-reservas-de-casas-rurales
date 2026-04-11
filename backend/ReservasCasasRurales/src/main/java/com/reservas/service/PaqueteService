@@ -22,16 +22,15 @@ public class PaqueteService {
         this.casaRepository = casaRepository;
     }
 
-    public Paquete crearPaquete(PaqueteRequestDTO dto) {
+    public Paquete crearPaquete(PaqueteRequestDTO dto, String username) {
 
-        // 1. VALIDAR FECHAS
-        if (dto.getFechaInicio().isAfter(dto.getFechaFin())) {
-            throw new RuntimeException("La fecha de inicio no puede ser mayor que la fecha fin");
-        }
-
-        // 2. BUSCAR CASA
         Casa casa = casaRepository.findById(dto.getCasaId())
                 .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
+
+        // VALIDAR PROPIETARIO
+        if (!casa.getPropietario().getNombreCuenta().equals(username)) {
+            throw new RuntimeException("No puedes crear paquetes en casas que no son tuyas");
+        }
 
         // 3. VALIDAR SOLAPAMIENTOS
         List<Paquete> paquetesSolapados =

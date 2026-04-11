@@ -62,7 +62,7 @@ public class SecurityConfig {
 
                         //  Protegidas
                         .requestMatchers(HttpMethod.POST, "/api/casas").authenticated()
-                        .requestMatchers("/api/paquetes/**").authenticated()
+                        .requestMatchers("/api/paquetes/**").hasRole("PROPIETARIO")
                         .requestMatchers(HttpMethod.POST, "/api/paquetes").authenticated()
 
                         // ── TODO LO DEMÁS REQUIERE JWT ──────────────────────────────

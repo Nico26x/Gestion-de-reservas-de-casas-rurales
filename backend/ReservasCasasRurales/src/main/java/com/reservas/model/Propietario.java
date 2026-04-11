@@ -24,4 +24,7 @@ public class Propietario {
 
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
+
+    @Column(name = "rol")
+    private String rol;
 }

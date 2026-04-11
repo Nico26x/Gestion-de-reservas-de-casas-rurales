@@ -31,13 +31,16 @@ public class PropietarioService {
         propietario.setNombreCuenta(dto.getNombreCuenta());
         propietario.setContrasena(contrasenaEncriptada);
 
+        propietario.setRol("ROLE_PROPIETARIO");
+
         propietarioRepository.save(propietario);
 
         return new RegistroResponseDTO("Usuario registrado correctamente", propietario.getNombreCuenta());
     }
 
-    public Propietario buscarPorUsername(String username) {
-        return propietarioRepository.findByNombreCuenta(username)
-                .orElseThrow(() -> new RuntimeException("Propietario no encontrado"));
+
+    public Propietario buscarPorNombreCuenta(String nombreCuenta) {
+        return propietarioRepository.findByNombreCuenta(nombreCuenta)
+            .orElseThrow(() -> new RuntimeException("Propietario no encontrado"));
     }
 }

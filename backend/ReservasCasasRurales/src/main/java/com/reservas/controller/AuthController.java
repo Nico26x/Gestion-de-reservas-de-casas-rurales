@@ -4,6 +4,7 @@ import com.reservas.dto.LoginRequestDTO;
 import com.reservas.dto.LoginResponseDTO;
 import com.reservas.dto.RegistroRequestDTO;
 import com.reservas.dto.RegistroResponseDTO;
+import com.reservas.model.Propietario;
 import com.reservas.security.JwtUtil;
 import com.reservas.service.PropietarioService;
 
@@ -39,15 +40,20 @@ public class AuthController {
                             request.getContrasena()));
 
             String nombreCuenta = authentication.getName();
-            String token = jwtUtil.generarToken(nombreCuenta);
+            Propietario propietario = propietarioService.buscarPorNombreCuenta(nombreCuenta);
+
+            String rol = propietario.getRol();
+
+            String token = jwtUtil.generarToken(nombreCuenta, rol);
 
             return ResponseEntity.ok(
-                    new LoginResponseDTO(token, nombreCuenta, "Login exitoso"));
+                new LoginResponseDTO(token, nombreCuenta, rol, "Login exitoso")
+            );
 
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponseDTO(null, null, "Credenciales incorrectas"));
+                    .body(new LoginResponseDTO(null, null, null, "Credenciales incorrectas"));
         }
     }
 

@@ -34,7 +34,7 @@ public Casa crearCasa(
 ) throws Exception {
 
     String username = authentication.getName();
-    Propietario propietario = propietarioService.buscarPorUsername(username);
+    Propietario propietario = propietarioService.buscarPorNombreCuenta(username);
 
     // Crear DTO manual
     CasaRequestDTO dto = new CasaRequestDTO();
