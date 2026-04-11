@@ -1,39 +1,129 @@
-<div class="crear-casa-container">
-  <h2>Registrar casa rural</h2>
-
-  <form [formGroup]="crearCasaForm" (ngSubmit)="onSubmit()">
+<div class="crear-casa-shell">
+  <section class="form-header">
     <div>
-      <label for="nombre">Nombre</label>
-      <input id="nombre" type="text" formControlName="nombre" />
+      <p class="eyebrow">Registro de casa rural</p>
+      <h1>Registra tu propiedad con una apariencia profesional y clara</h1>
+      <p class="intro-text">
+        Completa los datos esenciales de la casa y sube una imagen destacada para atraer reservas rurales de calidad.
+      </p>
+    </div>
+    <div class="form-card-indicator">
+      <span>Formulario pensado para anfitriones exigentes</span>
+    </div>
+  </section>
+
+  <form [formGroup]="crearCasaForm" (ngSubmit)="onSubmit()" class="form-card" novalidate>
+    <div class="form-grid">
+      <div class="field-group">
+        <label class="field-label" for="nombre">Nombre de la casa</label>
+        <input
+          id="nombre"
+          type="text"
+          formControlName="nombre"
+          placeholder="Ej. Cabaña del Valle"
+          [class.invalid]="nombre?.invalid && nombre?.touched"
+          aria-describedby="nombre-error"
+        />
+        <p class="field-error" *ngIf="nombre?.invalid && nombre?.touched" id="nombre-error">
+          {{ nombre?.errors?.['required'] ? 'El nombre es obligatorio.' : 'El nombre debe tener al menos 3 caracteres.' }}
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="direccion">Dirección</label>
+        <input
+          id="direccion"
+          type="text"
+          formControlName="direccion"
+          placeholder="Ej. Camino a la Laguna 123"
+          [class.invalid]="direccion?.invalid && direccion?.touched"
+          aria-describedby="direccion-error"
+        />
+        <p class="field-error" *ngIf="direccion?.invalid && direccion?.touched" id="direccion-error">
+          {{ direccion?.errors?.['required'] ? 'La dirección es obligatoria.' : 'La dirección debe tener al menos 5 caracteres.' }}
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="numeroHabitaciones">Habitaciones</label>
+        <input
+          id="numeroHabitaciones"
+          type="number"
+          formControlName="numeroHabitaciones"
+          min="3"
+          [class.invalid]="numeroHabitaciones?.invalid && numeroHabitaciones?.touched"
+          aria-describedby="habitaciones-error"
+        />
+        <p class="field-hint">Mínimo 3 habitaciones para alojar grupos rurales cómodamente.</p>
+        <p class="field-error" *ngIf="numeroHabitaciones?.invalid && numeroHabitaciones?.touched" id="habitaciones-error">
+          Ingrese un número válido de habitaciones (mínimo 3).
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="numeroBanos">Baños</label>
+        <input
+          id="numeroBanos"
+          type="number"
+          formControlName="numeroBanos"
+          min="2"
+          [class.invalid]="numeroBanos?.invalid && numeroBanos?.touched"
+          aria-describedby="banos-error"
+        />
+        <p class="field-hint">Indica cuántos baños tiene la casa rural.</p>
+        <p class="field-error" *ngIf="numeroBanos?.invalid && numeroBanos?.touched" id="banos-error">
+          Ingrese un número válido de baños (mínimo 2).
+        </p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="numeroCocinas">Cocinas</label>
+        <input
+          id="numeroCocinas"
+          type="number"
+          formControlName="numeroCocinas"
+          min="1"
+          [class.invalid]="numeroCocinas?.invalid && numeroCocinas?.touched"
+          aria-describedby="cocinas-error"
+        />
+        <p class="field-hint">Registra el número de espacios de cocina disponibles.</p>
+        <p class="field-error" *ngIf="numeroCocinas?.invalid && numeroCocinas?.touched" id="cocinas-error">
+          Ingrese un número válido de cocinas (mínimo 1).
+        </p>
+      </div>
     </div>
 
-    <div>
-      <label for="direccion">Dirección</label>
-      <input id="direccion" type="text" formControlName="direccion" />
+    <div class="file-block">
+      <div class="file-label-row">
+        <label class="field-label" for="foto">Foto principal</label>
+        <span class="file-note">Recomendado: JPG o PNG de alta calidad</span>
+      </div>
+
+      <div class="file-uploader">
+        <div class="file-info">
+          <span class="file-name">{{ selectedFile ? selectedFile.name : 'Ninguna imagen seleccionada' }}</span>
+        </div>
+        <button type="button" class="file-button" (click)="fotoInput.click()">
+          Seleccionar imagen
+        </button>
+      </div>
+
+      <input id="foto" #fotoInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+
+      <p class="field-error" *ngIf="!selectedFile && crearCasaForm.touched">
+        Debes seleccionar una foto representativa para la casa.
+      </p>
+
+      <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Vista previa de la imagen seleccionada" />
+      </div>
     </div>
 
-    <div>
-      <label for="numeroHabitaciones">Número de habitaciones</label>
-      <input id="numeroHabitaciones" type="number" formControlName="numeroHabitaciones" />
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span class="spinner" *ngIf="loading" aria-hidden="true"></span>
+        {{ loading ? 'Guardando propiedad...' : 'Registrar casa rural' }}
+      </button>
     </div>
-
-    <div>
-      <label for="numeroBanos">Número de baños</label>
-      <input id="numeroBanos" type="number" formControlName="numeroBanos" />
-    </div>
-
-    <div>
-      <label for="numeroCocinas">Número de cocinas</label>
-      <input id="numeroCocinas" type="number" formControlName="numeroCocinas" />
-    </div>
-
-    <div>
-      <label for="foto">Foto</label>
-      <input id="foto" type="file" accept="image/*" (change)="onFileSelected($event)" />
-    </div>
-
-    <button type="submit" [disabled]="loading">
-      {{ loading ? 'Guardando...' : 'Registrar casa' }}
-    </button>
   </form>
 </div>
