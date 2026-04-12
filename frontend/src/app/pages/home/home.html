@@ -1,6 +1,5 @@
 <div class="home-page">
   <section class="hero">
-    <!-- Capa visual: banner image (fondo) -->
     <div class="hero__visual" aria-hidden="true">
       <img
         class="hero-house-image"
@@ -9,10 +8,8 @@
       />
     </div>
 
-    <!-- Overlay suave para mejorar legibilidad del texto -->
     <div class="hero__overlay"></div>
 
-    <!-- Contenido textual (encima) -->
     <div class="hero__content">
       <h1>
         ¡Bienvenido <span>{{ nombreCuenta || 'usuario' }}</span>,
@@ -20,12 +17,14 @@
       <p class="hero__subtitle">al Sistema de Gestión de Casas Rurales</p>
       <p class="hero__text">Elige una opción para comenzar:</p>
     </div>
+
   </section>
 
   <section class="dashboard">
     <h2 class="dashboard__title">Sistema de Gestión de Casas Rurales</h2>
 
     <div class="dashboard__grid">
+
       <article class="action-card action-card--tinted">
         <div class="action-card__body">
           <div class="feature-icon">
@@ -35,13 +34,11 @@
               <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
             </svg>
           </div>
-
           <div>
             <h3>Crear Casa</h3>
             <p>Añade una nueva casa rural al sistema.</p>
           </div>
         </div>
-
         <a class="action-card__link" routerLink="/casas/crear">Ir a crear casa</a>
       </article>
 
@@ -54,13 +51,11 @@
               <path d="M12 3v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
           </div>
-
           <div>
             <h3>Crear Paquete</h3>
-            <p>Construye un nuevo paquete turísticosis.</p>
+            <p>Construye un nuevo paquete turístico.</p>
           </div>
         </div>
-
         <a class="action-card__link" routerLink="/paquetes/crear">Ir a crear paquete</a>
       </article>
 
@@ -73,16 +68,50 @@
               <path d="M12 12v5M9.5 14.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
             </svg>
           </div>
-
           <div>
             <h3>Crear Reserva</h3>
             <p>Reserva una estancia para tus clientes.</p>
           </div>
         </div>
-
         <a class="action-card__link" routerLink="/reservas/crear">Ir a crear reserva</a>
       </article>
 
+      <article class="action-card action-card--tinted">
+        <div class="action-card__body">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M4 12h10M4 18h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Definir Disponibilidad</h3>
+            <p>Configura fechas y horarios disponibles.</p>
+          </div>
+        </div>
+        <a class="action-card__link" routerLink="/disponibilidad/definir">
+          Ir a definir disponibilidad
+        </a>
+      </article>
+
+      <article class="action-card action-card--tinted">
+        <div class="action-card__body">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M20 20l-3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Consultar Disponibilidad</h3>
+            <p>Visualiza fechas disponibles y ocupadas.</p>
+          </div>
+        </div>
+        <a class="action-card__link" routerLink="/disponibilidad/consultar">
+          Ir a consultar disponibilidad
+        </a>
+      </article>
+
+      <!-- ===== PANEL DERECHO ===== -->
       <div class="auth-panel">
         <article class="action-card action-card--light">
           <div class="action-card__body action-card__body--auth">
@@ -92,7 +121,6 @@
                 <path d="M4.5 20c1.6-3.2 4.1-5 7.5-5s5.9 1.8 7.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
               </svg>
             </div>
-
             <div>
               <h3>Registro</h3>
               <div class="auth-links">
@@ -115,6 +143,8 @@
           </div>
         </div>
       </div>
+
     </div>
+
   </section>
 </div>
