@@ -55,6 +55,18 @@ export class CrearCasaComponent {
     return this.crearCasaForm.get('numeroCocinas');
   }
 
+  increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas'): void {
+    const current = Number(this.crearCasaForm.get(field)?.value ?? 0);
+    this.crearCasaForm.get(field)?.setValue(current + 1);
+  }
+
+  decrement(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas', min: number): void {
+    const current = Number(this.crearCasaForm.get(field)?.value ?? min);
+    if (current > min) {
+      this.crearCasaForm.get(field)?.setValue(current - 1);
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] || null;
