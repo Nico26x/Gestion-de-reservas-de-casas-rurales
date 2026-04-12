@@ -1,129 +1,177 @@
-<div class="crear-casa-shell">
-  <section class="form-header">
-    <div>
-      <p class="eyebrow">Registro de casa rural</p>
-      <h1>Registra tu propiedad con una apariencia profesional y clara</h1>
-      <p class="intro-text">
-        Completa los datos esenciales de la casa y sube una imagen destacada para atraer reservas rurales de calidad.
-      </p>
-    </div>
-    <div class="form-card-indicator">
-      <span>Formulario pensado para anfitriones exigentes</span>
-    </div>
-  </section>
+<section class="cl-wrap">
+  <div class="cl-bg-lines"></div>
 
-  <form [formGroup]="crearCasaForm" (ngSubmit)="onSubmit()" class="form-card" novalidate>
-    <div class="form-grid">
-      <div class="field-group">
-        <label class="field-label" for="nombre">Nombre de la casa</label>
+  <!-- Planos cayendo -->
+  <svg class="cl-plane plane-1" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <rect x="8" y="8" width="124" height="164" stroke="#D0E0F4" stroke-width="0.5"/>
+    <line x1="12" y1="30" x2="128" y2="30" stroke="#85B7EB" stroke-width="0.8"/>
+    <text x="70" y="24" font-size="9" fill="#185FA5" text-anchor="middle" font-family="monospace">PLANTA BAJA</text>
+    <rect x="18" y="40" width="48" height="55" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="74" y="40" width="56" height="25" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="74" y="73" width="56" height="22" fill="#f0f7ff" stroke="#85B7EB" stroke-width="0.8"/>
+    <line x1="12" y1="105" x2="128" y2="105" stroke="#85B7EB" stroke-width="0.8"/>
+    <rect x="22" y="112" width="96" height="55" fill="#f7faff" stroke="#378ADD" stroke-width="1"/>
+    <line x1="70" y1="112" x2="70" y2="167" stroke="#85B7EB" stroke-width="0.8"/>
+    <circle cx="42" cy="20" r="4" stroke="#185FA5" stroke-width="1" fill="none"/>
+    <circle cx="98" cy="20" r="4" stroke="#185FA5" stroke-width="1" fill="none"/>
+  </svg>
+
+  <svg class="cl-plane plane-2" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <rect x="8" y="8" width="124" height="164" stroke="#D0E0F4" stroke-width="0.5"/>
+    <text x="70" y="22" font-size="8" fill="#185FA5" text-anchor="middle" font-family="monospace">FACHADA</text>
+    <polygon points="70,35 20,80 120,80" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="35" y="80" width="70" height="90" fill="#f7faff" stroke="#378ADD" stroke-width="1"/>
+    <rect x="55" y="120" width="30" height="50" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="42" y="90" width="20" height="20" fill="white" stroke="#85B7EB" stroke-width="0.8"/>
+    <rect x="78" y="90" width="20" height="20" fill="white" stroke="#85B7EB" stroke-width="0.8"/>
+    <line x1="12" y1="170" x2="128" y2="170" stroke="#185FA5" stroke-width="1"/>
+  </svg>
+
+  <svg class="cl-plane plane-3" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <line x1="12" y1="28" x2="128" y2="28" stroke="#85B7EB" stroke-width="0.8"/>
+    <text x="70" y="21" font-size="8" fill="#185FA5" text-anchor="middle" font-family="monospace">PLANTA ALTA</text>
+    <rect x="15" y="35" width="110" height="130" stroke="#378ADD" stroke-width="1" fill="#f7faff"/>
+    <line x1="70" y1="35" x2="70" y2="165" stroke="#D0E0F4" stroke-width="0.8"/>
+    <line x1="15" y1="100" x2="125" y2="100" stroke="#D0E0F4" stroke-width="0.8"/>
+    <rect x="20" y="40" width="44" height="54" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="76" y="40" width="44" height="54" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="20" y="106" width="44" height="53" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="76" y="106" width="44" height="53" fill="#f0f7ff" stroke="#85B7EB" stroke-width="0.8"/>
+  </svg>
+
+  <!-- Tarjeta principal -->
+  <div class="cl-card">
+    <div class="cl-top-stripe"></div>
+
+    <div class="cl-header">
+      <div class="cl-house-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 12l8.954-8.955a1.5 1.5 0 012.122 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"/>
+        </svg>
+      </div>
+      <div>
+        <p class="cl-h1">Registrar Casa Rural</p>
+        <p class="cl-h2">Complete los datos del inmueble</p>
+      </div>
+    </div>
+
+    <form class="cl-body" [formGroup]="crearCasaForm" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Sección: Información básica -->
+      <p class="cl-section-label">Información básica</p>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="nombre">Nombre de la propiedad</label>
         <input
           id="nombre"
+          class="cl-inp"
+          [class.cl-inp--error]="nombre?.invalid && nombre?.touched"
           type="text"
+          placeholder="Ej: Casa El Roble"
           formControlName="nombre"
-          placeholder="Ej. Cabaña del Valle"
-          [class.invalid]="nombre?.invalid && nombre?.touched"
-          aria-describedby="nombre-error"
         />
-        <p class="field-error" *ngIf="nombre?.invalid && nombre?.touched" id="nombre-error">
-          {{ nombre?.errors?.['required'] ? 'El nombre es obligatorio.' : 'El nombre debe tener al menos 3 caracteres.' }}
-        </p>
+        <span class="cl-error" *ngIf="nombre?.invalid && nombre?.touched">
+          Mínimo 3 caracteres
+        </span>
       </div>
 
-      <div class="field-group">
-        <label class="field-label" for="direccion">Dirección</label>
+      <div class="cl-field">
+        <label class="cl-lbl" for="direccion">Dirección</label>
         <input
           id="direccion"
+          class="cl-inp"
+          [class.cl-inp--error]="direccion?.invalid && direccion?.touched"
           type="text"
+          placeholder="Calle, vereda, municipio..."
           formControlName="direccion"
-          placeholder="Ej. Camino a la Laguna 123"
-          [class.invalid]="direccion?.invalid && direccion?.touched"
-          aria-describedby="direccion-error"
         />
-        <p class="field-error" *ngIf="direccion?.invalid && direccion?.touched" id="direccion-error">
-          {{ direccion?.errors?.['required'] ? 'La dirección es obligatoria.' : 'La dirección debe tener al menos 5 caracteres.' }}
-        </p>
+        <span class="cl-error" *ngIf="direccion?.invalid && direccion?.touched">
+          Mínimo 5 caracteres
+        </span>
       </div>
 
-      <div class="field-group">
-        <label class="field-label" for="numeroHabitaciones">Habitaciones</label>
-        <input
-          id="numeroHabitaciones"
-          type="number"
-          formControlName="numeroHabitaciones"
-          min="3"
-          [class.invalid]="numeroHabitaciones?.invalid && numeroHabitaciones?.touched"
-          aria-describedby="habitaciones-error"
-        />
-        <p class="field-hint">Mínimo 3 habitaciones para alojar grupos rurales cómodamente.</p>
-        <p class="field-error" *ngIf="numeroHabitaciones?.invalid && numeroHabitaciones?.touched" id="habitaciones-error">
-          Ingrese un número válido de habitaciones (mínimo 3).
-        </p>
-      </div>
+      <!-- Sección: Distribución -->
+      <p class="cl-section-label">Distribución</p>
 
-      <div class="field-group">
-        <label class="field-label" for="numeroBanos">Baños</label>
-        <input
-          id="numeroBanos"
-          type="number"
-          formControlName="numeroBanos"
-          min="2"
-          [class.invalid]="numeroBanos?.invalid && numeroBanos?.touched"
-          aria-describedby="banos-error"
-        />
-        <p class="field-hint">Indica cuántos baños tiene la casa rural.</p>
-        <p class="field-error" *ngIf="numeroBanos?.invalid && numeroBanos?.touched" id="banos-error">
-          Ingrese un número válido de baños (mínimo 2).
-        </p>
-      </div>
-
-      <div class="field-group">
-        <label class="field-label" for="numeroCocinas">Cocinas</label>
-        <input
-          id="numeroCocinas"
-          type="number"
-          formControlName="numeroCocinas"
-          min="1"
-          [class.invalid]="numeroCocinas?.invalid && numeroCocinas?.touched"
-          aria-describedby="cocinas-error"
-        />
-        <p class="field-hint">Registra el número de espacios de cocina disponibles.</p>
-        <p class="field-error" *ngIf="numeroCocinas?.invalid && numeroCocinas?.touched" id="cocinas-error">
-          Ingrese un número válido de cocinas (mínimo 1).
-        </p>
-      </div>
-    </div>
-
-    <div class="file-block">
-      <div class="file-label-row">
-        <label class="field-label" for="foto">Foto principal</label>
-        <span class="file-note">Recomendado: JPG o PNG de alta calidad</span>
-      </div>
-
-      <div class="file-uploader">
-        <div class="file-info">
-          <span class="file-name">{{ selectedFile ? selectedFile.name : 'Ninguna imagen seleccionada' }}</span>
+      <div class="cl-rooms-grid">
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🛏</div>
+          <p class="cl-room-name">Habitaciones</p>
+          <div class="cl-room-ctrl">
+            <button type="button" class="cl-rm-btn" (click)="decrement('numeroHabitaciones', 3)">−</button>
+            <span class="cl-rm-val">{{ numeroHabitaciones?.value }}</span>
+            <button type="button" class="cl-rm-btn" (click)="increment('numeroHabitaciones')">+</button>
+          </div>
         </div>
-        <button type="button" class="file-button" (click)="fotoInput.click()">
-          Seleccionar imagen
-        </button>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🚿</div>
+          <p class="cl-room-name">Baños</p>
+          <div class="cl-room-ctrl">
+            <button type="button" class="cl-rm-btn" (click)="decrement('numeroBanos', 2)">−</button>
+            <span class="cl-rm-val">{{ numeroBanos?.value }}</span>
+            <button type="button" class="cl-rm-btn" (click)="increment('numeroBanos')">+</button>
+          </div>
+        </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🍳</div>
+          <p class="cl-room-name">Cocinas</p>
+          <div class="cl-room-ctrl">
+            <button type="button" class="cl-rm-btn" (click)="decrement('numeroCocinas', 1)">−</button>
+            <span class="cl-rm-val">{{ numeroCocinas?.value }}</span>
+            <button type="button" class="cl-rm-btn" (click)="increment('numeroCocinas')">+</button>
+          </div>
+        </div>
       </div>
 
-      <input id="foto" #fotoInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden />
+      <!-- Sección: Fotografía -->
+      <p class="cl-section-label">Fotografía</p>
 
-      <p class="field-error" *ngIf="!selectedFile && crearCasaForm.touched">
-        Debes seleccionar una foto representativa para la casa.
-      </p>
-
-      <div *ngIf="imagePreview" class="image-preview">
-        <img [src]="imagePreview" alt="Vista previa de la imagen seleccionada" />
+      <div
+        class="cl-upload"
+        [class.cl-upload--has-file]="imagePreview"
+        (click)="fotoInput.click()"
+      >
+        <ng-container *ngIf="!imagePreview">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#378ADD" stroke-width="1.5"
+               style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+          </svg>
+          <p class="cl-up-txt">Seleccionar imagen · JPG, PNG, WEBP</p>
+        </ng-container>
+        <ng-container *ngIf="imagePreview">
+          <img [src]="imagePreview" class="cl-preview-img" alt="Vista previa"/>
+          <p class="cl-up-txt cl-up-txt--change">Cambiar imagen</p>
+        </ng-container>
       </div>
-    </div>
 
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary" [disabled]="loading">
-        <span class="spinner" *ngIf="loading" aria-hidden="true"></span>
-        {{ loading ? 'Guardando propiedad...' : 'Registrar casa rural' }}
+      <input
+        #fotoInput
+        type="file"
+        accept="image/*"
+        style="display: none"
+        (change)="onFileSelected($event)"
+      />
+
+      <!-- Botón submit -->
+      <button class="cl-btn" type="submit" [disabled]="loading">
+        <ng-container *ngIf="!loading">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Crear Casa Rural
+        </ng-container>
+        <ng-container *ngIf="loading">
+          <span class="cl-spinner"></span>
+          Guardando...
+        </ng-container>
       </button>
-    </div>
-  </form>
-</div>
+
+    </form>
+  </div>
+</section>

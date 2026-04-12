@@ -1,66 +1,120 @@
-<div class="home-shell">
-  <section class="hero-panel">
-    <div class="hero-copy">
-      <p class="hero-welcome">Bienvenido{{ nombreCuenta ? ', ' + nombreCuenta : '' }}</p>
-      <h1>Gestiona tus casas rurales con calma, estilo y confianza</h1>
-      <p class="hero-description">
-        Controla reservas, paquetes y propiedades desde un panel diseñado para el turismo rural premium. Ordena tu trabajo con un flujo claro y elegante.
-      </p>
-      <div class="hero-actions">
-        <a routerLink="/casas/crear" class="btn btn-primary">Registrar nueva casa</a>
-        <a routerLink="/reservas/crear" class="btn btn-secondary">Crear reserva</a>
-      </div>
+<div class="home-page">
+  <section class="hero">
+    <!-- Capa visual: banner image (fondo) -->
+    <div class="hero__visual" aria-hidden="true">
+      <img
+        class="hero-house-image"
+        src="/assets/images/casa-hero.png"
+        alt="Ilustración de casa rural"
+      />
     </div>
 
-    <aside class="hero-status-card" aria-live="polite">
-      <span class="status-label">Estado de sesión</span>
-      <strong>{{ nombreCuenta ? nombreCuenta : 'Usuario' }}</strong>
-      <p>
-        {{ isAuthenticated
-          ? 'Tu sesión está activa. Continúa construyendo tu catálogo de casas rurales.'
-          : 'Debes iniciar sesión para acceder a todas las funciones de gestión.' }}
-      </p>
-      <div class="status-pill" [class.active]="isAuthenticated" [class.inactive]="!isAuthenticated">
-        {{ isAuthenticated ? 'Autenticado' : 'No autenticado' }}
+    <!-- Overlay suave para mejorar legibilidad del texto -->
+    <div class="hero__overlay"></div>
+
+    <!-- Contenido textual (encima) -->
+    <div class="hero__content">
+      <h1>
+        ¡Bienvenido <span>{{ nombreCuenta || 'usuario' }}</span>,
+      </h1>
+      <p class="hero__subtitle">al Sistema de Gestión de Casas Rurales</p>
+      <p class="hero__text">Elige una opción para comenzar:</p>
+    </div>
+  </section>
+
+  <section class="dashboard">
+    <h2 class="dashboard__title">Sistema de Gestión de Casas Rurales</h2>
+
+    <div class="dashboard__grid">
+      <article class="action-card action-card--tinted">
+        <div class="action-card__body">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5.5 10.5V20h13V10.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div>
+            <h3>Crear Casa</h3>
+            <p>Añade una nueva casa rural al sistema.</p>
+          </div>
+        </div>
+
+        <a class="action-card__link" routerLink="/casas/crear">Ir a crear casa</a>
+      </article>
+
+      <article class="action-card action-card--tinted">
+        <div class="action-card__body">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3l2.5 3H20l-2 4 2 4h-5.5L12 17l-2.5-3H4l2-4-2-4h5.5L12 3Z"
+                    stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M12 3v14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div>
+            <h3>Crear Paquete</h3>
+            <p>Construye un nuevo paquete turísticosis.</p>
+          </div>
+        </div>
+
+        <a class="action-card__link" routerLink="/paquetes/crear">Ir a crear paquete</a>
+      </article>
+
+      <article class="action-card action-card--tinted">
+        <div class="action-card__body">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M7 3.5v4M17 3.5v4M3.5 9.5h17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 12v5M9.5 14.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          <div>
+            <h3>Crear Reserva</h3>
+            <p>Reserva una estancia para tus clientes.</p>
+          </div>
+        </div>
+
+        <a class="action-card__link" routerLink="/reservas/crear">Ir a crear reserva</a>
+      </article>
+
+      <div class="auth-panel">
+        <article class="action-card action-card--light">
+          <div class="action-card__body action-card__body--auth">
+            <div class="feature-icon feature-icon--light">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M4.5 20c1.6-3.2 4.1-5 7.5-5s5.9 1.8 7.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div>
+              <h3>Registro</h3>
+              <div class="auth-links">
+                <a routerLink="/registro">Ir a registro</a>
+                <a routerLink="/login">Ir a login</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <div class="session-status">
+          <div class="session-status__item" [class.active]="isAuthenticated">
+            <span class="status-dot"></span>
+            <span>Ya hay una sesión iniciada.</span>
+          </div>
+
+          <div class="session-status__item" [class.active]="!isAuthenticated">
+            <span class="status-dot"></span>
+            <span>No hay sesión iniciada.</span>
+          </div>
+        </div>
       </div>
-    </aside>
-  </section>
-
-  <section class="grid-section" aria-label="Accesos rápidos">
-    <article class="quick-card">
-      <div class="card-icon">🏡</div>
-      <h2>Crear casa</h2>
-      <p>Registra una nueva propiedad rural con fotografía, ubicación y detalles clave.</p>
-      <a routerLink="/casas/crear" class="card-link">Ir a crear casa</a>
-    </article>
-
-    <article class="quick-card">
-      <div class="card-icon">🎒</div>
-      <h2>Crear paquete</h2>
-      <p>Diseña experiencias rurales completas y paquetes temáticos para tus visitantes.</p>
-      <a routerLink="/paquetes/crear" class="card-link">Ir a crear paquete</a>
-    </article>
-
-    <article class="quick-card">
-      <div class="card-icon">🗓️</div>
-      <h2>Crear reserva</h2>
-      <p>Genera una nueva reserva y mantén tu inventario rural ordenado y confiable.</p>
-      <a routerLink="/reservas/crear" class="card-link">Ir a crear reserva</a>
-    </article>
-  </section>
-
-  <section class="info-panel">
-    <div class="info-copy">
-      <span class="eyebrow">Sistema de gestión rural</span>
-      <h2>Un único lugar para administrar tu oferta de turismo rural</h2>
-      <p>
-        Simplifica la gestión de casas rurales con un flujo pensado para anfitriones serios. Controla las altas de propiedades, los paquetes exclusivos y las reservas sin perder claridad.
-      </p>
-      <ul>
-        <li>Organización clara de propiedades y reservas</li>
-        <li>Accesos rápidos a las tareas clave</li>
-        <li>Diseño accesible y adaptable para todos los dispositivos</li>
-      </ul>
     </div>
   </section>
 </div>

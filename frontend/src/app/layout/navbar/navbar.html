@@ -1,17 +1,33 @@
 <nav class="navbar">
-  <div class="navbar-left">
-    <a routerLink="/home" class="brand">Gestión de Reservas</a>
+
+  <a routerLink="/home" class="navbar-left">
+    <div class="navbar-logo-icon">
+      <!-- Icono dos casas superpuestas como en la imagen original -->
+      <svg viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Casa grande -->
+        <path d="M2 10L11 3l9 7v9h-5v-5H7v5H2V10z" fill="white"/>
+        <!-- Ventana pequeña -->
+        <rect x="8" y="13" width="2.5" height="3" fill="#3a5a9a" rx="0.4"/>
+        <rect x="11.5" y="13" width="2.5" height="3" fill="#3a5a9a" rx="0.4"/>
+      </svg>
+    </div>
+    <span class="navbar-brand">Gestión de Casas Rurales</span>
+  </a>
+
+  <div class="navbar-center">
+    <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link">Inicio</a>
+    <a routerLink="/casas/crear" class="nav-link">Casas</a>
+    <a routerLink="/reservas/crear" class="nav-link">Reservas</a>
+    <button class="nav-dots" type="button">···</button>
   </div>
 
-  <div class="navbar-right">
+  <div>
     <ng-container *ngIf="isAuthenticated; else guestLinks">
-      <span class="user-info">Hola, {{ nombreCuenta }}</span>
-      <button type="button" (click)="logout()">Cerrar sesión</button>
+      <button type="button" class="btn-cerrar" (click)="logout()">Cerrar sesión</button>
     </ng-container>
-
     <ng-template #guestLinks>
-      <a routerLink="/login">Iniciar sesión</a>
-      <a routerLink="/register">Registrarse</a>
+      <a routerLink="/login" class="btn-cerrar">Iniciar sesión</a>
     </ng-template>
   </div>
+
 </nav>
