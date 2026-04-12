@@ -1,0 +1,27 @@
+<h1>Crear paquete</h1>
+
+<form [formGroup]="paqueteForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="casaId">Casa ID</label>
+    <input id="casaId" type="number" formControlName="casaId" />
+  </div>
+
+  <div>
+    <label for="fechaInicio">Fecha inicio</label>
+    <input id="fechaInicio" type="date" formControlName="fechaInicio" />
+  </div>
+
+  <div>
+    <label for="fechaFin">Fecha fin</label>
+    <input id="fechaFin" type="date" formControlName="fechaFin" />
+  </div>
+
+  <div>
+    <label for="precio">Precio</label>
+    <input id="precio" type="number" formControlName="precio" />
+  </div>
+
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Guardando...' : 'Crear paquete' }}
+  </button>
+</form>

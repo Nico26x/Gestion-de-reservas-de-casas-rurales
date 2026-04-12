@@ -11,6 +11,7 @@ import { CrearReservaComponent } from './pages/reservas/crear-reserva/crear-rese
 import { NotFoundComponent } from './pages/not-found/not-found';
 import { DefinirDisponibilidadComponent } from './pages/disponibilidad/definir-disponibilidad/definir-disponibilidad';
 import { ConsultarDisponibilidadComponent } from './pages/disponibilidad/consultar-disponibilidad/consultar-disponibilidad';
+import { ownerGuard } from './core/guards/owner.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: 'reservas/crear', component: CrearReservaComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
+  { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [ownerGuard] },
 
   { path: '**', component: NotFoundComponent }
 ];

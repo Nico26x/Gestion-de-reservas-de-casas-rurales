@@ -22,6 +22,7 @@ export class AuthService {
       tap((response) => {
         this.storageService.setToken(response.token);
         this.storageService.setNombreCuenta(response.nombreCuenta);
+        this.storageService.setRol(response.rol);
       })
     );
   }
@@ -44,5 +45,9 @@ export class AuthService {
 
   getNombreCuenta(): string | null {
     return this.storageService.getNombreCuenta();
+  }
+
+  getRol(): string | null {
+    return this.storageService.getRol();
   }
 }
