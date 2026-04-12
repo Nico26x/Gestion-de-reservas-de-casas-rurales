@@ -2,6 +2,7 @@ package com.reservas.service;
 import com.reservas.dto.RegistroRequestDTO;
 import com.reservas.dto.RegistroResponseDTO;
 import com.reservas.model.Propietario;
+import com.reservas.model.Rol;
 import com.reservas.repository.PropietarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,20 @@ public class PropietarioService {
 
         String contrasenaEncriptada = passwordEncoder.encode(dto.getContrasena());
 
+        // Determinar el rol: si viene en el DTO, validar; sino, asignar PROPIETARIO
+        Rol rol = Rol.PROPIETARIO; // default
+        if (dto.getRol() != null && !dto.getRol().trim().isEmpty()) {
+            try {
+                rol = Rol.valueOf(dto.getRol().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Rol inválido. Use PROPIETARIO o CLIENTE");
+            }
+        }
+
         Propietario propietario = new Propietario();
         propietario.setNombreCuenta(dto.getNombreCuenta());
         propietario.setContrasena(contrasenaEncriptada);
+        propietario.setRol(rol);
 
         propietario.setRol("ROLE_PROPIETARIO");
 

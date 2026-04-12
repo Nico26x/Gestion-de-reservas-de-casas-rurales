@@ -40,15 +40,16 @@ public class AuthController {
                             request.getContrasena()));
 
             String nombreCuenta = authentication.getName();
-            Propietario propietario = propietarioService.buscarPorNombreCuenta(nombreCuenta);
-
-            String rol = propietario.getRol();
-
-            String token = jwtUtil.generarToken(nombreCuenta, rol);
+            
+            // Obtener el propietario para extraer el rol
+            Propietario propietario = propietarioService.buscarPorUsername(nombreCuenta);
+            String rolNombre = propietario.getRol().name();
+            
+            // Generar token incluyendo el rol
+            String token = jwtUtil.generarToken(nombreCuenta, rolNombre);
 
             return ResponseEntity.ok(
-                new LoginResponseDTO(token, nombreCuenta, rol, "Login exitoso")
-            );
+                    new LoginResponseDTO(token, nombreCuenta, rolNombre, "Login exitoso"));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity

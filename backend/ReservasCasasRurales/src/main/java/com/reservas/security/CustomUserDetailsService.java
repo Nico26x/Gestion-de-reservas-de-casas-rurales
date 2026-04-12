@@ -32,12 +32,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                         "Propietario no encontrado con nombre de cuenta: " + nombreCuenta
                 ));
 
-        // Construimos el UserDetails con el nombreCuenta y la contraseña encriptada
-        // Collections.emptyList() = sin roles por ahora (solo hay un tipo de usuario: propietario)
+        // Crear la autoridad basada en el rol real del usuario
+        String rolName = "ROLE_" + propietario.getRol().name();
+        
         return new User(
                 propietario.getNombreCuenta(),
                 propietario.getContrasena(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                List.of(new SimpleGrantedAuthority(rolName))
         );
     }
 }

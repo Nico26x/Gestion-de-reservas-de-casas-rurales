@@ -36,7 +36,7 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     /**
-     * Cadena de filtros — define rutas públicas vs protegidas.
+     * Cadena de filtros — define rutas públicas vs protegidas con autorización por rol.
      * NOTA Spring Boot 4.x: se usa .csrf(AbstractHttpConfigurer::disable)
      * en lugar de .csrf().disable() que fue removido.
      */
@@ -52,7 +52,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        //  Públicas
+                        // ── PÚBLICAS ──────────────────────────────
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/registro").permitAll()
 
@@ -60,10 +60,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/disponibilidad/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reservas").permitAll()
 
-                        //  Protegidas
-                        .requestMatchers(HttpMethod.POST, "/api/casas").authenticated()
-                        .requestMatchers("/api/paquetes/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.POST, "/api/paquetes").authenticated()
+                        // ── SOLO PROPIETARIO ──────────────────────────────
+                        .requestMatchers(HttpMethod.POST, "/api/casas").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/paquetes").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/casas/**").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/casas/**").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.GET, "/api/paquetes/**").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/paquetes/**").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/paquetes/**").hasRole("PROPIETARIO")
+
+                        // ── SOLO CLIENTE ──────────────────────────────
+                        .requestMatchers("/api/reservas/**").hasRole("CLIENTE")
 
                         // ── TODO LO DEMÁS REQUIERE JWT ──────────────────────────────
                         .anyRequest().authenticated()

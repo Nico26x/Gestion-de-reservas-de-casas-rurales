@@ -61,6 +61,30 @@ public class JwtUtil {
 }
 
     /**
+     * Genera un token JWT incluyendo el rol como claim.
+     */
+    public String generarToken(String nombreCuenta, String rol) {
+        Date ahora = new Date();
+        Date expiracion = new Date(ahora.getTime() + expirationMs);
+
+        return Jwts.builder()
+                .subject(nombreCuenta)
+                .claim("role", rol)
+                .issuedAt(ahora)
+                .expiration(expiracion)
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    /**
+     * Extrae el rol desde el token.
+     */
+    public String extraerRol(String token) {
+        Claims claims = extraerClaims(token);
+        return claims.get("role", String.class);
+    }
+
+    /**
      * Extrae el nombreCuenta (subject) del token.
      */
     public String extraerNombreCuenta(String token) {
