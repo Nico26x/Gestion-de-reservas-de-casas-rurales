@@ -40,4 +40,6 @@ public class Casa {
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Cocina> cocinas;
 
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+    private List<Paquete> paquetes;
 }

@@ -29,36 +29,6 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    /**
-     * Genera un token JWT para el propietario autenticado.
-     * CAMBIO 0.12.6: .setSubject() → .subject()  /  .setIssuedAt() → .issuedAt()
-     *                .setExpiration() → .expiration()  /  .signWith(key) sin algoritmo explícito
-     */
-    /**public String generarToken(String nombreCuenta) {
-        Date ahora = new Date();
-        Date expiracion = new Date(ahora.getTime() + expirationMs);
-
-        return Jwts.builder()
-                .subject(nombreCuenta)
-                .issuedAt(ahora)
-                .expiration(expiracion)
-                .signWith(getSigningKey())
-                .compact();
-    }**/
-
-    public String generarToken(String nombreCuenta, String rol) {
-
-    Date ahora = new Date();
-    Date expiracion = new Date(ahora.getTime() + expirationMs);
-
-    return Jwts.builder()
-            .subject(nombreCuenta)
-            .claim("rol", rol) // AQUÍ METEMOS EL ROL
-            .issuedAt(ahora)
-            .expiration(expiracion)
-            .signWith(getSigningKey())
-            .compact();
-}
 
     /**
      * Genera un token JWT incluyendo el rol como claim.
@@ -80,8 +50,7 @@ public class JwtUtil {
      * Extrae el rol desde el token.
      */
     public String extraerRol(String token) {
-        Claims claims = extraerClaims(token);
-        return claims.get("role", String.class);
+        return extraerClaims(token).get("role", String.class);
     }
 
     /**

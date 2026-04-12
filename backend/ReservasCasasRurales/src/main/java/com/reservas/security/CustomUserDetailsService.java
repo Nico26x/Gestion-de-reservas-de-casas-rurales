@@ -34,6 +34,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // Crear la autoridad basada en el rol real del usuario
         String rolName = "ROLE_" + propietario.getRol().name();
+
+        System.out.println("🔥 ENTRÓ A USER DETAILS");
+        System.out.println("USER: " + nombreCuenta);
         
         return new User(
                 propietario.getNombreCuenta(),

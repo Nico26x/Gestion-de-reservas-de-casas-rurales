@@ -24,4 +24,8 @@ public class Propietario {
 
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false)
+    private Rol rol = Rol.PROPIETARIO;
 }

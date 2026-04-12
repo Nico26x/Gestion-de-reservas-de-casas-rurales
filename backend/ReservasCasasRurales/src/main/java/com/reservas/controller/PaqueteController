@@ -24,15 +24,30 @@ public class PaqueteController {
 
     return paqueteService.crearPaquete(dto);
     }**//
-    @PostMapping
-    public Paquete crearPaquete(@RequestBody PaqueteRequestDTO dto, Authentication authentication) {
+    @RestController
+    @RequestMapping("/api/paquetes")
+        public class PaqueteController {
 
-    if (authentication == null) {
-        System.out.println("AUTH ES NULL ❌");
-    } else {
-        System.out.println("USUARIO AUTH: " + authentication.getName());
+        private final PaqueteService paqueteService;
+
+        public PaqueteController(PaqueteService paqueteService) {
+            this.paqueteService = paqueteService;
+        }
+
+        @PostMapping
+        public ResponseEntity<Paquete> crearPaquete(
+                @RequestBody PaqueteRequestDTO dto,
+                Authentication authentication) {
+
+            if (authentication == null) {
+                return ResponseEntity.status(401).build();
+            }
+
+            String username = authentication.getName();
+
+            Paquete paquete = paqueteService.crearPaquete(dto, username);
+
+            return ResponseEntity.ok(paquete);
+        }
     }
-
-    return paqueteService.crearPaquete(dto);
-}
 }

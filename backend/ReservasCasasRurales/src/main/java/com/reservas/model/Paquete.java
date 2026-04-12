@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @Entity
@@ -23,5 +25,6 @@ public class Paquete {
     //  Relación con casa
     @ManyToOne
     @JoinColumn(name = "casa_id", nullable = false)
+    @JsonIgnore
     private Casa casa;
 }

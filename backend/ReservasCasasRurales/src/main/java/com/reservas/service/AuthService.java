@@ -26,9 +26,9 @@ public class AuthService {
         );
 
         // BUSCAR USUARIO
-        Propietario propietario = propietarioService.buscarPorNombreCuenta(username);
+        Propietario propietario = propietarioService.buscarPorUsername(username);
 
-        String rol = propietario.getRol();
+        String rol = propietario.getRol().toString();
 
         //  USAR MÉTODO CON ROL
         return jwtUtil.generarToken(username, rol);

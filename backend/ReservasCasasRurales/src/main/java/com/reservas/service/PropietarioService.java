@@ -43,7 +43,7 @@ public class PropietarioService {
         propietario.setContrasena(contrasenaEncriptada);
         propietario.setRol(rol);
 
-        propietario.setRol("ROLE_PROPIETARIO");
+        
 
         propietarioRepository.save(propietario);
 
@@ -51,7 +51,7 @@ public class PropietarioService {
     }
 
 
-    public Propietario buscarPorNombreCuenta(String nombreCuenta) {
+    public Propietario buscarPorUsername(String nombreCuenta) {
         return propietarioRepository.findByNombreCuenta(nombreCuenta)
             .orElseThrow(() -> new RuntimeException("Propietario no encontrado"));
     }

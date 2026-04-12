@@ -6,6 +6,7 @@ import com.reservas.model.Propietario;
 import com.reservas.service.CasaService;
 import com.reservas.service.PropietarioService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,27 +24,41 @@ public class CasaController {
     }
 
     @PostMapping(consumes = "multipart/form-data")
-public Casa crearCasa(
-    @RequestParam String nombre,
-    @RequestParam String direccion,
-    @RequestParam int numeroHabitaciones,
-    @RequestParam int numeroBanos,
-    @RequestParam int numeroCocinas,
-    @RequestParam MultipartFile foto,
-    Authentication authentication
-) throws Exception {
+    public ResponseEntity<Casa> crearCasa(
+            @RequestParam String nombre,
+            @RequestParam String direccion,
+            @RequestParam int numeroHabitaciones,
+            @RequestParam int numeroBanos,
+            @RequestParam int numeroCocinas,
+            @RequestParam MultipartFile foto,
+            Authentication authentication) throws Exception {
 
-    String username = authentication.getName();
-    Propietario propietario = propietarioService.buscarPorNombreCuenta(username);
+        if (authentication == null) {
+            throw new RuntimeException("Usuario no autenticado");
+        }
 
-    // Crear DTO manual
-    CasaRequestDTO dto = new CasaRequestDTO();
-    dto.setNombre(nombre);
-    dto.setDireccion(direccion);
-    dto.setNumeroHabitaciones(numeroHabitaciones);
-    dto.setNumeroBanos(numeroBanos);
-    dto.setNumeroCocinas(numeroCocinas);
+        if (foto == null || foto.isEmpty()) {
+            throw new RuntimeException("La foto es obligatoria");
+        }
 
-    return casaService.crearCasa(dto, foto, propietario);
-}
+        if (numeroHabitaciones <= 0 || numeroBanos <= 0 || numeroCocinas <= 0) {
+            throw new RuntimeException("Valores inválidos");
+        }
+
+        String username = authentication.getName();
+
+        Propietario propietario = propietarioService.buscarPorUsername(username);
+
+        CasaRequestDTO dto = new CasaRequestDTO();
+        dto.setNombre(nombre);
+        dto.setDireccion(direccion);
+        dto.setNumeroHabitaciones(numeroHabitaciones);
+        dto.setNumeroBanos(numeroBanos);
+        dto.setNumeroCocinas(numeroCocinas);
+
+        Casa casa = casaService.crearCasa(dto, foto, propietario);
+
+        return ResponseEntity.ok(casa);
+    }
+
 }

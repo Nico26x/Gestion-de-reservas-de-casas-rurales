@@ -13,5 +13,5 @@ public interface PaqueteRepository extends JpaRepository<Paquete, Long> {
             Long casaId,
             LocalDate fechaFin,
             LocalDate fechaInicio
-    )
+    );
 }

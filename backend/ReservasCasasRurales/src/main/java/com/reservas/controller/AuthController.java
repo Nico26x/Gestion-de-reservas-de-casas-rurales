@@ -43,7 +43,8 @@ public class AuthController {
             
             // Obtener el propietario para extraer el rol
             Propietario propietario = propietarioService.buscarPorUsername(nombreCuenta);
-            String rolNombre = propietario.getRol().name();
+
+            String rolNombre = "ROLE_" + propietario.getRol().name();
             
             // Generar token incluyendo el rol
             String token = jwtUtil.generarToken(nombreCuenta, rolNombre);

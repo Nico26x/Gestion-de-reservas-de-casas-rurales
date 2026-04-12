@@ -114,7 +114,7 @@ public class SecurityConfig {
 
     /**
      * Proveedor de autenticación: usa nuestro UserDetailsService + BCrypt.
-     */
+    */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
