@@ -1,65 +1,117 @@
+/* ===== NAVBAR — Réplica exacta ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 .navbar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  padding: 20px 30px;
+  justify-content: space-between;
+  padding: 0 44px;
+  height: 66px;
   background: #ffffff;
-  border-bottom: 1px solid rgba(115, 129, 106, 0.16);
-  box-shadow: 0 14px 40px rgba(33, 49, 35, 0.06);
+  border-bottom: 1px solid #d0d8e4;
+  box-shadow: 0 1px 0 #d0d8e4;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.navbar-left .brand {
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 1.28rem;
-  color: #2d3c2f;
-  letter-spacing: 0.04em;
-}
-
-.navbar-right {
+/* Logo izquierda */
+.navbar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.navbar-right a,
-.navbar-right button {
+  gap: 11px;
   text-decoration: none;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: #2d3c2f;
-  font-weight: 600;
-  padding: 10px 14px;
-  border-radius: 14px;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
 }
 
-.navbar-right a:hover,
-.navbar-right button:hover,
-.navbar-right a:focus-visible,
-.navbar-right button:focus-visible {
-  background: rgba(76, 123, 85, 0.12);
-  outline: none;
-  transform: translateY(-1px);
+.navbar-logo-icon {
+  width: 36px;
+  height: 36px;
+  background: #3a5a9a;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
-.user-info {
+.navbar-logo-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.navbar-brand {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #1e2d4a;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* Navegación central */
+.navbar-center {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.nav-link {
+  position: relative;
+  padding: 10px 22px;
+  font-size: 0.97rem;
+  font-weight: 400;
+  color: #7a8fac;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover { color: #1e2d4a; }
+
+.nav-link.active {
+  color: #1e2d4a;
   font-weight: 700;
-  color: #415240;
 }
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 3px;
+  background: #1e2d4a;
+  border-radius: 2px;
+}
+
+.nav-dots {
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #7a8fac;
+  letter-spacing: 3px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.nav-dots:hover { color: #1e2d4a; }
+
+/* Botón derecha */
+.btn-cerrar {
+  padding: 11px 26px;
+  background: #1e3468;
+  color: #ffffff;
+  border: none;
+  border-radius: 9px;
+  font-size: 0.93rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-cerrar:hover { background: #162a55; }
 
 @media (max-width: 680px) {
-  .navbar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 18px 22px;
-  }
-
-  .navbar-right {
-    justify-content: flex-start;
-  }
+  .navbar-center { display: none; }
+  .navbar { padding: 0 20px; }
 }
