@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/paquetes/**").hasRole("PROPIETARIO")
                         .requestMatchers(HttpMethod.PUT, "/api/paquetes/**").hasRole("PROPIETARIO")
                         .requestMatchers(HttpMethod.DELETE, "/api/paquetes/**").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/disponibilidad").hasRole("PROPIETARIO")
 
                         // ── SOLO CLIENTE ──────────────────────────────
                         .requestMatchers("/api/reservas/**").hasRole("CLIENTE")
