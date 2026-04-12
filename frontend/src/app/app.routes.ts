@@ -9,6 +9,8 @@ import { CrearCasaComponent } from './pages/casas/crear-casa/crear-casa';
 import { CrearPaqueteComponent } from './pages/paquetes/crear-paquete/crear-paquete';
 import { CrearReservaComponent } from './pages/reservas/crear-reserva/crear-reserva';
 import { NotFoundComponent } from './pages/not-found/not-found';
+import { DefinirDisponibilidadComponent } from './pages/disponibilidad/definir-disponibilidad/definir-disponibilidad';
+import { ConsultarDisponibilidadComponent } from './pages/disponibilidad/consultar-disponibilidad/consultar-disponibilidad';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,6 +23,8 @@ export const routes: Routes = [
   { path: 'casas/crear', component: CrearCasaComponent, canActivate: [authGuard] },
   { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [authGuard] },
   { path: 'reservas/crear', component: CrearReservaComponent, canActivate: [authGuard] },
+  { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
+  { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
 
   { path: '**', component: NotFoundComponent }
 ];

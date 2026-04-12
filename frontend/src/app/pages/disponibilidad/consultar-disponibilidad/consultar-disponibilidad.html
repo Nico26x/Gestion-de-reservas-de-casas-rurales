@@ -1,0 +1,219 @@
+<div class="availability-page">
+  <section class="availability-hero">
+    <div class="availability-hero__content">
+      <span class="availability-hero__tag">Disponibilidad</span>
+      <h1>Consultar disponibilidad de casas rurales</h1>
+      <p>
+        Visualiza de forma clara la disponibilidad por fecha, modalidad de reserva
+        y estado de habitaciones en una interfaz moderna, elegante y fácil de usar.
+      </p>
+    </div>
+
+    <div class="availability-hero__mini-card">
+      <span class="mini-card__label">Consulta rápida</span>
+      <strong class="mini-card__value">Fechas + noches + casa</strong>
+      <p class="mini-card__text">
+        Obtén un resumen visual organizado por día.
+      </p>
+    </div>
+  </section>
+
+  <div class="availability-layout">
+    <aside class="search-card">
+      <div class="search-card__header">
+        <span class="search-card__eyebrow">Formulario</span>
+        <h2>Parámetros de búsqueda</h2>
+        <p>
+          Completa los datos para consultar la disponibilidad de una casa rural.
+        </p>
+      </div>
+
+      <form
+        class="availability-form"
+        [formGroup]="consultaForm"
+        (ngSubmit)="consultarDisponibilidad()"
+      >
+        <div class="form-field">
+          <label for="casaId">ID de la casa</label>
+          <input
+            id="casaId"
+            type="number"
+            formControlName="casaId"
+            min="1"
+            placeholder="Ej. 1"
+          />
+          <small
+            class="field-error"
+            *ngIf="consultaForm.get('casaId')?.invalid && consultaForm.get('casaId')?.touched"
+          >
+            Ingresa un ID válido mayor a 0.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="fechaEntrada">Fecha de entrada</label>
+          <input
+            id="fechaEntrada"
+            type="date"
+            formControlName="fechaEntrada"
+          />
+          <small
+            class="field-error"
+            *ngIf="consultaForm.get('fechaEntrada')?.invalid && consultaForm.get('fechaEntrada')?.touched"
+          >
+            Selecciona una fecha de entrada.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="numeroNoches">Número de noches</label>
+          <input
+            id="numeroNoches"
+            type="number"
+            formControlName="numeroNoches"
+            min="1"
+            placeholder="Ej. 2"
+          />
+          <small
+            class="field-error"
+            *ngIf="consultaForm.get('numeroNoches')?.invalid && consultaForm.get('numeroNoches')?.touched"
+          >
+            Debe ser al menos 1 noche.
+          </small>
+        </div>
+
+        <button class="primary-btn" type="submit" [disabled]="loadingConsultar">
+          <span class="primary-btn__icon">⌕</span>
+          {{ loadingConsultar ? 'Consultando disponibilidad...' : 'Consultar disponibilidad' }}
+        </button>
+      </form>
+    </aside>
+
+    <section class="results-panel">
+      <div class="results-panel__header">
+        <div>
+          <span class="results-panel__eyebrow">Resultados</span>
+          <h2>Resumen de disponibilidad</h2>
+          <p>
+            Consulta organizada por día, con indicadores visuales de modalidad y estado.
+          </p>
+        </div>
+
+        <div class="results-counter" *ngIf="disponibilidadPorDia.length > 0">
+          <span class="results-counter__number">{{ disponibilidadPorDia.length }}</span>
+          <span class="results-counter__text">día(s) encontrado(s)</span>
+        </div>
+      </div>
+
+      <div
+        class="empty-state"
+        *ngIf="!loadingConsultar && disponibilidadPorDia.length === 0"
+      >
+        <div class="empty-state__icon">📅</div>
+        <h3>Aún no hay resultados para mostrar</h3>
+        <p>
+          Ingresa el ID de la casa, la fecha de entrada y el número de noches para
+          consultar la disponibilidad.
+        </p>
+      </div>
+
+      <div class="results-list" *ngIf="disponibilidadPorDia.length > 0">
+        <article class="day-card" *ngFor="let dia of disponibilidadPorDia">
+          <div class="day-card__top">
+            <div>
+              <span class="day-card__label">Fecha consultada</span>
+              <h3>{{ dia.fecha }}</h3>
+            </div>
+
+            <span
+              class="mode-badge"
+              [ngClass]="{
+                'mode-badge--casa': dia.modalidad === 'CASA_ENTERA',
+                'mode-badge--habitaciones': dia.modalidad === 'HABITACIONES',
+                'mode-badge--ambas': dia.modalidad === 'AMBAS'
+              }"
+            >
+              {{ dia.modalidad }}
+            </span>
+          </div>
+
+          <div class="day-card__summary">
+            <div class="summary-box">
+              <span class="summary-box__label">Estado general</span>
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'status-badge--free': dia.estadoCasa === 'LIBRE',
+                  'status-badge--reserved': dia.estadoCasa === 'RESERVADA',
+                  'status-badge--blocked': dia.estadoCasa === 'NO_DISPONIBLE'
+                }"
+              >
+                {{ dia.estadoCasa }}
+              </span>
+            </div>
+
+            <div class="summary-box">
+              <span class="summary-box__label">Habitaciones registradas</span>
+              <strong class="summary-box__value">{{ dia.habitaciones.length }}</strong>
+            </div>
+          </div>
+
+          <div class="rooms-section">
+            <div class="rooms-section__header">
+              <h4>Habitaciones</h4>
+              <span>{{ dia.habitaciones.length }} registradas</span>
+            </div>
+
+            <div class="room-grid" *ngIf="dia.habitaciones.length > 0; else noRooms">
+              <div class="room-card" *ngFor="let habitacion of dia.habitaciones">
+                <div class="room-card__icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M4 12.5V8.8A2.8 2.8 0 0 1 6.8 6h10.4A2.8 2.8 0 0 1 20 8.8v3.7"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M3 12.5h18V18H3v-5.5Z"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M7 10.2h3.2M13.8 10.2H17"
+                      stroke="currentColor"
+                      stroke-width="1.7"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+
+                <div class="room-card__content">
+                  <span class="room-code">{{ habitacion.codigoHabitacion }}</span>
+                  <span
+                    class="room-status"
+                    [ngClass]="{
+                      'room-status--free': habitacion.estado === 'LIBRE',
+                      'room-status--reserved': habitacion.estado === 'RESERVADA',
+                      'room-status--blocked': habitacion.estado === 'NO_DISPONIBLE'
+                    }"
+                  >
+                    {{ habitacion.estado }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noRooms>
+              <div class="no-rooms">
+                No hay habitaciones registradas para esta fecha.
+              </div>
+            </ng-template>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>

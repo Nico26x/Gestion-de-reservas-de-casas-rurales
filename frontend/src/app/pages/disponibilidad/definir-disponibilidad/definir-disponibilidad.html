@@ -1,0 +1,366 @@
+<div class="define-availability-page">
+  <div class="define-availability-shell">
+    <section class="shell-side">
+      <div class="side-glow side-glow--one"></div>
+      <div class="side-glow side-glow--two"></div>
+
+      <span class="side-badge">Disponibilidad</span>
+
+      <h1>Definir disponibilidad</h1>
+
+      <p class="side-description">
+        Configure periodos de operación para cada casa rural, 
+        pensada para facilitar la gestión de reservas.
+      </p>
+
+      <div class="side-steps">
+        <div class="step-item">
+          <span class="step-item__number">01</span>
+          <div>
+            <strong>Identifique la casa</strong>
+            <p>Seleccione la propiedad que se desea configurar.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <span class="step-item__number">02</span>
+          <div>
+            <strong>Defina el periodo</strong>
+            <p>Establezca la fecha inicial y final del rango.</p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <span class="step-item__number">03</span>
+          <div>
+            <strong>Elija modalidad y estados</strong>
+            <p>Controle cómo se ofrecerá la casa y sus habitaciones.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="side-note-card">
+        <span class="side-note-card__icon">✦</span>
+        <div>
+          <strong>Configuración inteligente</strong>
+          <p>
+            Una definición clara de disponibilidad reduce errores operativos y
+            mejora la administración del calendario de reservas.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell-form-area">
+      <div class="form-area-header">
+        <div>
+          <span class="section-label">Panel de registro</span>
+          <h2>Configurar periodo de disponibilidad</h2>
+        </div>
+
+        <div class="header-status-pill">
+          <span class="header-status-pill__dot"></span>
+          Registro activo
+        </div>
+      </div>
+
+      <form
+        class="availability-form"
+        [formGroup]="registrarForm"
+        (ngSubmit)="registrarDisponibilidad()"
+      >
+        <div class="form-block form-block--featured">
+          <div class="block-heading">
+            <span class="block-heading__index">A</span>
+            <div>
+              <h3>Casa y fechas</h3>
+              <p>Información base para aplicar la disponibilidad.</p>
+            </div>
+          </div>
+
+          <div class="form-grid form-grid--three">
+            <div class="field-box field-box--house">
+              <label for="casaId">ID de la casa</label>
+              <input
+                id="casaId"
+                type="number"
+                formControlName="casaId"
+                min="1"
+                placeholder="Ej. 1"
+              />
+              <small
+                class="field-error"
+                *ngIf="registrarForm.get('casaId')?.invalid && registrarForm.get('casaId')?.touched"
+              >
+                Debe ingresar un ID válido mayor a 0.
+              </small>
+            </div>
+
+            <div class="field-box">
+              <label for="fechaInicio">Fecha de inicio</label>
+              <input
+                id="fechaInicio"
+                type="date"
+                formControlName="fechaInicio"
+              />
+              <small
+                class="field-error"
+                *ngIf="registrarForm.get('fechaInicio')?.invalid && registrarForm.get('fechaInicio')?.touched"
+              >
+                Seleccione la fecha de inicio.
+              </small>
+            </div>
+
+            <div class="field-box">
+              <label for="fechaFin">Fecha final</label>
+              <input
+                id="fechaFin"
+                type="date"
+                formControlName="fechaFin"
+              />
+              <small
+                class="field-error"
+                *ngIf="registrarForm.get('fechaFin')?.invalid && registrarForm.get('fechaFin')?.touched"
+              >
+                Seleccione la fecha final.
+              </small>
+            </div>
+          </div>
+
+          <div
+            class="date-warning"
+            *ngIf="
+              registrarForm.value.fechaInicio &&
+              registrarForm.value.fechaFin &&
+              registrarForm.value.fechaInicio > registrarForm.value.fechaFin
+            "
+          >
+            La fecha de inicio no puede ser mayor que la fecha final.
+          </div>
+        </div>
+
+        <div class="form-grid form-grid--two-panels">
+          <div class="form-block">
+            <div class="block-heading">
+              <span class="block-heading__index">B</span>
+              <div>
+                <h3>Modalidad de reserva</h3>
+                <p>Defina cómo se ofrecerá el alojamiento.</p>
+              </div>
+            </div>
+
+            <div class="field-box">
+              <label for="modalidad">Modalidad</label>
+              <select id="modalidad" formControlName="modalidad">
+                <option value="CASA_ENTERA">CASA_ENTERA</option>
+                <option value="HABITACIONES">HABITACIONES</option>
+                <option value="AMBAS">AMBAS</option>
+              </select>
+            </div>
+
+            <div class="mode-preview-grid">
+              <div
+                class="mini-mode-card"
+                [ngClass]="{
+                  'mini-mode-card--active': registrarForm.value.modalidad === 'CASA_ENTERA'
+                }"
+              >
+                <span class="mini-mode-card__icon">🏡</span>
+                <div>
+                  <strong>Casa entera</strong>
+                  <p>Disponibilidad para toda la propiedad.</p>
+                </div>
+              </div>
+
+              <div
+                class="mini-mode-card"
+                [ngClass]="{
+                  'mini-mode-card--active': registrarForm.value.modalidad === 'HABITACIONES'
+                }"
+              >
+                <span class="mini-mode-card__icon">🛏</span>
+                <div>
+                  <strong>Habitaciones</strong>
+                  <p>Control individual por ocupación interna.</p>
+                </div>
+              </div>
+
+              <div
+                class="mini-mode-card"
+                [ngClass]="{
+                  'mini-mode-card--active': registrarForm.value.modalidad === 'AMBAS'
+                }"
+              >
+                <span class="mini-mode-card__icon">🔷</span>
+                <div>
+                  <strong>Ambas</strong>
+                  <p>Flexibilidad para operar en ambos modos.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <div class="block-heading">
+              <span class="block-heading__index">C</span>
+              <div>
+                <h3>Estados operativos</h3>
+                <p>Especifique la condición actual del inventario.</p>
+              </div>
+            </div>
+
+            <div class="field-stack">
+              <div class="field-box">
+                <label for="estadoCasa">Estado de la casa</label>
+                <select id="estadoCasa" formControlName="estadoCasa">
+                  <option value="LIBRE">LIBRE</option>
+                  <option value="RESERVADA">RESERVADA</option>
+                  <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
+                </select>
+              </div>
+
+              <div class="field-box">
+                <label for="estadoHabitaciones">Estado de habitaciones</label>
+                <select id="estadoHabitaciones" formControlName="estadoHabitaciones">
+                  <option value="LIBRE">LIBRE</option>
+                  <option value="RESERVADA">RESERVADA</option>
+                  <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="status-legend">
+              <div class="legend-chip">
+                <span class="legend-chip__dot legend-chip__dot--free"></span>
+                Libre
+              </div>
+              <div class="legend-chip">
+                <span class="legend-chip__dot legend-chip__dot--reserved"></span>
+                Reservada
+              </div>
+              <div class="legend-chip">
+                <span class="legend-chip__dot legend-chip__dot--blocked"></span>
+                No disponible
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <div class="form-footer__text">
+            <strong>Consejo</strong>
+            <p>
+              Revise cuidadosamente el rango de fechas antes de guardar para evitar
+              inconsistencias en la operación de reservas.
+            </p>
+          </div>
+
+          <button class="submit-btn" type="submit" [disabled]="loadingRegistrar">
+            <span class="submit-btn__icon">⟶</span>
+            {{ loadingRegistrar ? 'Guardando disponibilidad...' : 'Registrar disponibilidad' }}
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="shell-preview">
+      <div class="preview-orbit"></div>
+
+      <div class="preview-card preview-card--main">
+        <span class="preview-card__label">Resumen visual</span>
+
+        <div class="preview-house">
+          <div class="preview-house__icon">⌂</div>
+          <div>
+            <h3>
+              {{
+                registrarForm.value.casaId
+                  ? ('Casa #' + registrarForm.value.casaId)
+                  : 'Casa pendiente'
+              }}
+            </h3>
+            <p>Disponibilidad configurada para gestión operativa</p>
+          </div>
+        </div>
+
+        <div class="preview-range">
+          <div class="preview-range__item">
+            <span>Inicio</span>
+            <strong>{{ registrarForm.value.fechaInicio || 'Sin definir' }}</strong>
+          </div>
+
+          <div class="preview-range__line"></div>
+
+          <div class="preview-range__item">
+            <span>Fin</span>
+            <strong>{{ registrarForm.value.fechaFin || 'Sin definir' }}</strong>
+          </div>
+        </div>
+
+        <div class="preview-mode-badge"
+          [ngClass]="{
+            'preview-mode-badge--home': registrarForm.value.modalidad === 'CASA_ENTERA',
+            'preview-mode-badge--rooms': registrarForm.value.modalidad === 'HABITACIONES',
+            'preview-mode-badge--both': registrarForm.value.modalidad === 'AMBAS'
+          }"
+        >
+          {{ registrarForm.value.modalidad || 'AMBAS' }}
+        </div>
+      </div>
+
+      <div class="preview-card preview-card--status">
+        <div class="status-circle-card">
+          <div
+            class="status-circle"
+            [ngClass]="{
+              'status-circle--free': registrarForm.value.estadoCasa === 'LIBRE',
+              'status-circle--reserved': registrarForm.value.estadoCasa === 'RESERVADA',
+              'status-circle--blocked': registrarForm.value.estadoCasa === 'NO_DISPONIBLE'
+            }"
+          >
+            <span>Casa</span>
+          </div>
+
+          <strong>{{ registrarForm.value.estadoCasa || 'LIBRE' }}</strong>
+        </div>
+
+        <div class="status-circle-card">
+          <div
+            class="status-circle"
+            [ngClass]="{
+              'status-circle--free': registrarForm.value.estadoHabitaciones === 'LIBRE',
+              'status-circle--reserved': registrarForm.value.estadoHabitaciones === 'RESERVADA',
+              'status-circle--blocked': registrarForm.value.estadoHabitaciones === 'NO_DISPONIBLE'
+            }"
+          >
+            <span>Habit.</span>
+          </div>
+
+          <strong>{{ registrarForm.value.estadoHabitaciones || 'LIBRE' }}</strong>
+        </div>
+      </div>
+
+      <div class="preview-card preview-card--message">
+        <span class="preview-card__label">Interpretación</span>
+        <p>
+          {{
+            registrarForm.value.modalidad === 'CASA_ENTERA'
+              ? 'La disponibilidad quedará orientada al alquiler completo de la propiedad.'
+              : registrarForm.value.modalidad === 'HABITACIONES'
+              ? 'La configuración prioriza la gestión de habitaciones por separado.'
+              : 'La configuración permitirá operar tanto por casa completa como por habitaciones.'
+          }}
+        </p>
+      </div>
+
+      <div class="preview-card preview-card--tips">
+        <span class="preview-card__label">Buenas prácticas</span>
+        <ul>
+          <li>Verificar la casa antes de guardar.</li>
+          <li>Usar fechas coherentes y consecutivas.</li>
+          <li>Mantener estados consistentes con la realidad operativa.</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
