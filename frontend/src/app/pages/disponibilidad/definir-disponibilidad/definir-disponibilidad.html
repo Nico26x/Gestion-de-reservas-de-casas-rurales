@@ -1,0 +1,49 @@
+<h1>Definir disponibilidad</h1>
+
+<form [formGroup]="registrarForm" (ngSubmit)="registrarDisponibilidad()">
+  <div>
+    <label for="casaId">Casa ID</label>
+    <input id="casaId" type="number" formControlName="casaId" />
+  </div>
+
+  <div>
+    <label for="fechaInicio">Fecha inicio</label>
+    <input id="fechaInicio" type="date" formControlName="fechaInicio" />
+  </div>
+
+  <div>
+    <label for="fechaFin">Fecha fin</label>
+    <input id="fechaFin" type="date" formControlName="fechaFin" />
+  </div>
+
+  <div>
+    <label for="modalidad">Modalidad</label>
+    <select id="modalidad" formControlName="modalidad">
+      <option value="CASA_ENTERA">CASA_ENTERA</option>
+      <option value="HABITACIONES">HABITACIONES</option>
+      <option value="AMBAS">AMBAS</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="estadoCasa">Estado casa</label>
+    <select id="estadoCasa" formControlName="estadoCasa">
+      <option value="LIBRE">LIBRE</option>
+      <option value="RESERVADA">RESERVADA</option>
+      <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="estadoHabitaciones">Estado habitaciones</label>
+    <select id="estadoHabitaciones" formControlName="estadoHabitaciones">
+      <option value="LIBRE">LIBRE</option>
+      <option value="RESERVADA">RESERVADA</option>
+      <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="loadingRegistrar">
+    {{ loadingRegistrar ? 'Guardando...' : 'Registrar disponibilidad' }}
+  </button>
+</form>
