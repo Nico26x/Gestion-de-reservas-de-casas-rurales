@@ -307,6 +307,33 @@ input.ng-invalid.ng-touched {
   box-shadow: 0 0 0 3px rgba(217, 123, 90, 0.1);
 }
 
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid #c5d4ec;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.93rem;
+  font-weight: 300;
+  outline: none;
+  transition: border-color var(--ease), box-shadow var(--ease), background var(--ease);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--border-focus);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(91, 141, 217, 0.12);
+}
+
+select.ng-invalid.ng-touched {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(217, 123, 90, 0.1);
+}
+
 /* ── Separador decorativo ── */
 .rp-divider {
   display: flex;

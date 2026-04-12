@@ -4,6 +4,7 @@ import com.reservas.dto.LoginRequestDTO;
 import com.reservas.dto.LoginResponseDTO;
 import com.reservas.dto.RegistroRequestDTO;
 import com.reservas.dto.RegistroResponseDTO;
+import com.reservas.model.Propietario;
 import com.reservas.security.JwtUtil;
 import com.reservas.service.PropietarioService;
 
@@ -39,10 +40,16 @@ public class AuthController {
                             request.getContrasena()));
 
             String nombreCuenta = authentication.getName();
-            String token = jwtUtil.generarToken(nombreCuenta);
+            
+            // Obtener el propietario para extraer el rol
+            Propietario propietario = propietarioService.buscarPorUsername(nombreCuenta);
+            String rolNombre = propietario.getRol().name();
+            
+            // Generar token incluyendo el rol
+            String token = jwtUtil.generarToken(nombreCuenta, rolNombre);
 
             return ResponseEntity.ok(
-                    new LoginResponseDTO(token, nombreCuenta, "Login exitoso"));
+                    new LoginResponseDTO(token, nombreCuenta, rolNombre, "Login exitoso"));
 
         } catch (BadCredentialsException e) {
             return ResponseEntity

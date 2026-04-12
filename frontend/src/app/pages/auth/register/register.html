@@ -47,6 +47,17 @@
       />
     </div>
 
+    <div>
+      <label for="rol">Tipo de cuenta</label>
+      <select
+        id="rol"
+        formControlName="rol"
+      >
+        <option value="CLIENTE">CLIENTE</option>
+        <option value="PROPIETARIO">PROPIETARIO</option>
+      </select>
+    </div>
+
     <button type="submit" [disabled]="loading">
       {{ loading ? 'Registrando...' : 'Registrarse' }}
     </button>
