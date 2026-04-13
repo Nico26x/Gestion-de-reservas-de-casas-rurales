@@ -1,294 +1,357 @@
-<section class="package-page">
-  <div class="package-backdrop">
-    <span class="blur blur--one"></span>
-    <span class="blur blur--two"></span>
-    <span class="grid-overlay"></span>
+<section class="package-studio">
+  <div class="package-studio__bg">
+    <span class="bg-blur bg-blur--one"></span>
+    <span class="bg-blur bg-blur--two"></span>
+    <span class="bg-grid"></span>
   </div>
 
-  <div class="package-shell">
-    <section class="package-hero">
-      <div class="hero-copy">
-        <span class="hero-kicker">Gestión de paquetes</span>
+  <div class="package-studio__shell">
+    <div class="package-layout">
+      <section class="package-main-card">
+        <header class="package-hero">
+          <div class="package-hero__copy">
+            <span class="hero-eyebrow">Gestión de paquetes</span>
 
-        <h1>
-          Diseñar un paquete
-          <span>moderno, claro y atractivo</span>
-        </h1>
+            <h1>
+              Crear un
+              <span>Paquete</span>
+            </h1>
 
-        <p class="hero-text">
-          Configure la vigencia comercial de una casa rural y defina un precio
-          especial con una experiencia visual más elegante, limpia y profesional.
-        </p>
-
-        <div class="hero-tags">
-          <span class="hero-tag">Precio personalizado</span>
-          <span class="hero-tag">Rango de fechas</span>
-          <span class="hero-tag">Vista previa en vivo</span>
-        </div>
-      </div>
-
-      <div class="hero-visual">
-        <div class="orbital orbital--one"></div>
-        <div class="orbital orbital--two"></div>
-        <div class="orbital orbital--three"></div>
-
-        <div class="floating-pill floating-pill--top-left">
-          <span class="floating-dot"></span>
-          Paquete exclusivo
-        </div>
-
-        <div class="floating-pill floating-pill--top-right">
-          <span class="floating-dot"></span>
-          Vigencia controlada
-        </div>
-
-        <div class="floating-pill floating-pill--bottom-left">
-          <span class="floating-dot"></span>
-          Enlace con casa
-        </div>
-
-        <div class="package-cube">
-          <div class="package-cube__glow"></div>
-          <div class="package-cube__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7"/>
-              <path d="M21 7H3v5h18V7Z"/>
-              <path d="M12 22V7"/>
-              <path d="M12 7H7.5a2.5 2.5 0 1 1 0-5C10 2 12 7 12 7Z"/>
-              <path d="M12 7h4.5a2.5 2.5 0 1 0 0-5C14 2 12 7 12 7Z"/>
-            </svg>
-          </div>
-          <span class="package-cube__label">Nuevo paquete</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="package-content">
-      <form
-        class="package-form-card"
-        [formGroup]="paqueteForm"
-        (ngSubmit)="onSubmit()"
-        novalidate
-      >
-        <div class="card-topbar"></div>
-
-        <div class="card-header">
-          <div class="card-header__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 7 12 3 4 7l8 4 8-4Z"/>
-              <path d="M4 7v10l8 4 8-4V7"/>
-              <path d="M12 11v10"/>
-            </svg>
-          </div>
-
-          <div>
-            <span class="card-kicker">Panel de registro</span>
-            <h2>Crear paquete comercial</h2>
-            <p>
-              Ingrese la casa, seleccione la vigencia y defina el precio del paquete.
+            <p class="hero-subtitle">
             </p>
-          </div>
-        </div>
 
-        <div class="form-section">
-          <div class="section-head">
-            <span class="section-index">01</span>
-            <div>
-              <h3>Casa asociada</h3>
-              <p>Identifique la propiedad a la que se aplicará el paquete.</p>
+            <div class="hero-tags">
+              <span class="hero-tag">Resumen en vivo</span>
+              <span class="hero-tag">Diseño premium</span>
+              <span class="hero-tag">Flujo simple</span>
             </div>
           </div>
 
-          <div class="field">
-            <label for="casaId">ID de la casa</label>
-            <div class="input-shell">
-              <span class="input-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M3 11.5 12 4l9 7.5"/>
-                  <path d="M5 10.5V20h14v-9.5"/>
-                  <path d="M9.5 20v-5h5v5"/>
-                </svg>
-              </span>
+          <div class="package-hero__art" aria-hidden="true">
+            <div class="space-ring space-ring--one"></div>
+            <div class="space-ring space-ring--two"></div>
+            <div class="space-ring space-ring--three"></div>
 
-              <input
-                id="casaId"
-                type="number"
-                min="1"
-                placeholder="Ej: 1"
-                formControlName="casaId"
-                [class.input-error]="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched"
-              />
-            </div>
+            <span class="space-dot space-dot--one"></span>
+            <span class="space-dot space-dot--two"></span>
+            <span class="space-dot space-dot--three"></span>
+            <span class="space-dot space-dot--four"></span>
 
-            <small
-              class="field-error"
-              *ngIf="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched"
-            >
-              Debe ingresar un ID válido mayor a 0.
-            </small>
-          </div>
-        </div>
+            <div class="rocket-glow"></div>
 
-        <div class="form-section">
-          <div class="section-head">
-            <span class="section-index">02</span>
-            <div>
-              <h3>Vigencia del paquete</h3>
-              <p>Defina el rango de fechas en el que estará disponible.</p>
-            </div>
-          </div>
+            <div class="rocket-scene">
+              <svg viewBox="0 0 220 220" class="rocket-svg">
+                <defs>
+                  <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2D6FD3" />
+                    <stop offset="55%" stop-color="#1F56A5" />
+                    <stop offset="100%" stop-color="#143B79" />
+                  </linearGradient>
 
-          <div class="field-grid field-grid--dates">
-            <div class="field">
-              <label for="fechaInicio">Fecha de inicio</label>
-              <div class="input-shell">
-                <span class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M8 2v4"/>
-                    <path d="M16 2v4"/>
-                    <rect x="3" y="4" width="18" height="17" rx="2"/>
-                    <path d="M3 10h18"/>
-                  </svg>
-                </span>
+                  <linearGradient id="rocketSide" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#77ACFF" />
+                    <stop offset="100%" stop-color="#2F6ED3" />
+                  </linearGradient>
 
-                <input
-                  id="fechaInicio"
-                  type="date"
-                  formControlName="fechaInicio"
-                  [class.input-error]="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched"
-                />
-              </div>
+                  <linearGradient id="rocketWing" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#2C68C7" />
+                    <stop offset="100%" stop-color="#163F7F" />
+                  </linearGradient>
 
-              <small
-                class="field-error"
-                *ngIf="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched"
-              >
-                Seleccione la fecha inicial.
-              </small>
-            </div>
+                  <linearGradient id="windowGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#F7FBFF" />
+                    <stop offset="100%" stop-color="#88B8FF" />
+                  </linearGradient>
 
-            <div class="field">
-              <label for="fechaFin">Fecha final</label>
-              <div class="input-shell">
-                <span class="input-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-                       stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M8 2v4"/>
-                    <path d="M16 2v4"/>
-                    <rect x="3" y="4" width="18" height="17" rx="2"/>
-                    <path d="M3 10h18"/>
-                  </svg>
-                </span>
+                  <linearGradient id="fireMain" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFF7B0" />
+                    <stop offset="55%" stop-color="#FFB347" />
+                    <stop offset="100%" stop-color="#FF7A2F" />
+                  </linearGradient>
 
-                <input
-                  id="fechaFin"
-                  type="date"
-                  formControlName="fechaFin"
-                  [class.input-error]="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched"
-                />
-              </div>
+                  <linearGradient id="fireCore" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="100%" stop-color="#FFE49B" />
+                  </linearGradient>
 
-              <small
-                class="field-error"
-                *ngIf="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched"
-              >
-                Seleccione la fecha final.
-              </small>
-            </div>
-          </div>
+                  <filter id="softShadow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="#1D4488" flood-opacity="0.18" />
+                  </filter>
+                </defs>
 
-          <div
-            class="date-alert"
-            *ngIf="
-              paqueteForm.value.fechaInicio &&
-              paqueteForm.value.fechaFin &&
-              paqueteForm.value.fechaInicio > paqueteForm.value.fechaFin
-            "
-          >
-            La fecha de inicio no puede ser mayor que la fecha final.
-          </div>
-        </div>
+                <g filter="url(#softShadow)">
+                  <path d="M110 30
+                           C137 47 154 78 155 116
+                           L110 143
+                           L65 116
+                           C66 78 83 47 110 30Z"
+                        fill="url(#rocketBody)" />
 
-        <div class="form-section">
-          <div class="section-head">
-            <span class="section-index">03</span>
-            <div>
-              <h3>Valor del paquete</h3>
-              <p>Defina el precio total con una presentación clara y elegante.</p>
-            </div>
-          </div>
+                  <path d="M110 30
+                           C137 47 154 78 155 116
+                           L110 143
+                           Z"
+                        fill="url(#rocketSide)" opacity="0.55" />
 
-          <div class="field">
-            <label for="precio">Precio</label>
-            <div class="input-shell input-shell--price">
-              <span class="price-prefix">$</span>
+                  <path d="M79 120
+                           L54 149
+                           L87 141
+                           L101 124
+                           Z"
+                        fill="url(#rocketWing)" />
 
-              <input
-                id="precio"
-                type="number"
-                min="1"
-                placeholder="0"
-                formControlName="precio"
-                [class.input-error]="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched"
-              />
-            </div>
+                  <path d="M141 120
+                           L166 149
+                           L133 141
+                           L119 124
+                           Z"
+                        fill="url(#rocketWing)" />
 
-            <small
-              class="field-error"
-              *ngIf="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched"
-            >
-              Debe ingresar un precio válido mayor a 0.
-            </small>
-          </div>
-        </div>
+                  <path d="M95 142
+                           L84 184
+                           L110 168
+                           L136 184
+                           L125 142
+                           Z"
+                        fill="#8CC0FF" />
 
-        <div class="submit-zone">
-          <div class="submit-note">
-            <span class="submit-note__title">Estado del formulario</span>
-            <span class="submit-note__text">
-              {{ paqueteForm.valid ? 'Listo para registrar' : 'Faltan datos por completar' }}
-            </span>
-          </div>
+                  <path d="M101 150
+                           L95 174
+                           L110 165
+                           L125 174
+                           L119 150
+                           Z"
+                        fill="#D9EDFF" opacity="0.9" />
 
-          <button type="submit" class="submit-btn" [disabled]="loading">
-            <ng-container *ngIf="!loading">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M20 7 12 3 4 7l8 4 8-4Z"/>
-                <path d="M4 7v10l8 4 8-4V7"/>
-                <path d="M12 11v10"/>
+                  <circle cx="110" cy="82" r="18" fill="#EAF5FF" />
+                  <circle cx="110" cy="82" r="13" fill="url(#windowGlow)" />
+                  <circle cx="110" cy="82" r="6" fill="#2E70D8" opacity="0.8" />
+
+                  <path d="M104 180
+                           C107 194 110 200 110 200
+                           C110 200 113 194 116 180
+                           Z"
+                        fill="url(#fireMain)" />
+
+                  <path d="M107 180
+                           C108.5 191 110 196 110 196
+                           C110 196 111.5 191 113 180
+                           Z"
+                        fill="url(#fireCore)" />
+
+                  <ellipse cx="110" cy="40" rx="11" ry="7" fill="#D8EAFF" opacity="0.85" />
+                  <path d="M98 45 Q110 20 122 45" fill="#184387" />
+                </g>
               </svg>
-              Crear paquete
-            </ng-container>
+            </div>
+          </div>
+        </header>
 
-            <ng-container *ngIf="loading">
-              <span class="btn-spinner"></span>
-              Guardando...
-            </ng-container>
-          </button>
-        </div>
-      </form>
+        <form
+          class="package-form"
+          [formGroup]="paqueteForm"
+          (ngSubmit)="onSubmit()"
+          novalidate
+        >
+          <div class="form-section">
+            <div class="section-heading">
+              <span class="section-step">01</span>
+              <div>
+                <h2>ID de casa</h2>
+                <p>Seleccione la propiedad a la que se asociará el paquete.</p>
+              </div>
+            </div>
 
-      <aside class="package-preview-card">
-        <div class="preview-header">
-          <div>
-            <span class="preview-kicker">Vista previa</span>
-            <h3>Resumen del paquete</h3>
+            <div class="field">
+              <label for="casaId">Número de la propiedad</label>
+
+              <div class="input-shell">
+                <span class="input-shell__icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M3 11.5 12 4l9 7.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M5 10.5V20h14v-9.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M9.5 20v-5h5v5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+
+                <input
+                  id="casaId"
+                  type="number"
+                  min="1"
+                  placeholder="Número de la propiedad..."
+                  formControlName="casaId"
+                  [class.is-invalid]="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched"
+                />
+              </div>
+
+              <small
+                class="field-error"
+                *ngIf="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched"
+              >
+                Debe ingresar un ID válido mayor a 0.
+              </small>
+            </div>
           </div>
 
-          <span class="preview-status">
-            <span class="preview-status__dot"></span>
-            Borrador
+          <div class="form-section">
+            <div class="section-heading">
+              <span class="section-step">02</span>
+              <div>
+                <h2>Periodo del paquete</h2>
+                <p>Defina el rango de fechas de disponibilidad comercial.</p>
+              </div>
+            </div>
+
+            <div class="field-grid field-grid--dates">
+              <div class="field">
+                <label for="fechaInicio">Inicio</label>
+
+                <div class="input-shell">
+                  <span class="input-shell__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M8 2v4" stroke-linecap="round" />
+                      <path d="M16 2v4" stroke-linecap="round" />
+                      <rect x="3" y="4" width="18" height="17" rx="2" />
+                      <path d="M3 10h18" stroke-linecap="round" />
+                    </svg>
+                  </span>
+
+                  <input
+                    id="fechaInicio"
+                    type="date"
+                    formControlName="fechaInicio"
+                    [class.is-invalid]="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched"
+                  />
+                </div>
+
+                <small
+                  class="field-error"
+                  *ngIf="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched"
+                >
+                  Seleccione la fecha inicial.
+                </small>
+              </div>
+
+              <div class="field">
+                <label for="fechaFin">Fin</label>
+
+                <div class="input-shell">
+                  <span class="input-shell__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M8 2v4" stroke-linecap="round" />
+                      <path d="M16 2v4" stroke-linecap="round" />
+                      <rect x="3" y="4" width="18" height="17" rx="2" />
+                      <path d="M3 10h18" stroke-linecap="round" />
+                    </svg>
+                  </span>
+
+                  <input
+                    id="fechaFin"
+                    type="date"
+                    formControlName="fechaFin"
+                    [class.is-invalid]="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched"
+                  />
+                </div>
+
+                <small
+                  class="field-error"
+                  *ngIf="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched"
+                >
+                  Seleccione la fecha final.
+                </small>
+              </div>
+            </div>
+
+            <div
+              class="date-warning"
+              *ngIf="
+                paqueteForm.value.fechaInicio &&
+                paqueteForm.value.fechaFin &&
+                paqueteForm.value.fechaInicio > paqueteForm.value.fechaFin
+              "
+            >
+              La fecha de inicio no puede ser mayor que la fecha final.
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="section-heading">
+              <span class="section-step">03</span>
+              <div>
+                <h2>Precio total</h2>
+                <p>Ingrese el valor que tendrá el paquete para ese periodo.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="precio">Valor del paquete</label>
+
+              <div class="input-shell input-shell--money">
+                <span class="money-prefix">$</span>
+
+                <input
+                  id="precio"
+                  type="number"
+                  min="1"
+                  placeholder="0"
+                  formControlName="precio"
+                  [class.is-invalid]="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched"
+                />
+              </div>
+
+              <small
+                class="field-error"
+                *ngIf="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched"
+              >
+                Debe ingresar un precio válido mayor a 0.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-footer">
+            <div class="form-status">
+              <span class="form-status__label">Estado del formulario</span>
+              <strong class="form-status__value">
+                {{ paqueteForm.valid ? 'Listo para registrar' : 'Faltan datos por completar' }}
+              </strong>
+            </div>
+
+            <button type="submit" class="submit-btn" [disabled]="loading">
+              <ng-container *ngIf="!loading">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+                  <path d="M20 7 12 3 4 7l8 4 8-4Z" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M4 7v10l8 4 8-4V7" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M12 11v10" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Crear paquete
+              </ng-container>
+
+              <ng-container *ngIf="loading">
+                <span class="btn-spinner"></span>
+                Guardando...
+              </ng-container>
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="package-summary">
+        <div class="package-summary__top">
+          <span class="summary-eyebrow">Resumen</span>
+          <h3>Tu paquete</h3>
+
+          <span
+            class="summary-status"
+            [class.summary-status--ready]="paqueteForm.valid"
+          >
+            <span class="summary-status__dot"></span>
+            {{ paqueteForm.valid ? 'Listo' : 'Borrador' }}
           </span>
         </div>
 
-        <div class="preview-price-card">
-          <span class="preview-price-card__label">Precio del paquete</span>
-          <strong class="preview-price-card__value">
+        <div class="summary-amount">
+          <span class="summary-amount__label">Precio total</span>
+          <strong class="summary-amount__value">
             {{
               paqueteForm.value.precio
                 ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0')
@@ -297,75 +360,95 @@
           </strong>
         </div>
 
-        <div class="preview-grid">
-          <div class="preview-item">
-            <span class="preview-item__label">Casa</span>
-            <strong class="preview-item__value">
-              {{
-                paqueteForm.value.casaId
-                  ? ('Casa #' + paqueteForm.value.casaId)
-                  : 'Sin asignar'
-              }}
-            </strong>
+        <div class="summary-card">
+          <span class="summary-card__label">Casa</span>
+          <strong class="summary-card__value">
+            {{
+              paqueteForm.value.casaId
+                ? ('Casa #' + paqueteForm.value.casaId)
+                : 'Sin asignar'
+            }}
+          </strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-card__label">Fecha inicio</span>
+          <strong class="summary-card__value">
+            {{ paqueteForm.value.fechaInicio || 'Pendiente' }}
+          </strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-card__label">Fecha fin</span>
+          <strong class="summary-card__value">
+            {{ paqueteForm.value.fechaFin || 'Pendiente' }}
+          </strong>
+        </div>
+
+        <div class="summary-card">
+          <span class="summary-card__label">Estado visual</span>
+          <strong class="summary-card__value">
+            {{ paqueteForm.valid ? 'Completo' : 'En edición' }}
+          </strong>
+        </div>
+
+        <div class="summary-progress">
+          <div
+            class="progress-item"
+            [class.progress-item--done]="!!paqueteForm.value.casaId"
+          >
+            <span class="progress-item__mark"></span>
+            <div>
+              <small>Propiedad</small>
+              <strong>
+                {{ paqueteForm.value.casaId ? 'Asignada' : 'Pendiente' }}
+              </strong>
+            </div>
           </div>
 
-          <div class="preview-item">
-            <span class="preview-item__label">Vigencia inicial</span>
-            <strong class="preview-item__value">
-              {{ paqueteForm.value.fechaInicio || 'Pendiente' }}
-            </strong>
+          <div
+            class="progress-item"
+            [class.progress-item--done]="
+              !!paqueteForm.value.fechaInicio &&
+              !!paqueteForm.value.fechaFin &&
+              paqueteForm.value.fechaInicio <= paqueteForm.value.fechaFin
+            "
+          >
+            <span class="progress-item__mark"></span>
+            <div>
+              <small>Periodo</small>
+              <strong>
+                {{
+                  paqueteForm.value.fechaInicio && paqueteForm.value.fechaFin
+                    ? 'Definido'
+                    : 'Pendiente'
+                }}
+              </strong>
+            </div>
           </div>
 
-          <div class="preview-item">
-            <span class="preview-item__label">Vigencia final</span>
-            <strong class="preview-item__value">
-              {{ paqueteForm.value.fechaFin || 'Pendiente' }}
-            </strong>
-          </div>
-
-          <div class="preview-item">
-            <span class="preview-item__label">Estado visual</span>
-            <strong class="preview-item__value">
-              {{ paqueteForm.valid ? 'Completo' : 'En edición' }}
-            </strong>
+          <div
+            class="progress-item"
+            [class.progress-item--done]="!!paqueteForm.value.precio"
+          >
+            <span class="progress-item__mark"></span>
+            <div>
+              <small>Precio</small>
+              <strong>
+                {{ paqueteForm.value.precio ? 'Registrado' : 'Pendiente' }}
+              </strong>
+            </div>
           </div>
         </div>
 
-        <div class="timeline-card">
-          <div class="timeline-card__head">
-            <span class="timeline-card__title">Línea de vigencia</span>
-            <span class="timeline-card__badge">Activo al registrar</span>
-          </div>
-
-          <div class="timeline">
-            <div class="timeline-step">
-              <span class="timeline-step__dot"></span>
-              <div>
-                <small>Inicio</small>
-                <strong>{{ paqueteForm.value.fechaInicio || 'Sin fecha' }}</strong>
-              </div>
-            </div>
-
-            <div class="timeline-line"></div>
-
-            <div class="timeline-step">
-              <span class="timeline-step__dot timeline-step__dot--end"></span>
-              <div>
-                <small>Fin</small>
-                <strong>{{ paqueteForm.value.fechaFin || 'Sin fecha' }}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="advice-card">
-          <span class="advice-card__icon">✦</span>
+        <div class="summary-tip">
+          <span class="summary-tip__icon">✦</span>
           <p>
-            Un rango de fechas bien definido y un precio claro mejoran la
-            gestión interna y reducen errores al momento de reservar.
+            Un periodo bien definido y un precio claro ayudan a gestionar mejor
+            las reservas y evitan errores operativos.
           </p>
         </div>
       </aside>
-    </section>
+    </div>
   </div>
 </section>
