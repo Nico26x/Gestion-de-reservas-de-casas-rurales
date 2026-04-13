@@ -6,6 +6,8 @@ import com.reservas.model.Propietario;
 import com.reservas.service.CasaService;
 import com.reservas.service.PropietarioService;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ public class CasaController {
     public ResponseEntity<Casa> crearCasa(
             @RequestParam String nombre,
             @RequestParam String direccion,
+            @RequestParam String poblacion,
             @RequestParam int numeroHabitaciones,
             @RequestParam int numeroBanos,
             @RequestParam int numeroCocinas,
@@ -52,6 +55,7 @@ public class CasaController {
         CasaRequestDTO dto = new CasaRequestDTO();
         dto.setNombre(nombre);
         dto.setDireccion(direccion);
+        dto.setPoblacion(poblacion);
         dto.setNumeroHabitaciones(numeroHabitaciones);
         dto.setNumeroBanos(numeroBanos);
         dto.setNumeroCocinas(numeroCocinas);
@@ -59,6 +63,17 @@ public class CasaController {
         Casa casa = casaService.crearCasa(dto, foto, propietario);
 
         return ResponseEntity.ok(casa);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Casa>> getCasasPorPoblacion(
+            @RequestParam(required = false) String poblacion) {
+
+        if (poblacion != null) {
+            return ResponseEntity.ok(casaService.buscarPorPoblacion(poblacion));
+        }
+
+        return ResponseEntity.ok(casaService.findAll()); // mejor que lista vacía
     }
 
 }

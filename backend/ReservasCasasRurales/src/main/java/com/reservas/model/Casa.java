@@ -17,9 +17,11 @@ public class Casa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombre;
     private String direccion;
+    
+    @Column(name = "poblacion")
+    private String poblacion;
 
     @Column(name = "foto")
     private String foto;
