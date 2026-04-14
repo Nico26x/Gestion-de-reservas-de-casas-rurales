@@ -30,6 +30,7 @@ export class CrearCasaComponent {
   crearCasaForm = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     direccion: ['', [Validators.required, Validators.minLength(5)]],
+    poblacion: ['', [Validators.required, Validators.minLength(2)]],
     numeroHabitaciones: [3, [Validators.required, Validators.min(3)]],
     numeroBanos: [2, [Validators.required, Validators.min(2)]],
     numeroCocinas: [1, [Validators.required, Validators.min(1)]]
@@ -41,6 +42,10 @@ export class CrearCasaComponent {
 
   get direccion() {
     return this.crearCasaForm.get('direccion');
+  }
+
+  get poblacion() {
+    return this.crearCasaForm.get('poblacion');
   }
 
   get numeroHabitaciones() {
@@ -89,6 +94,7 @@ export class CrearCasaComponent {
     this.crearCasaForm.reset({
       nombre: '',
       direccion: '',
+      poblacion: '',
       numeroHabitaciones: 3,
       numeroBanos: 2,
       numeroCocinas: 1
@@ -123,6 +129,7 @@ export class CrearCasaComponent {
     const casaData: CrearCasaRequest = {
       nombre: this.crearCasaForm.value.nombre!,
       direccion: this.crearCasaForm.value.direccion!,
+      poblacion: this.crearCasaForm.value.poblacion!,
       numeroHabitaciones: Number(this.crearCasaForm.value.numeroHabitaciones),
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
       numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),

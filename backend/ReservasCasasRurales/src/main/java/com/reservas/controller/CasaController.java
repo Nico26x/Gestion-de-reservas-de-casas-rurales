@@ -27,13 +27,13 @@ public class CasaController {
 
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Casa> crearCasa(
-            @RequestParam String nombre,
-            @RequestParam String direccion,
-            @RequestParam String poblacion,
-            @RequestParam int numeroHabitaciones,
-            @RequestParam int numeroBanos,
-            @RequestParam int numeroCocinas,
-            @RequestParam MultipartFile foto,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("direccion") String direccion,
+            @RequestParam("poblacion") String poblacion,
+            @RequestParam("numeroHabitaciones") int numeroHabitaciones,
+            @RequestParam("numeroBanos") int numeroBanos,
+            @RequestParam("numeroCocinas") int numeroCocinas,
+            @RequestParam("foto") MultipartFile foto,
             Authentication authentication) throws Exception {
 
         if (authentication == null) {
@@ -67,7 +67,7 @@ public class CasaController {
 
     @GetMapping
     public ResponseEntity<List<Casa>> getCasasPorPoblacion(
-            @RequestParam(required = false) String poblacion) {
+            @RequestParam(value = "poblacion", required = false) String poblacion) {
 
         if (poblacion != null) {
             return ResponseEntity.ok(casaService.buscarPorPoblacion(poblacion));

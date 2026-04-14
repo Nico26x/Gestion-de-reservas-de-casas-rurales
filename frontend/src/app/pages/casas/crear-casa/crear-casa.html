@@ -94,6 +94,21 @@
         </span>
       </div>
 
+      <div class="cl-field">
+        <label class="cl-lbl" for="poblacion">Población</label>
+        <input
+          id="poblacion"
+          class="cl-inp"
+          [class.cl-inp--error]="poblacion?.invalid && poblacion?.touched"
+          type="text"
+          placeholder="Ej: Salento, Filandia, Circasia..."
+          formControlName="poblacion"
+        />
+        <span class="cl-error" *ngIf="poblacion?.invalid && poblacion?.touched">
+          Mínimo 2 caracteres
+        </span>
+      </div>
+
       <!-- Sección: Distribución -->
       <p class="cl-section-label">Distribución</p>
 

@@ -1,0 +1,40 @@
+<h1>Buscar casas por población</h1>
+
+<form [formGroup]="busquedaForm" (ngSubmit)="buscar()">
+  <div>
+    <label for="poblacion">Población</label>
+    <input id="poblacion" type="text" formControlName="poblacion" />
+  </div>
+
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Buscando...' : 'Buscar' }}
+  </button>
+
+  <button type="button" (click)="cargarTodas()" [disabled]="loading">
+    Ver todas
+  </button>
+</form>
+
+<hr />
+
+<div *ngIf="resultados.length === 0">
+  <p>No hay resultados para mostrar.</p>
+</div>
+
+<div *ngIf="resultados.length > 0">
+  <div *ngFor="let casa of resultados">
+    <h3>{{ casa.nombre }}</h3>
+    <p><strong>Dirección:</strong> {{ casa.direccion }}</p>
+    <p><strong>Población:</strong> {{ casa.poblacion }}</p>
+
+    <div *ngIf="casa.foto">
+      <img [src]="casa.foto" [alt]="casa.nombre" width="220" />
+    </div>
+
+    <p>
+      <a [routerLink]="['/casas', casa.id]">Ver detalle</a>
+    </p>
+
+    <hr />
+  </div>
+</div>
