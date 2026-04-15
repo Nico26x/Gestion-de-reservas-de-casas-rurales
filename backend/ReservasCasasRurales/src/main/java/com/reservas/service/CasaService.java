@@ -58,6 +58,10 @@ public class CasaService {
         for (int i = 0; i < dto.getNumeroHabitaciones(); i++) {
             Habitacion h = new Habitacion();
             h.setCasa(casa);
+            h.setCodigoHabitacion("HAB-" + (i + 1));
+            h.setNumeroCamas(1);
+            h.setTieneBano(true);
+            h.setTipoCama(TipoCama.SIMPLE);
             habitaciones.add(h);
         }
 
