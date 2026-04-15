@@ -23,7 +23,6 @@
   <h2>Registro</h2>
   <p class="rp-subtitle">Gestión de Casas Rurales</p>
 
-
   <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div>
       <label for="nombreCuenta">Nombre de cuenta</label>
@@ -56,6 +55,16 @@
         <option value="CLIENTE">CLIENTE</option>
         <option value="PROPIETARIO">PROPIETARIO</option>
       </select>
+    </div>
+
+    <div>
+      <label for="numeroCuentaBancaria">Número de cuenta bancaria</label>
+      <input
+        id="numeroCuentaBancaria"
+        type="text"
+        formControlName="numeroCuentaBancaria"
+        placeholder="Ingresa tu número de cuenta bancaria"
+      />
     </div>
 
     <button type="submit" [disabled]="loading">

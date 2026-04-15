@@ -28,7 +28,8 @@ export class RegisterComponent {
   registerForm = this.fb.group({
     nombreCuenta: ['', [Validators.required]],
     contrasena: ['', [Validators.required]],
-    rol: ['CLIENTE', [Validators.required]]
+    rol: ['CLIENTE', [Validators.required]],
+    numeroCuentaBancaria: ['', [Validators.required]]
   });
 
   onSubmit(): void {
@@ -48,7 +49,8 @@ export class RegisterComponent {
     const registerData: RegisterRequest = {
       nombreCuenta: this.registerForm.value.nombreCuenta!,
       contrasena: this.registerForm.value.contrasena!,
-      rol: this.registerForm.value.rol!
+      rol: this.registerForm.value.rol!,
+      numeroCuentaBancaria: this.registerForm.value.numeroCuentaBancaria!
     };
 
     this.authService.register(registerData).subscribe({
