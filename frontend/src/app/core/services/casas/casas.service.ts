@@ -21,6 +21,9 @@ export class CasasService {
     formData.append('numeroBanos', String(data.numeroBanos));
     formData.append('numeroCocinas', String(data.numeroCocinas));
     formData.append('foto', data.foto);
+    formData.append('numeroCamas', String(data.numeroCamas));
+    formData.append('tieneBano', String(data.tieneBano));
+    formData.append('tipoCama', data.tipoCama);
 
     return this.http.post<Casa>(this.apiUrl, formData);
   }

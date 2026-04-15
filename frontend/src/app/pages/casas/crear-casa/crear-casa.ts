@@ -33,7 +33,10 @@ export class CrearCasaComponent {
     poblacion: ['', [Validators.required, Validators.minLength(2)]],
     numeroHabitaciones: [3, [Validators.required, Validators.min(3)]],
     numeroBanos: [2, [Validators.required, Validators.min(2)]],
-    numeroCocinas: [1, [Validators.required, Validators.min(1)]]
+    numeroCocinas: [1, [Validators.required, Validators.min(1)]],
+    numeroCamas: [1, [Validators.required, Validators.min(1)]],
+    tieneBano: [false, [Validators.required]],
+    tipoCama: ['', [Validators.required]]
   });
 
   get nombre() {
@@ -58,6 +61,18 @@ export class CrearCasaComponent {
 
   get numeroCocinas() {
     return this.crearCasaForm.get('numeroCocinas');
+  }
+
+  get numeroCamas() {
+    return this.crearCasaForm.get('numeroCamas');
+  }
+
+  get tieneBano() {
+    return this.crearCasaForm.get('tieneBano');
+  }
+
+  get tipoCama() {
+    return this.crearCasaForm.get('tipoCama');
   }
 
   increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas'): void {
@@ -97,7 +112,10 @@ export class CrearCasaComponent {
       poblacion: '',
       numeroHabitaciones: 3,
       numeroBanos: 2,
-      numeroCocinas: 1
+      numeroCocinas: 1,
+      numeroCamas: 1,
+      tieneBano: false,
+      tipoCama: ''
     });
     this.selectedFile = null;
     this.imagePreview = null;
@@ -133,6 +151,9 @@ export class CrearCasaComponent {
       numeroHabitaciones: Number(this.crearCasaForm.value.numeroHabitaciones),
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
       numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),
+      numeroCamas: Number(this.crearCasaForm.value.numeroCamas),
+      tieneBano: Boolean(this.crearCasaForm.value.tieneBano),
+      tipoCama: this.crearCasaForm.value.tipoCama!,
       foto: this.selectedFile
     };
 

@@ -142,6 +142,52 @@
         </div>
       </div>
 
+      <p class="cl-section-label">Configuración base de habitaciones</p>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="numeroCamas">Número de camas por habitación</label>
+        <input
+          id="numeroCamas"
+          class="cl-inp"
+          [class.cl-inp--error]="numeroCamas?.invalid && numeroCamas?.touched"
+          type="number"
+          min="1"
+          formControlName="numeroCamas"
+        />
+        <span class="cl-error" *ngIf="numeroCamas?.invalid && numeroCamas?.touched">
+          Mínimo 1 cama
+        </span>
+      </div>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="tipoCama">Tipo de cama</label>
+        <select
+          id="tipoCama"
+          class="cl-inp"
+          [class.cl-inp--error]="tipoCama?.invalid && tipoCama?.touched"
+          formControlName="tipoCama"
+        >
+          <option value="">Seleccione una opción</option>
+          <option value="SIMPLE">SIMPLE</option>
+          <option value="DOBLE">DOBLE</option>
+        </select>
+        <span class="cl-error" *ngIf="tipoCama?.invalid && tipoCama?.touched">
+          Este campo es obligatorio
+        </span>
+      </div>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="tieneBano">¿La habitación tiene baño?</label>
+        <select
+          id="tieneBano"
+          class="cl-inp"
+          formControlName="tieneBano"
+        >
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </div>
+
       <!-- Sección: Fotografía -->
       <p class="cl-section-label">Fotografía</p>
 

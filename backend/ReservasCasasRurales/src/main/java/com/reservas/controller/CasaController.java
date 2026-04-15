@@ -3,6 +3,7 @@ package com.reservas.controller;
 import com.reservas.dto.CasaRequestDTO;
 import com.reservas.model.Casa;
 import com.reservas.model.Propietario;
+import com.reservas.model.TipoCama;
 import com.reservas.service.CasaService;
 import com.reservas.service.PropietarioService;
 
@@ -33,6 +34,9 @@ public class CasaController {
             @RequestParam("numeroHabitaciones") int numeroHabitaciones,
             @RequestParam("numeroBanos") int numeroBanos,
             @RequestParam("numeroCocinas") int numeroCocinas,
+            @RequestParam("numeroCamas") Integer numeroCamas,
+            @RequestParam("tieneBano") Boolean tieneBano,
+            @RequestParam("tipoCama") TipoCama tipoCama,
             @RequestParam("foto") MultipartFile foto,
             Authentication authentication) throws Exception {
 
@@ -59,6 +63,9 @@ public class CasaController {
         dto.setNumeroHabitaciones(numeroHabitaciones);
         dto.setNumeroBanos(numeroBanos);
         dto.setNumeroCocinas(numeroCocinas);
+        dto.setNumeroCamas(numeroCamas);
+        dto.setTieneBano(tieneBano);
+        dto.setTipoCama(tipoCama);
 
         Casa casa = casaService.crearCasa(dto, foto, propietario);
 
@@ -73,7 +80,6 @@ public class CasaController {
             return ResponseEntity.ok(casaService.buscarPorPoblacion(poblacion));
         }
 
-        return ResponseEntity.ok(casaService.findAll()); // mejor que lista vacía
+        return ResponseEntity.ok(casaService.findAll());
     }
-
 }
