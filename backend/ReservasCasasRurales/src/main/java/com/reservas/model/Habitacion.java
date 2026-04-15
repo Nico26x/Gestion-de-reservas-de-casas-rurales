@@ -9,11 +9,24 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Habitacion {
-    
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //Código que identifica la habitación dentro de la casa, "HAB-1", "HAB-2"
+    @Column(name = "codigo_habitacion", nullable = false)
+    private String codigoHabitacion;
+
+    @Column(name = "numero_camas", nullable = false)
+    private Integer numeroCamas;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_cama", nullable = false)
+    private TipoCama tipoCama;
+
+    @Column(name = "tiene_bano", nullable = false)
+    private Boolean tieneBano;
 
     @ManyToOne
     @JoinColumn(name = "casa_id")

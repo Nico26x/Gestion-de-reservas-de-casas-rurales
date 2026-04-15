@@ -41,9 +41,8 @@ public class PropietarioService {
         Propietario propietario = new Propietario();
         propietario.setNombreCuenta(dto.getNombreCuenta());
         propietario.setContrasena(contrasenaEncriptada);
+        propietario.setNumeroCuentaBancaria(dto.getNumeroCuentaBancaria());
         propietario.setRol(rol);
-
-        
 
         propietarioRepository.save(propietario);
 

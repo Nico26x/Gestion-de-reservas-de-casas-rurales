@@ -25,6 +25,10 @@ public class Propietario {
     @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
+    // Número de cuenta bancaria donde el cliente consigna el 20% de la reserva
+    @Column(name = "numero_cuenta_bancaria", nullable = false)
+    private String numeroCuentaBancaria;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "rol", nullable = false)
     private Rol rol = Rol.PROPIETARIO;
