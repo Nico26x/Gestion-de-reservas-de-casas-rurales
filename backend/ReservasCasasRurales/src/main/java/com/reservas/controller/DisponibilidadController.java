@@ -40,9 +40,9 @@ public class DisponibilidadController {
 
     @GetMapping
     public ResponseEntity<?> consultarDisponibilidad(
-            @RequestParam Long casaId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaEntrada,
-            @RequestParam int numeroNoches) {
+            @RequestParam("casaId") Long casaId,
+            @RequestParam("fechaEntrada") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaEntrada,
+            @RequestParam("numeroNoches") int numeroNoches) {
         try {
             List<DisponibilidadDiaResponseDTO> respuesta =
                     disponibilidadService.consultarDisponibilidad(casaId, fechaEntrada, numeroNoches);
