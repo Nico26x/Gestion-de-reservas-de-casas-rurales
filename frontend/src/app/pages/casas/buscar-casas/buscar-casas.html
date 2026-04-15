@@ -1,40 +1,220 @@
-<h1>Buscar casas por población</h1>
+<section class="houses-page">
+  <div class="houses-orb houses-orb--one"></div>
+  <div class="houses-orb houses-orb--two"></div>
+  <div class="houses-pattern"></div>
 
-<form [formGroup]="busquedaForm" (ngSubmit)="buscar()">
-  <div>
-    <label for="poblacion">Población</label>
-    <input id="poblacion" type="text" formControlName="poblacion" />
+  <div class="houses-shell">
+    <section class="houses-top">
+      <div class="houses-intro">
+        <span class="houses-badge">Casas rurales · búsqueda inteligente</span>
+
+        <h1 class="houses-title">
+          Encuentra una estancia
+          <span>única y acogedora</span>
+        </h1>
+
+        <p class="houses-description">
+          Explora casas rurales por población y visualiza cada alojamiento.
+        </p>
+
+        <div class="houses-metrics">
+          <div class="metric-card">
+            <small>Resultados visibles</small>
+            <strong>{{ resultados.length }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <small>Estado</small>
+            <strong>{{ loading ? 'Buscando' : 'Disponible' }}</strong>
+          </div>
+
+          <div class="metric-card">
+            <small>Estilo</small>
+            <strong>Premium</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-panel">
+        <div class="search-panel__header">
+          <div>
+            <p class="section-mini">Buscar alojamiento</p>
+            <h2>Filtrar por población</h2>
+          </div>
+
+          <div class="search-panel__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M16 16L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <form [formGroup]="busquedaForm" (ngSubmit)="buscar()" class="search-form" novalidate>
+          <label for="poblacion" class="field-label">Población</label>
+
+          <div
+            class="field-control"
+            [class.field-control--error]="busquedaForm.get('poblacion')?.invalid && busquedaForm.get('poblacion')?.touched"
+          >
+            <span class="field-control__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s6-5.4 6-11a6 6 0 10-12 0c0 5.6 6 11 6 11Z"
+                      stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </span>
+
+            <input
+              id="poblacion"
+              type="text"
+              formControlName="poblacion"
+              placeholder="Ej: Salento, Filandia, Circasia..."
+            />
+          </div>
+
+          <small
+            class="field-error"
+            *ngIf="busquedaForm.get('poblacion')?.invalid && busquedaForm.get('poblacion')?.touched"
+          >
+            Debes escribir una población válida.
+          </small>
+
+          <div class="search-actions">
+            <button class="btn-primary" type="submit" [disabled]="loading">
+              {{ loading ? 'Buscando...' : 'Buscar casas' }}
+            </button>
+
+            <button class="btn-secondary" type="button" (click)="cargarTodas()" [disabled]="loading">
+              Ver todas
+            </button>
+          </div>
+        </form>
+
+        <div class="search-panel__footer">
+          <span>Diseño visual renovado</span>
+          <span>Azules y blancos</span>
+          <span>Listo para Angular</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="loading-state" *ngIf="loading">
+      <div class="loading-state__spinner"></div>
+      <p>Consultando las casas disponibles...</p>
+    </section>
+
+    <section class="results-area" *ngIf="!loading">
+      <div class="results-header">
+        <div>
+          <p class="section-mini">Exploración</p>
+          <h2>Casas rurales encontradas</h2>
+        </div>
+
+        <div class="results-counter" *ngIf="resultados.length > 0">
+          {{ resultados.length }} resultado<span *ngIf="resultados.length !== 1">s</span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="resultados.length === 0">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5.5 10.5V20h13V10.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <h3>Empieza tu búsqueda</h3>
+        <p>
+          Escribe una población para encontrar alojamientos rurales o pulsa
+          <strong>“Ver todas”</strong> para visualizar el catálogo completo.
+        </p>
+
+        <button class="btn-primary empty-state__button" type="button" (click)="cargarTodas()">
+          Explorar todas las casas
+        </button>
+      </div>
+
+      <div class="houses-grid" *ngIf="resultados.length > 0">
+        <article
+          class="house-card"
+          *ngFor="let casa of resultados; let i = index"
+          [class.house-card--featured]="i === 0"
+        >
+          <div class="house-card__media">
+            <ng-container *ngIf="casa.foto; else housePlaceholder">
+              <img
+                [src]="casa.foto"
+                [alt]="casa.nombre || 'Casa rural'"
+                class="house-card__image"
+              />
+            </ng-container>
+
+            <ng-template #housePlaceholder>
+              <div class="house-card__placeholder">
+                <div class="house-card__placeholder-icon">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5.5 10.5V20h13V10.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span>Imagen no disponible</span>
+              </div>
+            </ng-template>
+
+            <div class="house-card__overlay">
+              <span class="location-pill">{{ casa.poblacion || 'Sin población' }}</span>
+            </div>
+          </div>
+
+          <div class="house-card__content">
+            <div class="house-card__top">
+              <div>
+                <h3>{{ casa.nombre || 'Casa rural sin nombre' }}</h3>
+                <p>{{ casa.direccion || 'Dirección no disponible' }}</p>
+              </div>
+
+              <span class="house-id" *ngIf="casa.id">#{{ casa.id }}</span>
+            </div>
+
+            <div class="features-strip">
+              <div class="feature-box">
+                <span class="feature-box__emoji">🛏</span>
+                <div>
+                  <strong>{{ casa.numeroHabitaciones || 0 }}</strong>
+                  <small>Habitaciones</small>
+                </div>
+              </div>
+
+              <div class="feature-box">
+                <span class="feature-box__emoji">🚿</span>
+                <div>
+                  <strong>{{ casa.numeroBanos || 0 }}</strong>
+                  <small>Baños</small>
+                </div>
+              </div>
+
+              <div class="feature-box">
+                <span class="feature-box__emoji">🍳</span>
+                <div>
+                  <strong>{{ casa.numeroCocinas || 0 }}</strong>
+                  <small>Cocinas</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="house-card__footer">
+              <span class="house-card__hint">Alojamiento rural disponible para reserva</span>
+
+              <a routerLink="/reservas/crear" class="reserve-link">
+                Crear reserva
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
   </div>
-
-  <button type="submit" [disabled]="loading">
-    {{ loading ? 'Buscando...' : 'Buscar' }}
-  </button>
-
-  <button type="button" (click)="cargarTodas()" [disabled]="loading">
-    Ver todas
-  </button>
-</form>
-
-<hr />
-
-<div *ngIf="resultados.length === 0">
-  <p>No hay resultados para mostrar.</p>
-</div>
-
-<div *ngIf="resultados.length > 0">
-  <div *ngFor="let casa of resultados">
-    <h3>{{ casa.nombre }}</h3>
-    <p><strong>Dirección:</strong> {{ casa.direccion }}</p>
-    <p><strong>Población:</strong> {{ casa.poblacion }}</p>
-
-    <div *ngIf="casa.foto">
-      <img [src]="casa.foto" [alt]="casa.nombre" width="220" />
-    </div>
-
-    <p>
-      <a [routerLink]="['/casas', casa.id]">Ver detalle</a>
-    </p>
-
-    <hr />
-  </div>
-</div>
+</section>
