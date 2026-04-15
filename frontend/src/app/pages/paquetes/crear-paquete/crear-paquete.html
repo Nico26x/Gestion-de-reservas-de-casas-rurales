@@ -320,7 +320,7 @@
             <div class="field">
               <label for="modalidad">Modalidad</label>
 
-              <div class="input-shell">
+              <div class="input-shell input-shell--select">
                 <span class="input-shell__icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path d="M4 7h16" stroke-linecap="round" />
@@ -338,7 +338,7 @@
                   <option value="CASA_ENTERA">CASA_ENTERA</option>
                   <option value="HABITACIONES">HABITACIONES</option>
                   <option value="AMBAS">AMBAS</option>
-              </select>
+                </select>
               </div>
 
               <small
@@ -395,9 +395,9 @@
           <span class="summary-amount__label">Precio total</span>
           <strong class="summary-amount__value">
             {{
-              paqueteForm.value.precio
-                ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0')
-                : '$ 0'
+            paqueteForm.value.precio
+            ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0')
+            : '$ 0'
             }}
           </strong>
         </div>
@@ -406,9 +406,9 @@
           <span class="summary-card__label">Casa</span>
           <strong class="summary-card__value">
             {{
-              paqueteForm.value.casaId
-                ? ('Casa #' + paqueteForm.value.casaId)
-                : 'Sin asignar'
+            paqueteForm.value.casaId
+            ? ('Casa #' + paqueteForm.value.casaId)
+            : 'Sin asignar'
             }}
           </strong>
         </div>
@@ -468,9 +468,9 @@
               <small>Periodo</small>
               <strong>
                 {{
-                  paqueteForm.value.fechaInicio && paqueteForm.value.fechaFin
-                    ? 'Definido'
-                    : 'Pendiente'
+                paqueteForm.value.fechaInicio && paqueteForm.value.fechaFin
+                ? 'Definido'
+                : 'Pendiente'
                 }}
               </strong>
             </div>
