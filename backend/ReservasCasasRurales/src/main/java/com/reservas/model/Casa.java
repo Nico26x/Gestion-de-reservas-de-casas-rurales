@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -44,4 +45,20 @@ public class Casa {
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Paquete> paquetes;
+
+    // Getters para contar elementos en las colecciones
+    @JsonProperty("numeroHabitaciones")
+    public Integer getNumeroHabitaciones() {
+        return habitaciones != null ? habitaciones.size() : 0;
+    }
+
+    @JsonProperty("numeroBanos")
+    public Integer getNumeroBanos() {
+        return banos != null ? banos.size() : 0;
+    }
+
+    @JsonProperty("numeroCocinas")
+    public Integer getNumeroCocinas() {
+        return cocinas != null ? cocinas.size() : 0;
+    }
 }
