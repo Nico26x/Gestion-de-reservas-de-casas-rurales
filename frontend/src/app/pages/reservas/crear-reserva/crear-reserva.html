@@ -1,0 +1,324 @@
+<section class="reserve-page">
+  <div class="reserve-bg-grid"></div>
+  <div class="reserve-glow reserve-glow--one"></div>
+  <div class="reserve-glow reserve-glow--two"></div>
+
+  <div class="reserve-shell">
+    <section class="reserve-hero">
+      <div class="reserve-hero__content">
+        <span class="reserve-badge">Reserva rural · experiencia premium</span>
+
+        <h1 class="reserve-title">
+          Crea una reserva
+          <span></span>
+        </h1>
+
+        <p class="reserve-subtitle">
+          Selecciona la casa, define la fecha de entrada, indica el número de noches
+          y consulta la disponibilidad antes de confirmar la reserva.
+        </p>
+
+        <div class="reserve-hero__chips">
+          <span>Azules y blancos</span>
+          <span>Diseño moderno</span>
+          <span>Vista funcional</span>
+        </div>
+      </div>
+
+      <div class="reserve-hero__stats">
+        <div class="hero-stat">
+          <small>Casas cargadas</small>
+          <strong>{{ casas.length }}</strong>
+        </div>
+
+        <div class="hero-stat">
+          <small>Modalidad activa</small>
+          <strong>Casa completa</strong>
+        </div>
+
+        <div class="hero-stat">
+          <small>Estado actual</small>
+          <strong>{{ loading ? 'Reservando' : 'Disponible' }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="reserve-layout">
+      <!-- FORMULARIO -->
+      <div class="reserve-card reserve-card--form">
+        <div class="card-header">
+          <div>
+            <p class="section-mini">Formulario de reserva</p>
+            <h2>Completa la solicitud</h2>
+            <p>
+              La reserva se realiza sobre una casa seleccionada y valida la disponibilidad
+              del rango escogido.
+            </p>
+          </div>
+
+          <div class="card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M7 3v3M17 3v3M4 9h16M6 21h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2Z"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" class="reserve-form" novalidate>
+          <div class="form-field form-field--full">
+            <label for="casaId">Casa rural</label>
+            <div
+              class="field-shell"
+              [class.field-shell--error]="casaId?.invalid && casaId?.touched"
+            >
+              <span class="field-icon" aria-hidden="true">🏡</span>
+
+              <select id="casaId" formControlName="casaId" (change)="onCasaChange()">
+                <option [ngValue]="null">Selecciona una casa</option>
+                <option *ngFor="let casa of casas" [ngValue]="casa.id">
+                  {{ casa.nombre }} - {{ casa.poblacion }}
+                </option>
+              </select>
+            </div>
+
+            <small class="field-error" *ngIf="casaId?.invalid && casaId?.touched">
+              Debes seleccionar una casa.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label for="fechaEntrada">Fecha de entrada</label>
+            <div
+              class="field-shell"
+              [class.field-shell--error]="fechaEntrada?.invalid && fechaEntrada?.touched"
+            >
+              <span class="field-icon" aria-hidden="true">📅</span>
+              <input
+                id="fechaEntrada"
+                type="date"
+                [min]="minDate"
+                formControlName="fechaEntrada"
+              />
+            </div>
+
+            <small class="field-error" *ngIf="fechaEntrada?.invalid && fechaEntrada?.touched">
+              Debes indicar la fecha de entrada.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label for="numeroNoches">Número de noches</label>
+            <div
+              class="field-shell"
+              [class.field-shell--error]="numeroNoches?.invalid && numeroNoches?.touched"
+            >
+              <span class="field-icon" aria-hidden="true">🌙</span>
+              <input
+                id="numeroNoches"
+                type="number"
+                min="1"
+                formControlName="numeroNoches"
+                placeholder="Ej: 2"
+              />
+            </div>
+
+            <small class="field-error" *ngIf="numeroNoches?.invalid && numeroNoches?.touched">
+              Debes indicar al menos 1 noche.
+            </small>
+          </div>
+
+          <div class="form-field form-field--full">
+            <label for="telefonoCliente">Teléfono de contacto</label>
+            <div
+              class="field-shell"
+              [class.field-shell--error]="telefonoCliente?.invalid && telefonoCliente?.touched"
+            >
+              <span class="field-icon" aria-hidden="true">📞</span>
+              <input
+                id="telefonoCliente"
+                type="text"
+                formControlName="telefonoCliente"
+                placeholder="Ej: 3001234567"
+              />
+            </div>
+
+            <small
+              class="field-error"
+              *ngIf="telefonoCliente?.invalid && telefonoCliente?.touched"
+            >
+              Debes ingresar un teléfono válido.
+            </small>
+          </div>
+
+          <div class="reserve-summary-bar">
+            <div class="summary-pill">
+              <small>Salida estimada</small>
+              <strong>{{ getFechaSalidaEstimada() }}</strong>
+            </div>
+
+            <div class="summary-pill">
+              <small>Tipo</small>
+              <strong>Casa completa</strong>
+            </div>
+          </div>
+
+          <div class="reserve-actions">
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="consultarDisponibilidad()"
+              [disabled]="consultandoDisponibilidad || loading"
+            >
+              {{ consultandoDisponibilidad ? 'Consultando...' : 'Consultar disponibilidad' }}
+            </button>
+
+            <button type="submit" class="btn-primary" [disabled]="loading">
+              {{ loading ? 'Creando reserva...' : 'Confirmar reserva' }}
+            </button>
+          </div>
+
+          <button type="button" class="btn-text" (click)="limpiarFormulario()">
+            Limpiar formulario
+          </button>
+        </form>
+      </div>
+
+      <!-- PANEL DERECHO -->
+      <aside class="reserve-side">
+        <div class="reserve-card reserve-card--house">
+          <p class="section-mini">Casa seleccionada</p>
+
+          <ng-container *ngIf="casaSeleccionada; else noCasa">
+            <div class="house-preview">
+              <div class="house-preview__media">
+                <img
+                  *ngIf="casaSeleccionada.foto; else housePlaceholder"
+                  [src]="casaSeleccionada.foto"
+                  [alt]="casaSeleccionada.nombre || 'Casa rural'"
+                />
+
+                <ng-template #housePlaceholder>
+                  <div class="house-preview__placeholder">
+                    <span>🏡</span>
+                    <small>Sin imagen</small>
+                  </div>
+                </ng-template>
+              </div>
+
+              <div class="house-preview__content">
+                <h3>{{ casaSeleccionada.nombre || 'Casa rural sin nombre' }}</h3>
+                <p>{{ casaSeleccionada.direccion || 'Dirección no disponible' }}</p>
+
+                <div class="house-preview__chips">
+                  <span>{{ casaSeleccionada.poblacion || 'Sin población' }}</span>
+                  <span>{{ casaSeleccionada.numeroHabitaciones || 0 }} habitaciones</span>
+                  <span>{{ casaSeleccionada.numeroBanos || 0 }} baños</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+          <ng-template #noCasa>
+            <div class="side-empty">
+              <div class="side-empty__icon">✨</div>
+              <h3>Sin casa seleccionada</h3>
+              <p>
+                Elige una casa desde el formulario para visualizar aquí su información principal.
+              </p>
+            </div>
+          </ng-template>
+        </div>
+
+        <div class="reserve-card reserve-card--availability">
+          <div class="availability-header">
+            <div>
+              <p class="section-mini">Disponibilidad</p>
+              <h3>Vista previa del rango</h3>
+            </div>
+
+            <span class="availability-pill" *ngIf="disponibilidad.length > 0">
+              {{ disponibilidad.length }} día<span *ngIf="disponibilidad.length !== 1">s</span>
+            </span>
+          </div>
+
+          <div class="availability-loading" *ngIf="consultandoDisponibilidad">
+            <div class="availability-loading__spinner"></div>
+            <p>Consultando disponibilidad...</p>
+          </div>
+
+          <div class="availability-list" *ngIf="!consultandoDisponibilidad && disponibilidad.length > 0">
+            <div class="day-card" *ngFor="let dia of disponibilidad">
+              <div class="day-card__top">
+                <strong>{{ formatDate(dia.fecha) }}</strong>
+                <span class="badge" [ngClass]="getEstadoBadgeClass(dia.estadoCasa)">
+                  {{ dia.estadoCasa }}
+                </span>
+              </div>
+
+              <div class="day-card__meta">
+                <span>Modalidad: {{ getModalidadLabel(dia.modalidad) }}</span>
+                <span>Habitaciones libres: {{ getHabitacionesLibresCount(dia) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-empty side-empty--small" *ngIf="!consultandoDisponibilidad && disponibilidad.length === 0">
+            <div class="side-empty__icon">📘</div>
+            <h3>Sin consulta realizada</h3>
+            <p>
+              Consulta la disponibilidad para ver aquí el comportamiento del rango seleccionado.
+            </p>
+          </div>
+        </div>
+
+        <div class="reserve-card reserve-card--ticket" *ngIf="reservaCreada">
+          <div class="ticket-top">
+            <span class="ticket-label">Reserva confirmada</span>
+            <strong>#{{ reservaCreada.numeroReserva }}</strong>
+          </div>
+
+          <div class="ticket-grid">
+            <div>
+              <small>Casa</small>
+              <strong>{{ reservaCreada.nombreCasa || casaSeleccionada?.nombre || 'No disponible' }}</strong>
+            </div>
+
+            <div>
+              <small>Entrada</small>
+              <strong>{{ formatDate(reservaCreada.fechaEntrada) }}</strong>
+            </div>
+
+            <div>
+              <small>Noches</small>
+              <strong>{{ reservaCreada.numeroNoches || 0 }}</strong>
+            </div>
+
+            <div>
+              <small>Estado</small>
+              <strong>{{ reservaCreada.estado || 'PENDIENTE' }}</strong>
+            </div>
+
+            <div>
+              <small>Importe</small>
+              <strong>{{ formatMoney(reservaCreada.importe) }}</strong>
+            </div>
+
+            <div>
+              <small>Anticipo</small>
+              <strong>{{ formatMoney(reservaCreada.anticipo) }}</strong>
+            </div>
+          </div>
+
+          <div class="ticket-account">
+            <small>Cuenta bancaria para anticipo</small>
+            <strong>{{ reservaCreada.numeroCuentaBancaria || 'No disponible' }}</strong>
+          </div>
+
+          <p class="ticket-message">
+            {{ reservaCreada.mensaje }}
+          </p>
+        </div>
+      </aside>
+    </section>
+  </div>
+</section>
