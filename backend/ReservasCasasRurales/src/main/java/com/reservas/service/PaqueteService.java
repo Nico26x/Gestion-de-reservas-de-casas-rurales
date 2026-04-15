@@ -38,11 +38,16 @@ public class PaqueteService {
         throw new RuntimeException("El precio debe ser mayor a 0");
     }
 
+    //VALIDAR MODALIDAD
+    if (dto.getModalidad() == null) {
+        throw new RuntimeException("La modalidad es obligatoria");
+    }
+
     //  BUSCAR CASA
     Casa casa = casaRepository.findById(dto.getCasaId())
             .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
 
-    //  VALIDAR PROPIETARIO 🔥
+    //  VALIDAR PROPIETARIO 
     if (!casa.getPropietario().getNombreCuenta().equals(username)) {
         throw new RuntimeException("No puedes crear paquetes en casas que no son tuyas");
     }
@@ -65,6 +70,7 @@ public class PaqueteService {
     paquete.setFechaFin(dto.getFechaFin());
     paquete.setPrecio(dto.getPrecio());
     paquete.setCasa(casa);
+    paquete.setModalidad(dto.getModalidad());
 
     return paqueteRepository.save(paquete);
 }

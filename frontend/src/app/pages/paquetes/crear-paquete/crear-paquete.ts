@@ -26,7 +26,8 @@ export class CrearPaqueteComponent {
     casaId: [null as number | null, [Validators.required, Validators.min(1)]],
     fechaInicio: ['', Validators.required],
     fechaFin: ['', Validators.required],
-    precio: [null as number | null, [Validators.required, Validators.min(1)]]
+    precio: [null as number | null, [Validators.required, Validators.min(1)]],
+    modalidad: ['', [Validators.required]]
   });
 
   onSubmit(): void {
@@ -57,7 +58,8 @@ export class CrearPaqueteComponent {
       casaId: Number(this.paqueteForm.value.casaId),
       fechaInicio,
       fechaFin,
-      precio: Number(this.paqueteForm.value.precio)
+      precio: Number(this.paqueteForm.value.precio),
+      modalidad: this.paqueteForm.value.modalidad!
     };
 
     this.paquetesService.crearPaquete(data).subscribe({
@@ -73,7 +75,8 @@ export class CrearPaqueteComponent {
           casaId: null,
           fechaInicio: '',
           fechaFin: '',
-          precio: null
+          precio: null,
+          modalidad: ''
         });
       },
       error: (error) => {

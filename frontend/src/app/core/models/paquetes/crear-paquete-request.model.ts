@@ -3,4 +3,5 @@ export interface CrearPaqueteRequest {
   fechaFin: string;
   precio: number;
   casaId: number;
+  modalidad: string;
 }

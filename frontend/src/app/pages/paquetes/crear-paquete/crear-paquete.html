@@ -308,6 +308,48 @@
             </div>
           </div>
 
+          <div class="form-section">
+            <div class="section-heading">
+              <span class="section-step">04</span>
+              <div>
+                <h2>Modalidad</h2>
+                <p>Indique la modalidad del paquete.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="modalidad">Modalidad</label>
+
+              <div class="input-shell">
+                <span class="input-shell__icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M4 7h16" stroke-linecap="round" />
+                    <path d="M7 12h10" stroke-linecap="round" />
+                    <path d="M10 17h4" stroke-linecap="round" />
+                  </svg>
+                </span>
+
+                <select
+                  id="modalidad"
+                  formControlName="modalidad"
+                  [class.is-invalid]="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched"
+                >
+                  <option value="">Seleccione una modalidad</option>
+                  <option value="CASA_ENTERA">CASA_ENTERA</option>
+                  <option value="HABITACIONES">HABITACIONES</option>
+                  <option value="AMBAS">AMBAS</option>
+              </select>
+              </div>
+
+              <small
+                class="field-error"
+                *ngIf="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched"
+              >
+                Debe seleccionar la modalidad del paquete.
+              </small>
+            </div>
+          </div>
+
           <div class="form-footer">
             <div class="form-status">
               <span class="form-status__label">Estado del formulario</span>
@@ -386,6 +428,13 @@
         </div>
 
         <div class="summary-card">
+          <span class="summary-card__label">Modalidad</span>
+          <strong class="summary-card__value">
+            {{ paqueteForm.value.modalidad || 'Pendiente' }}
+          </strong>
+        </div>
+
+        <div class="summary-card">
           <span class="summary-card__label">Estado visual</span>
           <strong class="summary-card__value">
             {{ paqueteForm.valid ? 'Completo' : 'En edición' }}
@@ -436,6 +485,19 @@
               <small>Precio</small>
               <strong>
                 {{ paqueteForm.value.precio ? 'Registrado' : 'Pendiente' }}
+              </strong>
+            </div>
+          </div>
+
+          <div
+            class="progress-item"
+            [class.progress-item--done]="!!paqueteForm.value.modalidad"
+          >
+            <span class="progress-item__mark"></span>
+            <div>
+              <small>Modalidad</small>
+              <strong>
+                {{ paqueteForm.value.modalidad ? 'Registrada' : 'Pendiente' }}
               </strong>
             </div>
           </div>
