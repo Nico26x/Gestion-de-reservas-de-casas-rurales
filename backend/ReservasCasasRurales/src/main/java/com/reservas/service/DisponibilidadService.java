@@ -182,19 +182,15 @@ public class DisponibilidadService {
         }
     }
 
+    // SE TUVO Q BORRAR EL IF (TIENE LOGICA RARA)
     private EstadoDisponibilidad ajustarEstadoCasaSegunModalidad(ModalidadDisponibilidad modalidad,
                                                                  EstadoDisponibilidad estadoCasa) {
-        if (modalidad == ModalidadDisponibilidad.HABITACIONES) {
-            return EstadoDisponibilidad.NO_DISPONIBLE;
-        }
         return estadoCasa;
     }
 
+    // SE TUVO Q BORRAR EL IF (TIENE LOGICA RARA)
     private EstadoDisponibilidad ajustarEstadoHabitacionesSegunModalidad(ModalidadDisponibilidad modalidad,
                                                                          EstadoDisponibilidad estadoHabitaciones) {
-        if (modalidad == ModalidadDisponibilidad.CASA_ENTERA) {
-            return EstadoDisponibilidad.NO_DISPONIBLE;
-        }
         return estadoHabitaciones;
     }
 }
