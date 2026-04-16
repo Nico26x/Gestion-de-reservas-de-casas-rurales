@@ -28,7 +28,7 @@
 
         <div class="hero-stat">
           <small>Modalidad activa</small>
-          <strong>Casa completa</strong>
+          <strong>{{ getTipoReservaLabel(reservaForm.value.tipoReserva || undefined) }}</strong>
         </div>
 
         <div class="hero-stat">
@@ -145,6 +145,25 @@
             </small>
           </div>
 
+          <div class="form-field form-field--full">
+            <label for="tipoReserva">Tipo de reserva</label>
+            <div
+              class="field-shell"
+              [class.field-shell--error]="tipoReserva?.invalid && tipoReserva?.touched"
+            >
+              <span class="field-icon" aria-hidden="true">🛎️</span>
+              <select id="tipoReserva" formControlName="tipoReserva">
+                <option value="CASA_COMPLETA">Casa completa</option>
+                <option value="HABITACIONES">Habitaciones</option>
+                <option value="AMBAS">Ambas</option>
+              </select>
+            </div>
+
+            <small class="field-error" *ngIf="tipoReserva?.invalid && tipoReserva?.touched">
+              Debes seleccionar un tipo de reserva.
+            </small>
+          </div>
+
           <div class="reserve-summary-bar">
             <div class="summary-pill">
               <small>Salida estimada</small>
@@ -153,7 +172,7 @@
 
             <div class="summary-pill">
               <small>Tipo</small>
-              <strong>Casa completa</strong>
+              <strong>{{ getTipoReservaLabel(reservaForm.value.tipoReserva || undefined) }}</strong>
             </div>
           </div>
 

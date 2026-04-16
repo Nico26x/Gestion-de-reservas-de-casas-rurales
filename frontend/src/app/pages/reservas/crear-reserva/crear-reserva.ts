@@ -58,7 +58,8 @@ export class CrearReservaComponent implements OnInit {
     telefonoCliente: [
       '',
       [Validators.required, Validators.minLength(7), Validators.maxLength(20)]
-    ]
+    ],
+    tipoReserva: ['CASA_COMPLETA', Validators.required]
   });
 
   ngOnInit(): void {
@@ -79,6 +80,10 @@ export class CrearReservaComponent implements OnInit {
 
   get telefonoCliente() {
     return this.reservaForm.get('telefonoCliente');
+  }
+
+  get tipoReserva() {
+    return this.reservaForm.get('tipoReserva');
   }
 
   cargarCasas(): void {
@@ -192,6 +197,7 @@ export class CrearReservaComponent implements OnInit {
       fechaEntrada: this.reservaForm.value.fechaEntrada!,
       numeroNoches: Number(this.reservaForm.value.numeroNoches),
       telefonoCliente: this.reservaForm.value.telefonoCliente!.trim(),
+      tipoReserva: this.reservaForm.value.tipoReserva!,
       habitacionIds: [] as number[]
     };
 
@@ -223,7 +229,8 @@ export class CrearReservaComponent implements OnInit {
       casaId: null,
       fechaEntrada: '',
       numeroNoches: 1,
-      telefonoCliente: ''
+      telefonoCliente: '',
+      tipoReserva: 'CASA_COMPLETA'
     });
 
     this.casaSeleccionada = null;
@@ -272,6 +279,21 @@ export class CrearReservaComponent implements OnInit {
         return 'Por habitaciones';
       default:
         return modalidad;
+    }
+  }
+
+  getTipoReservaLabel(tipo: string | undefined): string {
+    if (!tipo) return 'No definido';
+
+    switch (tipo.toUpperCase()) {
+      case 'CASA_COMPLETA':
+        return 'Casa completa';
+      case 'HABITACIONES':
+        return 'Habitaciones';
+      case 'AMBAS':
+        return 'Ambas';
+      default:
+        return tipo;
     }
   }
 
