@@ -130,39 +130,6 @@
         </a>
       </article>
 
-      <!-- ===== PANEL DERECHO ===== -->
-      <div class="auth-panel">
-        <article class="action-card action-card--light">
-          <div class="action-card__body action-card__body--auth">
-            <div class="feature-icon feature-icon--light">
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
-                <path d="M4.5 20c1.6-3.2 4.1-5 7.5-5s5.9 1.8 7.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div>
-              <h3>Registro</h3>
-              <div class="auth-links">
-                <a routerLink="/registro">Ir a registro</a>
-                <a routerLink="/login">Ir a login</a>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <div class="session-status">
-          <div class="session-status__item" [class.active]="isAuthenticated">
-            <span class="status-dot"></span>
-            <span>Ya hay una sesión iniciada.</span>
-          </div>
-
-          <div class="session-status__item" [class.active]="!isAuthenticated">
-            <span class="status-dot"></span>
-            <span>No hay sesión iniciada.</span>
-          </div>
-        </div>
-      </div>
-
     </div>
 
   </section>
