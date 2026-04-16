@@ -20,4 +20,12 @@ export class HomeComponent {
   get isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
+
+  get rol(): string | null {
+    return this.authService.getRol();
+  }
+
+  get esCliente(): boolean {
+    return this.rol === 'CLIENTE' || this.rol === 'ROLE_CLIENTE';
+  }
 }
