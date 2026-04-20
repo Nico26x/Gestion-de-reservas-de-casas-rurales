@@ -274,17 +274,17 @@
             </div>
           </div>
 
-          <div class="form-section">
+          <div class="form-section" *ngIf="paqueteForm.value.modalidad === 'CASA_ENTERA' || paqueteForm.value.modalidad === 'AMBAS'">
             <div class="section-heading">
               <span class="section-step">03</span>
               <div>
-                <h2>Precio total</h2>
-                <p>Ingrese el valor que tendrá el paquete para ese periodo.</p>
+                <h2>Precio por noche (casa completa)</h2>
+                <p>Ingrese el precio por noche de la casa completa.</p>
               </div>
             </div>
 
             <div class="field">
-              <label for="precio">Valor del paquete</label>
+              <label for="precio">Precio por noche - Casa completa</label>
 
               <div class="input-shell input-shell--money">
                 <span class="money-prefix">$</span>
@@ -308,9 +308,43 @@
             </div>
           </div>
 
+          <div class="form-section" *ngIf="paqueteForm.value.modalidad === 'HABITACIONES' || paqueteForm.value.modalidad === 'AMBAS'">
+            <div class="section-heading">
+              <span class="section-step">{{ paqueteForm.value.modalidad === 'AMBAS' ? '04' : '03' }}</span>
+              <div>
+                <h2>Precio por noche (por habitación)</h2>
+                <p>Ingrese el precio por noche por habitación.</p>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="precioHabitacion">Precio por noche - Por habitación</label>
+
+              <div class="input-shell input-shell--money">
+                <span class="money-prefix">$</span>
+
+                <input
+                  id="precioHabitacion"
+                  type="number"
+                  min="1"
+                  placeholder="0"
+                  formControlName="precioHabitacion"
+                  [class.is-invalid]="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched"
+                />
+              </div>
+
+              <small
+                class="field-error"
+                *ngIf="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched"
+              >
+                Debe ingresar un precio por habitación válido mayor a 0.
+              </small>
+            </div>
+          </div>
+
           <div class="form-section">
             <div class="section-heading">
-              <span class="section-step">04</span>
+              <span class="section-step">{{ paqueteForm.value.modalidad === 'AMBAS' ? '05' : '04' }}</span>
               <div>
                 <h2>Modalidad</h2>
                 <p>Indique la modalidad del paquete.</p>
@@ -392,12 +426,24 @@
         </div>
 
         <div class="summary-amount">
-          <span class="summary-amount__label">Precio total</span>
+          <span class="summary-amount__label">
+            {{
+              paqueteForm.value.modalidad === 'CASA_ENTERA' 
+                ? 'Precio total' 
+                : (paqueteForm.value.modalidad === 'AMBAS' 
+                  ? 'Precios' 
+                  : 'Precio por habitación')
+            }}
+          </span>
           <strong class="summary-amount__value">
             {{
-            paqueteForm.value.precio
-            ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0')
-            : '$ 0'
+              paqueteForm.value.modalidad === 'CASA_ENTERA'
+                ? (paqueteForm.value.precio ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0') : '$ 0')
+                : (paqueteForm.value.modalidad === 'AMBAS'
+                  ? (paqueteForm.value.precio && paqueteForm.value.precioHabitacion 
+                    ? (paqueteForm.value.precio | currency:'COP':'symbol':'1.0-0') + ' / ' + (paqueteForm.value.precioHabitacion | currency:'COP':'symbol':'1.0-0')
+                    : '$ 0')
+                  : (paqueteForm.value.precioHabitacion ? (paqueteForm.value.precioHabitacion | currency:'COP':'symbol':'1.0-0') : '$ 0'))
             }}
           </strong>
         </div>
@@ -478,13 +524,25 @@
 
           <div
             class="progress-item"
-            [class.progress-item--done]="!!paqueteForm.value.precio"
+            [class.progress-item--done]="
+              paqueteForm.value.modalidad === 'CASA_ENTERA'
+                ? !!paqueteForm.value.precio
+                : (paqueteForm.value.modalidad === 'AMBAS'
+                  ? (!!paqueteForm.value.precio && !!paqueteForm.value.precioHabitacion)
+                  : !!paqueteForm.value.precioHabitacion)
+            "
           >
             <span class="progress-item__mark"></span>
             <div>
               <small>Precio</small>
               <strong>
-                {{ paqueteForm.value.precio ? 'Registrado' : 'Pendiente' }}
+                {{
+                paqueteForm.value.modalidad === 'CASA_ENTERA'
+                  ? (paqueteForm.value.precio ? 'Registrado' : 'Pendiente')
+                  : (paqueteForm.value.modalidad === 'AMBAS'
+                    ? ((paqueteForm.value.precio && paqueteForm.value.precioHabitacion) ? 'Registrado' : 'Pendiente')
+                    : (paqueteForm.value.precioHabitacion ? 'Registrado' : 'Pendiente'))
+                }}
               </strong>
             </div>
           </div>

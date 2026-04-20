@@ -7,6 +7,8 @@ import com.reservas.model.*;
 import com.reservas.repository.CasaRepository;
 import com.reservas.repository.DisponibilidadHabitacionRepository;
 import com.reservas.repository.DisponibilidadRepository;
+import com.reservas.repository.PaqueteRepository;
+import com.reservas.repository.ReservaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +22,19 @@ public class DisponibilidadService {
     private final CasaRepository casaRepository;
     private final DisponibilidadRepository disponibilidadRepository;
     private final DisponibilidadHabitacionRepository disponibilidadHabitacionRepository;
+    private final PaqueteRepository paqueteRepository;
+    private final ReservaRepository reservaRepository;
 
     public DisponibilidadService(CasaRepository casaRepository,
                                  DisponibilidadRepository disponibilidadRepository,
-                                 DisponibilidadHabitacionRepository disponibilidadHabitacionRepository) {
+                                 DisponibilidadHabitacionRepository disponibilidadHabitacionRepository,
+                                 PaqueteRepository paqueteRepository,
+                                 ReservaRepository reservaRepository) {
         this.casaRepository = casaRepository;
         this.disponibilidadRepository = disponibilidadRepository;
         this.disponibilidadHabitacionRepository = disponibilidadHabitacionRepository;
+        this.paqueteRepository = paqueteRepository;
+        this.reservaRepository = reservaRepository;
     }
 
     @Transactional
@@ -54,6 +62,25 @@ public class DisponibilidadService {
         ModalidadDisponibilidad modalidad = parsearModalidad(dto.getModalidad());
         EstadoDisponibilidad estadoCasa = parsearEstado(dto.getEstadoCasa());
         EstadoDisponibilidad estadoHabitaciones = parsearEstado(dto.getEstadoHabitaciones());
+
+        //  VALIDAR QUE EXISTA UN PAQUETE QUE CUBRA COMPLETAMENTE EL RANGO DE FECHAS
+        List<Paquete> paquetesCubrentes = paqueteRepository
+                .findByCasaIdAndFechaInicioIsLessThanEqualAndFechaFinIsGreaterThanEqual(
+                        casa.getId(),
+                        dto.getFechaInicio(),
+                        dto.getFechaFin()
+                );
+
+        if (paquetesCubrentes.isEmpty()) {
+            throw new RuntimeException(
+                    "No se puede definir disponibilidad fuera de las fechas cubiertas por un paquete. " +
+                    "Debe crear un paquete que incluya el rango " + dto.getFechaInicio() + " a " + dto.getFechaFin()
+            );
+        }
+
+        //  VALIDAR QUE LA MODALIDAD DE DISPONIBILIDAD SEA COMPATIBLE CON LA MODALIDAD DEL PAQUETE
+        Paquete paqueteAplicable = paquetesCubrentes.get(0);
+        validarCompatibilidadModalidad(paqueteAplicable.getModalidad(), modalidad);
 
         LocalDate fechaActual = dto.getFechaInicio();
 
@@ -129,7 +156,8 @@ public class DisponibilidadService {
                     for (Habitacion habitacion : casa.getHabitaciones()) {
                         habitaciones.add(
                                 new HabitacionDisponibilidadResponseDTO(
-                                        "HAB-" + habitacion.getId(),
+                                        habitacion.getId(),
+                                        habitacion.getCodigoHabitacion(),
                                         EstadoDisponibilidad.NO_DISPONIBLE.name()
                                 )
                         );
@@ -147,7 +175,8 @@ public class DisponibilidadService {
                 for (DisponibilidadHabitacion dh : habitacionesDb) {
                     habitaciones.add(
                             new HabitacionDisponibilidadResponseDTO(
-                                    "HAB-" + dh.getHabitacion().getId(),
+                                    dh.getHabitacion().getId(),
+                                    dh.getHabitacion().getCodigoHabitacion(),
                                     dh.getEstado().name()
                             )
                     );
@@ -162,8 +191,55 @@ public class DisponibilidadService {
     }
 
     private void validarQueNoContradigaReservas(Long casaId, LocalDate fecha) {
-        // Aquí va la validación real cuando exista la HU12 con Reserva.
-        // Por ahora queda preparado para no inventar una tabla que aún no existe.
+        Casa casa = new Casa();
+        casa.setId(casaId);
+
+        List<EstadoReserva> estadosActivos = List.of(EstadoReserva.PENDIENTE, EstadoReserva.CONFIRMADA);
+
+        //Buscar reservas activas que cubran esta fecha
+        LocalDate fechaSiguiente = fecha.plusDays(1);
+        List<Reserva> reservasEnFecha = reservaRepository
+                .findByCasaIdAndFechaEntradaLessThanAndEstadoReservaIn(
+                        casa,
+                        fechaSiguiente,
+                        estadosActivos
+                );
+
+        for (Reserva reserva : reservasEnFecha) {
+            LocalDate fechaSalida = reserva.getFechaEntrada().plusDays(reserva.getNumeroNoches());
+
+            //Si la reserva cubre esta fecha, no se puede redefinir disponibilidad
+            //porque eso borraría y recrearía los estados del día, sobrescribiendo la reserva
+            if (reserva.getFechaEntrada().isBefore(fechaSiguiente) && fecha.isBefore(fechaSalida)) {
+                throw new RuntimeException(
+                        "No se puede redefinir la disponibilidad de la fecha " + fecha + 
+                        " porque ya tiene reservas activas"
+                );
+            }
+        }
+    }
+
+    private void validarCompatibilidadModalidad(ModalidadDisponibilidad modalidadPaquete,
+                                                  ModalidadDisponibilidad modalidadDisponibilidad) {
+        //Si el paquete es CASA_ENTERA, la disponibilidad solo puede ser CASA_ENTERA
+        if (modalidadPaquete == ModalidadDisponibilidad.CASA_ENTERA &&
+            modalidadDisponibilidad != ModalidadDisponibilidad.CASA_ENTERA) {
+            throw new RuntimeException(
+                    "La modalidad de disponibilidad no es compatible con la modalidad del paquete (CASA_ENTERA). " +
+                    "Solo se puede definir disponibilidad de CASA_ENTERA."
+            );
+        }
+
+        //Si el paquete es HABITACIONES, la disponibilidad solo puede ser HABITACIONES
+        if (modalidadPaquete == ModalidadDisponibilidad.HABITACIONES &&
+            modalidadDisponibilidad != ModalidadDisponibilidad.HABITACIONES) {
+            throw new RuntimeException(
+                    "La modalidad de disponibilidad no es compatible con la modalidad del paquete (HABITACIONES). " +
+                    "Solo se puede definir disponibilidad de HABITACIONES."
+            );
+        }
+
+        //Si el paquete es AMBAS, cualquier modalidad de disponibilidad es válida
     }
 
     private ModalidadDisponibilidad parsearModalidad(String modalidad) {
@@ -182,15 +258,25 @@ public class DisponibilidadService {
         }
     }
 
-    // SE TUVO Q BORRAR EL IF (TIENE LOGICA RARA)
+    // Ajusta el estado de la casa según la modalidad
     private EstadoDisponibilidad ajustarEstadoCasaSegunModalidad(ModalidadDisponibilidad modalidad,
                                                                  EstadoDisponibilidad estadoCasa) {
+        // Si la modalidad es HABITACIONES, el estado de la casa no aplica
+        if (modalidad == ModalidadDisponibilidad.HABITACIONES) {
+            return EstadoDisponibilidad.LIBRE;
+        }
+        // Si es CASA_ENTERA o AMBAS, devolver el estado como está
         return estadoCasa;
     }
 
-    // SE TUVO Q BORRAR EL IF (TIENE LOGICA RARA)
+    // Ajusta el estado de habitaciones según la modalidad
     private EstadoDisponibilidad ajustarEstadoHabitacionesSegunModalidad(ModalidadDisponibilidad modalidad,
                                                                          EstadoDisponibilidad estadoHabitaciones) {
+        // Si la modalidad es CASA_ENTERA, el estado de habitaciones no aplica
+        if (modalidad == ModalidadDisponibilidad.CASA_ENTERA) {
+            return EstadoDisponibilidad.LIBRE;
+        }
+        // Si es HABITACIONES o AMBAS, devolver el estado como está
         return estadoHabitaciones;
     }
 }

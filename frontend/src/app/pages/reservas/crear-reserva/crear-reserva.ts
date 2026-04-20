@@ -6,6 +6,7 @@ import { CasasService } from '../../../core/services/casas/casas.service';
 import { DisponibilidadService } from '../../../core/services/disponibilidad/disponibilidad.service';
 import { Casa } from '../../../core/models/casas/casa.model';
 import { DisponibilidadDiaResponse } from '../../../core/models/disponibilidad/disponibilidad-dia-response.model';
+import { HabitacionDisponibilidadResponse } from '../../../core/models/disponibilidad/habitacion-disponibilidad-response.model';
 import { environment } from '../../../environments/environment';
 import {
   fireErrorAlert,
@@ -47,9 +48,17 @@ export class CrearReservaComponent implements OnInit {
   casas: Casa[] = [];
   casaSeleccionada: Casa | null = null;
   disponibilidad: DisponibilidadDiaResponse[] = [];
+  habitacionesDisponiblesSeleccionables: HabitacionDisponibilidadResponse[] = [];
   reservaCreada: ReservaResponseView | null = null;
+  habitacionesSeleccionadas: number[] = [];
 
-  minDate = new Date().toISOString().split('T')[0];
+  minDate = (() => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  })();
 
   reservaForm = this.fb.group({
     casaId: [null as number | null, [Validators.required, Validators.min(1)]],
@@ -59,11 +68,36 @@ export class CrearReservaComponent implements OnInit {
       '',
       [Validators.required, Validators.minLength(7), Validators.maxLength(20)]
     ],
-    tipoReserva: ['CASA_COMPLETA', Validators.required]
+    tipoReserva: ['CASA_COMPLETA', Validators.required],
+    habitacionIds: [[] as number[]]
   });
 
   ngOnInit(): void {
     this.cargarCasas();
+
+    //  Listener para resetear habitacionIds cuando cambia tipoReserva
+    this.reservaForm.get('tipoReserva')?.valueChanges.subscribe(() => {
+      this.habitacionesSeleccionadas = [];
+      this.reservaForm.get('habitacionIds')?.setValue([]);
+      this.reservaCreada = null;
+    });
+
+    //  Listener para limpiar selección cuando cambia fechaEntrada o numeroNoches
+    this.reservaForm.get('fechaEntrada')?.valueChanges.subscribe(() => {
+      this.habitacionesSeleccionadas = [];
+      this.reservaForm.get('habitacionIds')?.setValue([]);
+      this.habitacionesDisponiblesSeleccionables = [];
+      this.disponibilidad = [];
+      this.reservaCreada = null;
+    });
+
+    this.reservaForm.get('numeroNoches')?.valueChanges.subscribe(() => {
+      this.habitacionesSeleccionadas = [];
+      this.reservaForm.get('habitacionIds')?.setValue([]);
+      this.habitacionesDisponiblesSeleccionables = [];
+      this.disponibilidad = [];
+      this.reservaCreada = null;
+    });
   }
 
   get casaId() {
@@ -105,6 +139,9 @@ export class CrearReservaComponent implements OnInit {
     this.casaSeleccionada =
       this.casas.find((casa) => Number(casa.id) === casaId) ?? null;
 
+    this.habitacionesSeleccionadas = [];
+    this.reservaForm.get('habitacionIds')?.setValue([]);
+    this.habitacionesDisponiblesSeleccionables = [];
     this.disponibilidad = [];
     this.reservaCreada = null;
   }
@@ -134,7 +171,10 @@ export class CrearReservaComponent implements OnInit {
 
     this.consultandoDisponibilidad = true;
     this.disponibilidad = [];
-    this.reservaCreada = null;
+    this.habitacionesDisponiblesSeleccionables = [];
+    if (showFeedback) {
+      this.reservaCreada = null;
+    }
 
     this.disponibilidadService
       .consultarDisponibilidad(
@@ -146,6 +186,9 @@ export class CrearReservaComponent implements OnInit {
         next: (response) => {
           this.consultandoDisponibilidad = false;
           this.disponibilidad = response ?? [];
+
+          // Construir lista de habitaciones disponibles desde la consulta
+          this.construirHabitacionesDisponibles();
 
           if (showFeedback && this.disponibilidad.length === 0) {
             fireWarningAlert(
@@ -181,6 +224,16 @@ export class CrearReservaComponent implements OnInit {
       return;
     }
 
+    //  VALIDAR HABITACIONES SI TIPO DE RESERVA ES HABITACIONES
+    const tipoReserva = this.reservaForm.value.tipoReserva;
+    if (tipoReserva === 'HABITACIONES' && this.habitacionesSeleccionadas.length === 0) {
+      fireWarningAlert(
+        'Habitaciones requeridas',
+        'Debes seleccionar al menos una habitación para una reserva por habitaciones.'
+      );
+      return;
+    }
+
     if (!this.isFechaValida()) {
       fireWarningAlert(
         'Fecha inválida',
@@ -198,7 +251,7 @@ export class CrearReservaComponent implements OnInit {
       numeroNoches: Number(this.reservaForm.value.numeroNoches),
       telefonoCliente: this.reservaForm.value.telefonoCliente!.trim(),
       tipoReserva: this.reservaForm.value.tipoReserva!,
-      habitacionIds: [] as number[]
+      habitacionIds: tipoReserva === 'HABITACIONES' ? this.habitacionesSeleccionadas : []
     };
 
     this.http.post<ReservaResponseView>(this.apiUrl, payload).subscribe({
@@ -224,15 +277,101 @@ export class CrearReservaComponent implements OnInit {
     });
   }
 
+  toggleHabitacion(habitacionId: number): void {
+    const index = this.habitacionesSeleccionadas.indexOf(habitacionId);
+    if (index > -1) {
+      this.habitacionesSeleccionadas.splice(index, 1);
+    } else {
+      this.habitacionesSeleccionadas.push(habitacionId);
+    }
+    this.reservaForm.get('habitacionIds')?.setValue(this.habitacionesSeleccionadas);
+  }
+
+  isHabitacionSeleccionada(habitacionId: number): boolean {
+    return this.habitacionesSeleccionadas.includes(habitacionId);
+  }
+
+  construirHabitacionesDisponibles(): void {
+    // Primero, validar que TODOS los días del rango permitan selección por habitaciones
+    const algunDiaEsCasaEntera = this.disponibilidad.some(
+      (dia) => dia.modalidad?.toUpperCase() === 'CASA_ENTERA'
+    );
+
+    if (algunDiaEsCasaEntera || this.disponibilidad.length === 0) {
+      // Si algún día es CASA_ENTERA o no hay disponibilidad, no hay habitaciones seleccionables
+      this.habitacionesDisponiblesSeleccionables = [];
+      this.limpiarHabitacionesNoValidas([]);
+      return;
+    }
+
+    // Calcular intersección de habitaciones libres en TODOS los días
+    const habitacionesDisponibles: Map<number, HabitacionDisponibilidadResponse> = new Map();
+    let esPrimerDia = true;
+
+    for (const dia of this.disponibilidad) {
+      const habitacionesLibresEnEsteDia = new Set<number>();
+
+      // Recopilar IDs de habitaciones libres en este día
+      for (const habitacion of dia.habitaciones ?? []) {
+        if (habitacion.estado === 'LIBRE') {
+          habitacionesLibresEnEsteDia.add(habitacion.id);
+        }
+      }
+
+      if (esPrimerDia) {
+        // En el primer día, agregar todas las habitaciones libres
+        for (const habitacion of dia.habitaciones ?? []) {
+          if (habitacion.estado === 'LIBRE') {
+            habitacionesDisponibles.set(habitacion.id, habitacion);
+          }
+        }
+        esPrimerDia = false;
+      } else {
+        // En los siguientes días, mantener solo las que también están libres
+        for (const [habitacionId] of habitacionesDisponibles) {
+          if (!habitacionesLibresEnEsteDia.has(habitacionId)) {
+            // Si no está libre en este día, eliminar de la lista
+            habitacionesDisponibles.delete(habitacionId);
+          }
+        }
+      }
+    }
+
+    // Convertir a array ordenado por id
+    this.habitacionesDisponiblesSeleccionables = Array.from(habitacionesDisponibles.values()).sort(
+      (a, b) => a.id - b.id
+    );
+
+    // Limpiar habitaciones seleccionadas que ya no sean válidas
+    this.limpiarHabitacionesNoValidas(
+      this.habitacionesDisponiblesSeleccionables.map((h) => h.id)
+    );
+  }
+
+  private limpiarHabitacionesNoValidas(habitacionesValidas: number[]): void {
+    const habitacionesValidasSet = new Set(habitacionesValidas);
+
+    // Filtrar habitaciones seleccionadas que ya no son válidas
+    this.habitacionesSeleccionadas = this.habitacionesSeleccionadas.filter(
+      (id) => habitacionesValidasSet.has(id)
+    );
+
+    // Sincronizar el form control
+    this.reservaForm.get('habitacionIds')?.setValue(this.habitacionesSeleccionadas);
+  }
+
   limpiarFormulario(): void {
     this.reservaForm.reset({
       casaId: null,
       fechaEntrada: '',
       numeroNoches: 1,
       telefonoCliente: '',
-      tipoReserva: 'CASA_COMPLETA'
+      tipoReserva: 'CASA_COMPLETA',
+      habitacionIds: []
     });
 
+    this.habitacionesSeleccionadas = [];
+    this.habitacionesDisponiblesSeleccionables = [];
     this.casaSeleccionada = null;
     this.disponibilidad = [];
     this.reservaCreada = null;
@@ -249,13 +388,67 @@ export class CrearReservaComponent implements OnInit {
     const fecha = new Date(`${fechaEntrada}T00:00:00`);
     fecha.setDate(fecha.getDate() + numeroNoches);
 
-    return this.formatDate(fecha.toISOString().split('T')[0]);
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    return this.formatDate(`${year}-${month}-${day}`);
   }
 
   getHabitacionesLibresCount(dia: DisponibilidadDiaResponse): number {
     return (dia.habitaciones ?? []).filter(
       (habitacion) => habitacion.estado === 'LIBRE'
     ).length;
+  }
+
+  // Devuelve el estado a mostrar según modalidad del día y tipo de reserva seleccionado
+  getEstadoParaMostrar(dia: DisponibilidadDiaResponse): string {
+    const tipoReserva = this.reservaForm.value.tipoReserva?.toUpperCase();
+    const modalidadDia = dia.modalidad?.toUpperCase();
+
+    // Si el día es CASA_ENTERA, mostrar estado de casa
+    if (modalidadDia === 'CASA_ENTERA') {
+      return dia.estadoCasa;
+    }
+
+    // Si el día es HABITACIONES, mostrar disponibilidad de habitaciones
+    if (modalidadDia === 'HABITACIONES') {
+      if (!dia.habitaciones || dia.habitaciones.length === 0) {
+        return 'NO_DISPONIBLE';
+      }
+      const habitacionesLibres = dia.habitaciones.filter(
+        (h) => h.estado === 'LIBRE'
+      ).length;
+      if (habitacionesLibres > 0) {
+        return 'LIBRE';
+      }
+      const habitacionesReservadas = dia.habitaciones.filter(
+        (h) => h.estado === 'RESERVADA'
+      ).length;
+      return habitacionesReservadas > 0 ? 'RESERVADA' : 'NO_DISPONIBLE';
+    }
+
+    // Si el día es AMBAS, considerar el tipo de reserva seleccionado
+    if (modalidadDia === 'AMBAS') {
+      if (tipoReserva === 'CASA_COMPLETA') {
+        return dia.estadoCasa;
+      } else if (tipoReserva === 'HABITACIONES') {
+        if (!dia.habitaciones || dia.habitaciones.length === 0) {
+          return 'NO_DISPONIBLE';
+        }
+        const habitacionesLibres = dia.habitaciones.filter(
+          (h) => h.estado === 'LIBRE'
+        ).length;
+        if (habitacionesLibres > 0) {
+          return 'LIBRE';
+        }
+        const habitacionesReservadas = dia.habitaciones.filter(
+          (h) => h.estado === 'RESERVADA'
+        ).length;
+        return habitacionesReservadas > 0 ? 'RESERVADA' : 'NO_DISPONIBLE';
+      }
+    }
+
+    return dia.estadoCasa;
   }
 
   getEstadoBadgeClass(estado: string | undefined): string {

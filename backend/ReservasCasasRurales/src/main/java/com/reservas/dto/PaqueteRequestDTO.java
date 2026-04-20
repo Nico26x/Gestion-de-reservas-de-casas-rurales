@@ -14,6 +14,7 @@ public class PaqueteRequestDTO {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private Double precio;
+    private Double precioHabitacion;
     private Long casaId;
     private ModalidadDisponibilidad modalidad;
 }

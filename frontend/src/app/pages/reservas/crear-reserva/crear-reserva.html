@@ -155,12 +155,39 @@
               <select id="tipoReserva" formControlName="tipoReserva">
                 <option value="CASA_COMPLETA">Casa completa</option>
                 <option value="HABITACIONES">Habitaciones</option>
-                <option value="AMBAS">Ambas</option>
               </select>
             </div>
 
             <small class="field-error" *ngIf="tipoReserva?.invalid && tipoReserva?.touched">
               Debes seleccionar un tipo de reserva.
+            </small>
+          </div>
+
+          <div class="form-field form-field--full" *ngIf="reservaForm.value.tipoReserva === 'HABITACIONES' && habitacionesDisponiblesSeleccionables.length > 0">
+            <label>Seleccionar habitaciones</label>
+            <div class="habitaciones-grid">
+              <div 
+                class="habitacion-card" 
+                *ngFor="let habitacion of habitacionesDisponiblesSeleccionables"
+                (click)="toggleHabitacion(habitacion.id)"
+                [class.habitacion-card--selected]="isHabitacionSeleccionada(habitacion.id)"
+              >
+                <div class="habitacion-card__header">
+                  <span class="habitacion-code">{{ habitacion.codigoHabitacion }}</span>
+                  <input 
+                    type="checkbox" 
+                    [checked]="isHabitacionSeleccionada(habitacion.id)"
+                    (change)="toggleHabitacion(habitacion.id)"
+                    (click)="$event.stopPropagation()"
+                  />
+                </div>
+                <div class="habitacion-card__info">
+                  <span class="habitacion-status" [class.status-libre]="habitacion.estado === 'LIBRE'">{{ habitacion.estado }}</span>
+                </div>
+              </div>
+            </div>
+            <small class="field-error" *ngIf="reservaForm.value.tipoReserva === 'HABITACIONES' && habitacionesSeleccionadas.length === 0 && reservaForm.get('tipoReserva')?.touched">
+              Debes seleccionar al menos una habitación.
             </small>
           </div>
 
@@ -264,8 +291,8 @@
             <div class="day-card" *ngFor="let dia of disponibilidad">
               <div class="day-card__top">
                 <strong>{{ formatDate(dia.fecha) }}</strong>
-                <span class="badge" [ngClass]="getEstadoBadgeClass(dia.estadoCasa)">
-                  {{ dia.estadoCasa }}
+                <span class="badge" [ngClass]="getEstadoBadgeClass(getEstadoParaMostrar(dia))">
+                  {{ getEstadoParaMostrar(dia) }}
                 </span>
               </div>
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaquetesService } from '../../../core/services/paquetes/paquetes.service';
 import { CrearPaqueteRequest } from '../../../core/models/paquetes/crear-paquete-request.model';
@@ -16,7 +16,7 @@ import {
   templateUrl: './crear-paquete.html',
   styleUrl: './crear-paquete.css'
 })
-export class CrearPaqueteComponent {
+export class CrearPaqueteComponent implements OnInit {
   private fb = inject(FormBuilder);
   private paquetesService = inject(PaquetesService);
 
@@ -26,9 +26,35 @@ export class CrearPaqueteComponent {
     casaId: [null as number | null, [Validators.required, Validators.min(1)]],
     fechaInicio: ['', Validators.required],
     fechaFin: ['', Validators.required],
-    precio: [null as number | null, [Validators.required, Validators.min(1)]],
+    precio: [null as number | null],
+    precioHabitacion: [null as number | null],
     modalidad: ['', [Validators.required]]
   });
+
+  ngOnInit(): void {
+    this.paqueteForm.get('modalidad')?.valueChanges.subscribe((modalidad) => {
+      const precioControl = this.paqueteForm.get('precio');
+      const precioHabitacionControl = this.paqueteForm.get('precioHabitacion');
+
+      // Lógica para precio (CASA_ENTERA o AMBAS)
+      if (modalidad === 'CASA_ENTERA' || modalidad === 'AMBAS') {
+        precioControl?.setValidators([Validators.required, Validators.min(1)]);
+      } else {
+        precioControl?.clearValidators();
+        precioControl?.reset();
+      }
+      precioControl?.updateValueAndValidity();
+
+      // Lógica para precioHabitacion (HABITACIONES o AMBAS)
+      if (modalidad === 'HABITACIONES' || modalidad === 'AMBAS') {
+        precioHabitacionControl?.setValidators([Validators.required, Validators.min(1)]);
+      } else {
+        precioHabitacionControl?.clearValidators();
+        precioHabitacionControl?.reset();
+      }
+      precioHabitacionControl?.updateValueAndValidity();
+    });
+  }
 
   onSubmit(): void {
     if (this.paqueteForm.invalid) {
@@ -54,12 +80,14 @@ export class CrearPaqueteComponent {
 
     this.loading = true;
 
+    const modalidad = this.paqueteForm.value.modalidad!;
     const data: CrearPaqueteRequest = {
       casaId: Number(this.paqueteForm.value.casaId),
       fechaInicio,
       fechaFin,
-      precio: Number(this.paqueteForm.value.precio),
-      modalidad: this.paqueteForm.value.modalidad!
+      precio: (modalidad === 'CASA_ENTERA' || modalidad === 'AMBAS') ? Number(this.paqueteForm.value.precio) : undefined,
+      precioHabitacion: (modalidad === 'HABITACIONES' || modalidad === 'AMBAS') ? Number(this.paqueteForm.value.precioHabitacion) : undefined,
+      modalidad
     };
 
     this.paquetesService.crearPaquete(data).subscribe({
@@ -76,6 +104,7 @@ export class CrearPaqueteComponent {
           fechaInicio: '',
           fechaFin: '',
           precio: null,
+          precioHabitacion: null,
           modalidad: ''
         });
       },
@@ -86,6 +115,7 @@ export class CrearPaqueteComponent {
           'Error al crear paquete',
           error?.error?.mensaje ||
             error?.error?.message ||
+            error?.error ||
             'No se pudo crear el paquete.'
         );
       }

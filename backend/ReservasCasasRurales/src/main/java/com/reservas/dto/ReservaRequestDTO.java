@@ -12,5 +12,6 @@ public class ReservaRequestDTO {
     private LocalDate fechaEntrada;
     private Integer numeroNoches;
     private String telefonoCliente;
+    private String tipoReserva;
     private List<Long> habitacionIds;
 }

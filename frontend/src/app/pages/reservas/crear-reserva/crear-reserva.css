@@ -127,6 +127,7 @@
   display: block;
   margin-top: 0.22rem;
   background: linear-gradient(135deg, #1d4d99 0%, #3e85eb 55%, #73b3ff 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -715,6 +716,65 @@
   color: #5b769a;
   line-height: 1.75;
   font-size: 0.94rem;
+}
+
+/*  HABITACIONES SELECTION */
+.habitaciones-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+
+.habitacion-card {
+  padding: 1rem;
+  border: 2px solid #dceafb;
+  border-radius: 12px;
+  background: #f9fbff;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.habitacion-card:hover {
+  border-color: #5c82b6;
+  background: #f4f8ff;
+}
+
+.habitacion-card--selected {
+  border-color: #4770a6;
+  background: #eef5ff;
+  box-shadow: 0 2px 8px rgba(71, 112, 166, 0.12);
+}
+
+.habitacion-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.habitacion-code {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #173963;
+}
+
+.habitacion-card input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #4770a6;
+}
+
+.habitacion-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #647fa4;
 }
 
 /* RESPONSIVE */

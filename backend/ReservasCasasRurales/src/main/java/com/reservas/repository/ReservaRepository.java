@@ -6,6 +6,7 @@ import com.reservas.model.Reserva;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,11 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     //Buscar reservas activas de una casa (PENDIENTE o CONFIRMADA)
     List<Reserva> findByCasaIdAndEstadoReservaIn(Casa casaId, List<EstadoReserva> estadosReservas);
+
+    //Buscar reservas que se solapan con el rango de fechas especificado
+    List<Reserva> findByCasaIdAndFechaEntradaLessThanAndEstadoReservaIn(
+            Casa casaId,
+            LocalDate fechaSalida,
+            List<EstadoReserva> estadosReservas
+    );
 }

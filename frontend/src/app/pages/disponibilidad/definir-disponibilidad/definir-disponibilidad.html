@@ -210,18 +210,24 @@
             </div>
 
             <div class="field-stack">
-              <div class="field-box">
+              <div class="field-box" *ngIf="registrarForm.value.modalidad !== 'HABITACIONES'">
                 <label for="estadoCasa">Estado de la casa</label>
-                <select id="estadoCasa" formControlName="estadoCasa">
+                <select 
+                  id="estadoCasa" 
+                  formControlName="estadoCasa"
+                >
                   <option value="LIBRE">LIBRE</option>
                   <option value="RESERVADA">RESERVADA</option>
                   <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
                 </select>
               </div>
 
-              <div class="field-box">
+              <div class="field-box" *ngIf="registrarForm.value.modalidad !== 'CASA_ENTERA'">
                 <label for="estadoHabitaciones">Estado de habitaciones</label>
-                <select id="estadoHabitaciones" formControlName="estadoHabitaciones">
+                <select 
+                  id="estadoHabitaciones" 
+                  formControlName="estadoHabitaciones"
+                >
                   <option value="LIBRE">LIBRE</option>
                   <option value="RESERVADA">RESERVADA</option>
                   <option value="NO_DISPONIBLE">NO_DISPONIBLE</option>
@@ -309,7 +315,7 @@
       </div>
 
       <div class="preview-card preview-card--status">
-        <div class="status-circle-card">
+        <div class="status-circle-card" *ngIf="registrarForm.value.modalidad !== 'HABITACIONES'">
           <div
             class="status-circle"
             [ngClass]="{
@@ -324,7 +330,7 @@
           <strong>{{ registrarForm.value.estadoCasa || 'LIBRE' }}</strong>
         </div>
 
-        <div class="status-circle-card">
+        <div class="status-circle-card" *ngIf="registrarForm.value.modalidad !== 'CASA_ENTERA'">
           <div
             class="status-circle"
             [ngClass]="{

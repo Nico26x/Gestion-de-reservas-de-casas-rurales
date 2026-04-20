@@ -31,6 +31,20 @@ export class DefinirDisponibilidadComponent {
     estadoHabitaciones: ['LIBRE', Validators.required]
   });
 
+  // Construye el payload filtrando campos según la modalidad
+  private construirPayloadSegunModalidad(): DisponibilidadRequest {
+    const modalidad = this.registrarForm.value.modalidad!;
+
+    return {
+      casaId: Number(this.registrarForm.value.casaId),
+      fechaInicio: this.registrarForm.value.fechaInicio!,
+      fechaFin: this.registrarForm.value.fechaFin!,
+      modalidad,
+      estadoCasa: modalidad === 'HABITACIONES' ? 'LIBRE' : this.registrarForm.value.estadoCasa!,
+      estadoHabitaciones: modalidad === 'CASA_ENTERA' ? 'LIBRE' : this.registrarForm.value.estadoHabitaciones!
+    };
+  }
+
   registrarDisponibilidad(): void {
     if (this.registrarForm.invalid) {
       this.registrarForm.markAllAsTouched();
@@ -54,14 +68,7 @@ export class DefinirDisponibilidadComponent {
 
     this.loadingRegistrar = true;
 
-    const data: DisponibilidadRequest = {
-      casaId: Number(this.registrarForm.value.casaId),
-      fechaInicio,
-      fechaFin,
-      modalidad: this.registrarForm.value.modalidad!,
-      estadoCasa: this.registrarForm.value.estadoCasa!,
-      estadoHabitaciones: this.registrarForm.value.estadoHabitaciones!
-    };
+    const data: DisponibilidadRequest = this.construirPayloadSegunModalidad();
 
     this.disponibilidadService.registrarDisponibilidad(data).subscribe({
       next: (response) => {

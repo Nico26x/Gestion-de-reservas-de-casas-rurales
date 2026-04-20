@@ -143,12 +143,12 @@
               <span
                 class="status-badge"
                 [ngClass]="{
-                  'status-badge--free': dia.estadoCasa === 'LIBRE',
-                  'status-badge--reserved': dia.estadoCasa === 'RESERVADA',
-                  'status-badge--blocked': dia.estadoCasa === 'NO_DISPONIBLE'
+                  'status-badge--free': getEstadoSegunModalidad(dia) === 'LIBRE',
+                  'status-badge--reserved': getEstadoSegunModalidad(dia) === 'RESERVADA',
+                  'status-badge--blocked': getEstadoSegunModalidad(dia) === 'NO_DISPONIBLE'
                 }"
               >
-                {{ dia.estadoCasa }}
+                {{ getEstadoSegunModalidad(dia) }}
               </span>
             </div>
 
@@ -158,7 +158,7 @@
             </div>
           </div>
 
-          <div class="rooms-section">
+          <div class="rooms-section" *ngIf="dia.modalidad !== 'CASA_ENTERA'">
             <div class="rooms-section__header">
               <h4>Habitaciones</h4>
               <span>{{ dia.habitaciones.length }} registradas</span>

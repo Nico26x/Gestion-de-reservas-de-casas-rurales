@@ -63,4 +63,66 @@ export class ConsultarDisponibilidadComponent {
         }
       });
   }
+
+  // Devuelve el estado correcto según la modalidad
+  getEstadoSegunModalidad(dia: DisponibilidadDiaResponse): string {
+    switch (dia.modalidad?.toUpperCase()) {
+      case 'CASA_ENTERA':
+        return dia.estadoCasa;
+
+      case 'HABITACIONES':
+        // Para habitaciones, determinar el estado según la disponibilidad real
+        if (!dia.habitaciones || dia.habitaciones.length === 0) {
+          return 'NO_DISPONIBLE';
+        }
+        
+        // Revisar si hay al menos una habitación LIBRE
+        const habitacionesLibres = dia.habitaciones.filter(
+          (h) => h.estado === 'LIBRE'
+        ).length;
+        if (habitacionesLibres > 0) {
+          return 'LIBRE';
+        }
+        
+        // Si no hay libres, revisar si hay al menos una RESERVADA
+        const tieneReservadas = dia.habitaciones.some(
+          (h) => h.estado === 'RESERVADA'
+        );
+        if (tieneReservadas) {
+          return 'RESERVADA';
+        }
+        
+        // Si no hay libres ni reservadas, todo está bloqueado
+        return 'NO_DISPONIBLE';
+
+      case 'AMBAS':
+        // Para modalidad AMBAS, combinar estado de casa + estado de habitaciones
+        // Si hay alguna vía de reserva disponible, reflejarlo
+        const casaLibre = dia.estadoCasa === 'LIBRE';
+        const habitacionesLibresAmbas = 
+          dia.habitaciones && dia.habitaciones.length > 0 &&
+          dia.habitaciones.some((h) => h.estado === 'LIBRE');
+        
+        // Si casa o alguna habitación están libres, mostrar LIBRE
+        if (casaLibre || habitacionesLibresAmbas) {
+          return 'LIBRE';
+        }
+        
+        // Si no hay vía libre, revisar si hay reservadas
+        const casaReservada = dia.estadoCasa === 'RESERVADA';
+        const habitacionesReservadas = 
+          dia.habitaciones && dia.habitaciones.length > 0 &&
+          dia.habitaciones.some((h) => h.estado === 'RESERVADA');
+        
+        if (casaReservada || habitacionesReservadas) {
+          return 'RESERVADA';
+        }
+        
+        // Si todo está bloqueado
+        return 'NO_DISPONIBLE';
+
+      default:
+        return dia.estadoCasa;
+    }
+  }
 }

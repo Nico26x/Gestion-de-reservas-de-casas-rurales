@@ -1,3 +1,11 @@
+export interface Habitacion {
+  id?: number;
+  codigoHabitacion?: string;
+  numeroCamas?: number;
+  tipoCama?: string;
+  tieneBano?: boolean;
+}
+
 export interface Casa {
   id?: number;
   nombre?: string;
@@ -7,4 +15,5 @@ export interface Casa {
   numeroBanos?: number;
   numeroCocinas?: number;
   foto?: string;
+  habitaciones?: Habitacion[];
 }

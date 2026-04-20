@@ -33,14 +33,26 @@ public class PaqueteService {
         throw new RuntimeException("La fecha inicio no puede ser mayor que la fecha fin");
     }
 
-    //  VALIDAR PRECIO
-    if (dto.getPrecio() == null || dto.getPrecio() <= 0) {
-        throw new RuntimeException("El precio debe ser mayor a 0");
-    }
-
-    //VALIDAR MODALIDAD
+    //  VALIDAR PRECIO Y PRECIO_HABITACION SEGÚN MODALIDAD
     if (dto.getModalidad() == null) {
         throw new RuntimeException("La modalidad es obligatoria");
+    }
+
+    if (dto.getModalidad().equals(com.reservas.model.ModalidadDisponibilidad.CASA_ENTERA)) {
+        if (dto.getPrecio() == null || dto.getPrecio() <= 0) {
+            throw new RuntimeException("El precio debe ser mayor a 0");
+        }
+    } else if (dto.getModalidad().equals(com.reservas.model.ModalidadDisponibilidad.HABITACIONES)) {
+        if (dto.getPrecioHabitacion() == null || dto.getPrecioHabitacion() <= 0) {
+            throw new RuntimeException("El precio por habitación debe ser mayor a 0");
+        }
+    } else if (dto.getModalidad().equals(com.reservas.model.ModalidadDisponibilidad.AMBAS)) {
+        if (dto.getPrecio() == null || dto.getPrecio() <= 0) {
+            throw new RuntimeException("El precio debe ser mayor a 0");
+        }
+        if (dto.getPrecioHabitacion() == null || dto.getPrecioHabitacion() <= 0) {
+            throw new RuntimeException("El precio por habitación debe ser mayor a 0");
+        }
     }
 
     //  BUSCAR CASA
@@ -69,6 +81,7 @@ public class PaqueteService {
     paquete.setFechaInicio(dto.getFechaInicio());
     paquete.setFechaFin(dto.getFechaFin());
     paquete.setPrecio(dto.getPrecio());
+    paquete.setPrecioHabitacion(dto.getPrecioHabitacion());
     paquete.setCasa(casa);
     paquete.setModalidad(dto.getModalidad());
 
