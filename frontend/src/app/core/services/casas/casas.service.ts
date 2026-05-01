@@ -17,6 +17,9 @@ export class CasasService {
     formData.append('nombre', data.nombre);
     formData.append('direccion', data.direccion);
     formData.append('poblacion', data.poblacion);
+    if (data.descripcion) {
+      formData.append('descripcion', data.descripcion);
+    }
     formData.append('numeroHabitaciones', String(data.numeroHabitaciones));
     formData.append('numeroBanos', String(data.numeroBanos));
     formData.append('numeroCocinas', String(data.numeroCocinas));

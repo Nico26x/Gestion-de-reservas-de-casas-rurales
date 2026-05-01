@@ -55,6 +55,7 @@ public class CasaService {
         casa.setNombre(dto.getNombre());
         casa.setDireccion(dto.getDireccion());
         casa.setPoblacion(dto.getPoblacion());
+        casa.setDescripcion(dto.getDescripcion());
 
         Map data = imageService.upload(foto);
         String url = (String) data.get("url");

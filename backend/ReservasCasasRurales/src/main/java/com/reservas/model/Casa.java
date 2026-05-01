@@ -27,6 +27,9 @@ public class Casa {
     @Column(name = "foto")
     private String foto;
 
+    @Column(length = 1000)
+    private String descripcion;
+
     // Relación con propietario
     @ManyToOne
     @JoinColumn(name = "propietario_id", nullable = false)

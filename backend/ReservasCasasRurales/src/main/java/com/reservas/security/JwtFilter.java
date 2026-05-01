@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,9 +19,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
     /**
      * Este filtro se ejecuta en CADA request que llega al servidor.
@@ -62,23 +57,40 @@ public class JwtFilter extends OncePerRequestFilter {
         // 3. Si se extrajo el nombreCuenta y no hay autenticación previa
         if (nombreCuenta != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-    if (jwtUtil.validarToken(token)) {
+            if (jwtUtil.validarToken(token)) {
 
-        String rol = jwtUtil.extraerRol(token);
+                String rol = jwtUtil.extraerRol(token);
+                
+                // Diagnóstico
+                System.out.println("[JWT FILTER DIAGNOSTICS]");
+                System.out.println("  URI solicitada: " + request.getRequestURI());
+                System.out.println("  Método HTTP: " + request.getMethod());
+                System.out.println("  Username: " + nombreCuenta);
+                System.out.println("  Rol extraído del token: " + rol);
+                
+                // Asegurar que el rol tenga el prefijo "ROLE_"
+                if (rol != null && !rol.startsWith("ROLE_")) {
+                    rol = "ROLE_" + rol;
+                }
+                
+                System.out.println("  Rol con prefijo: " + rol);
 
-        List<SimpleGrantedAuthority> authorities =
-                List.of(new SimpleGrantedAuthority(rol));
+                List<SimpleGrantedAuthority> authorities =
+                        List.of(new SimpleGrantedAuthority(rol));
+                
+                System.out.println("  Authorities creadas: " + authorities);
 
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(
-                        nombreCuenta,
-                        null,
-                        authorities
-                );
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                nombreCuenta,
+                                null,
+                                authorities
+                        );
 
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-    }
-}
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+                System.out.println("  ✓ Authentication establecida en SecurityContext");
+            }
+        }
 
         // 8. Continuar con el siguiente filtro en la cadena
         filterChain.doFilter(request, response);

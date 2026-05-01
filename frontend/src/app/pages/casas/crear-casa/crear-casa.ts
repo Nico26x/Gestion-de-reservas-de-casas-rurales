@@ -31,6 +31,7 @@ export class CrearCasaComponent {
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     direccion: ['', [Validators.required, Validators.minLength(5)]],
     poblacion: ['', [Validators.required, Validators.minLength(2)]],
+    descripcion: [''],
     numeroHabitaciones: [3, [Validators.required, Validators.min(3)]],
     numeroBanos: [2, [Validators.required, Validators.min(2)]],
     numeroCocinas: [1, [Validators.required, Validators.min(1)]],
@@ -49,6 +50,10 @@ export class CrearCasaComponent {
 
   get poblacion() {
     return this.crearCasaForm.get('poblacion');
+  }
+
+  get descripcion() {
+    return this.crearCasaForm.get('descripcion');
   }
 
   get numeroHabitaciones() {
@@ -90,17 +95,52 @@ export class CrearCasaComponent {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] || null;
-    this.selectedFile = file;
-
-    if (this.imagePreviewUrl) {
-      URL.revokeObjectURL(this.imagePreviewUrl);
-      this.imagePreviewUrl = null;
-    }
 
     if (file) {
+      // Diagnóstico: imprimir información del archivo
+      const fileSizeMb = file.size / (1024 * 1024);
+      console.log(`[FILE VALIDATION] Archivo seleccionado:`);
+      console.log(`  Nombre: ${file.name}`);
+      console.log(`  Tamaño (bytes): ${file.size}`);
+      console.log(`  Tamaño (MB): ${fileSizeMb.toFixed(2)}MB`);
+      console.log(`  Tipo MIME: ${file.type}`);
+
+      // Validar tamaño máximo: 25MB
+      const MAX_FILE_SIZE_MB = 25;
+      if (fileSizeMb > MAX_FILE_SIZE_MB) {
+        console.warn(`[FILE VALIDATION] RECHAZADO: Archivo supera ${MAX_FILE_SIZE_MB}MB`);
+        
+        fireWarningAlert(
+          'Archivo demasiado grande',
+          `La imagen pesa ${fileSizeMb.toFixed(2)}MB. El límite es ${MAX_FILE_SIZE_MB}MB.`
+        );
+
+        // Limpiar selección
+        this.selectedFile = null;
+        this.imagePreview = null;
+        if (this.imagePreviewUrl) {
+          URL.revokeObjectURL(this.imagePreviewUrl);
+          this.imagePreviewUrl = null;
+        }
+        if (input) {
+          input.value = '';
+        }
+        return;
+      }
+
+      // Archivo válido: procesar preview
+      console.log(`[FILE VALIDATION] ACEPTADO: ${fileSizeMb.toFixed(2)}MB <= ${MAX_FILE_SIZE_MB}MB`);
+      this.selectedFile = file;
+
+      if (this.imagePreviewUrl) {
+        URL.revokeObjectURL(this.imagePreviewUrl);
+        this.imagePreviewUrl = null;
+      }
+
       this.imagePreviewUrl = URL.createObjectURL(file);
       this.imagePreview = this.imagePreviewUrl;
     } else {
+      this.selectedFile = null;
       this.imagePreview = null;
     }
   }
@@ -110,6 +150,7 @@ export class CrearCasaComponent {
       nombre: '',
       direccion: '',
       poblacion: '',
+      descripcion: '',
       numeroHabitaciones: 3,
       numeroBanos: 2,
       numeroCocinas: 1,
@@ -148,6 +189,7 @@ export class CrearCasaComponent {
       nombre: this.crearCasaForm.value.nombre!,
       direccion: this.crearCasaForm.value.direccion!,
       poblacion: this.crearCasaForm.value.poblacion!,
+      descripcion: this.crearCasaForm.value.descripcion || undefined,
       numeroHabitaciones: Number(this.crearCasaForm.value.numeroHabitaciones),
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
       numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),

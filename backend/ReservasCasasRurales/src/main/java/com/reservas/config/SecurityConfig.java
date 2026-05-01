@@ -61,14 +61,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/reservas").permitAll()
 
                         // ── SOLO PROPIETARIO ──────────────────────────────
-                        .requestMatchers(HttpMethod.POST, "/api/casas").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.POST, "/api/paquetes").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.PUT, "/api/casas/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.DELETE, "/api/casas/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.GET, "/api/paquetes/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.PUT, "/api/paquetes/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.DELETE, "/api/paquetes/**").hasRole("PROPIETARIO")
-                        .requestMatchers(HttpMethod.POST, "/api/disponibilidad").hasRole("PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/casas").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/paquetes").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/casas/**").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/casas/**").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.GET, "/api/paquetes/**").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/paquetes/**").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/paquetes/**").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/disponibilidad").hasAuthority("ROLE_PROPIETARIO")
 
                         // ── SOLO CLIENTE ──────────────────────────────
                         .requestMatchers("/api/reservas/**").hasRole("CLIENTE")

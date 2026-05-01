@@ -31,6 +31,7 @@ public class CasaController {
             @RequestParam("nombre") String nombre,
             @RequestParam("direccion") String direccion,
             @RequestParam("poblacion") String poblacion,
+            @RequestParam(value = "descripcion", required = false) String descripcion,
             @RequestParam("numeroHabitaciones") int numeroHabitaciones,
             @RequestParam("numeroBanos") int numeroBanos,
             @RequestParam("numeroCocinas") int numeroCocinas,
@@ -39,6 +40,20 @@ public class CasaController {
             @RequestParam("tipoCama") TipoCama tipoCama,
             @RequestParam("foto") MultipartFile foto,
             Authentication authentication) throws Exception {
+
+        // === DIAGNÓSTICO DE MULTIPART: Log al entrar al controlador ===
+        System.out.println("\n========== [CasaController.crearCasa DIAGNOSTICS] ==========");
+        System.out.println("  ✓ Request llegó al controller");
+        if (foto != null && !foto.isEmpty()) {
+            long fileSizeBytes = foto.getSize();
+            long fileSizeMB = fileSizeBytes / (1024 * 1024);
+            System.out.println("  Archivo recibido: " + foto.getOriginalFilename());
+            System.out.println("  Tamaño: " + fileSizeBytes + " bytes (~" + fileSizeMB + "MB)");
+            System.out.println("  Content-Type: " + foto.getContentType());
+        } else {
+            System.out.println("  ⚠ No se recibió archivo o está vacío");
+        }
+        System.out.println("========================================================\n");
 
         if (authentication == null) {
             throw new RuntimeException("Usuario no autenticado");
@@ -60,6 +75,7 @@ public class CasaController {
         dto.setNombre(nombre);
         dto.setDireccion(direccion);
         dto.setPoblacion(poblacion);
+        dto.setDescripcion(descripcion);
         dto.setNumeroHabitaciones(numeroHabitaciones);
         dto.setNumeroBanos(numeroBanos);
         dto.setNumeroCocinas(numeroCocinas);

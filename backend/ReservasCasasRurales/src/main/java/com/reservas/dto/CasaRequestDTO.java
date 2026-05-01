@@ -11,6 +11,7 @@ public class CasaRequestDTO {
     private String nombre;
     private String direccion;
     private String poblacion;
+    private String descripcion;
 
     private int numeroHabitaciones;
     private int numeroBanos;
