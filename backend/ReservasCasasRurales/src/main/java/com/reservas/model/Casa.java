@@ -49,6 +49,9 @@ public class Casa {
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private List<Paquete> paquetes;
 
+    @Column(name = "numero_comedores")
+    private Integer numeroComedores;
+
     // Getters para contar elementos en las colecciones
     @JsonProperty("numeroHabitaciones")
     public Integer getNumeroHabitaciones() {

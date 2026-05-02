@@ -14,6 +14,7 @@ export interface Casa {
   numeroHabitaciones?: number;
   numeroBanos?: number;
   numeroCocinas?: number;
+  numeroComedores?: number;
   descripcion?: string;
   foto?: string;
   habitaciones?: Habitacion[];

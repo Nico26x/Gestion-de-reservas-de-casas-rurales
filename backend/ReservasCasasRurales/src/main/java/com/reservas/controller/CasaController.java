@@ -35,6 +35,7 @@ public class CasaController {
             @RequestParam("numeroHabitaciones") int numeroHabitaciones,
             @RequestParam("numeroBanos") int numeroBanos,
             @RequestParam("numeroCocinas") int numeroCocinas,
+            @RequestParam("numeroComedores") int numeroComedores,
             @RequestParam("numeroCamas") Integer numeroCamas,
             @RequestParam("tieneBano") Boolean tieneBano,
             @RequestParam("tipoCama") TipoCama tipoCama,
@@ -79,6 +80,7 @@ public class CasaController {
         dto.setNumeroHabitaciones(numeroHabitaciones);
         dto.setNumeroBanos(numeroBanos);
         dto.setNumeroCocinas(numeroCocinas);
+        dto.setNumeroComedores(numeroComedores);
         dto.setNumeroCamas(numeroCamas);
         dto.setTieneBano(tieneBano);
         dto.setTipoCama(tipoCama);

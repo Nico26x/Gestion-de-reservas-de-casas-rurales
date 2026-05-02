@@ -23,6 +23,7 @@ export class CasasService {
     formData.append('numeroHabitaciones', String(data.numeroHabitaciones));
     formData.append('numeroBanos', String(data.numeroBanos));
     formData.append('numeroCocinas', String(data.numeroCocinas));
+    formData.append('numeroComedores', String(data.numeroComedores));
     formData.append('foto', data.foto);
     formData.append('numeroCamas', String(data.numeroCamas));
     formData.append('tieneBano', String(data.tieneBano));

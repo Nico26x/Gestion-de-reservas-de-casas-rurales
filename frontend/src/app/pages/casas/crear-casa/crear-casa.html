@@ -140,6 +140,15 @@
             <button type="button" class="cl-rm-btn" (click)="increment('numeroCocinas')">+</button>
           </div>
         </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🍽</div>
+          <p class="cl-room-name">Comedores</p>
+          <div class="cl-room-ctrl">
+            <button type="button" class="cl-rm-btn" (click)="decrement('numeroComedores', 1)">−</button>
+            <span class="cl-rm-val">{{ numeroComedores?.value }}</span>
+            <button type="button" class="cl-rm-btn" (click)="increment('numeroComedores')">+</button>
+          </div>
+        </div>
       </div>
 
       <p class="cl-section-label">Configuración base de habitaciones</p>

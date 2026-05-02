@@ -35,6 +35,7 @@ export class CrearCasaComponent {
     numeroHabitaciones: [3, [Validators.required, Validators.min(3)]],
     numeroBanos: [2, [Validators.required, Validators.min(2)]],
     numeroCocinas: [1, [Validators.required, Validators.min(1)]],
+    numeroComedores: [1, [Validators.required, Validators.min(1)]],
     numeroCamas: [1, [Validators.required, Validators.min(1)]],
     tieneBano: [false, [Validators.required]],
     tipoCama: ['', [Validators.required]]
@@ -68,6 +69,10 @@ export class CrearCasaComponent {
     return this.crearCasaForm.get('numeroCocinas');
   }
 
+  get numeroComedores() {
+    return this.crearCasaForm.get('numeroComedores');
+  }
+
   get numeroCamas() {
     return this.crearCasaForm.get('numeroCamas');
   }
@@ -80,12 +85,12 @@ export class CrearCasaComponent {
     return this.crearCasaForm.get('tipoCama');
   }
 
-  increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas'): void {
+  increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores'): void {
     const current = Number(this.crearCasaForm.get(field)?.value ?? 0);
     this.crearCasaForm.get(field)?.setValue(current + 1);
   }
 
-  decrement(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas', min: number): void {
+  decrement(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores', min: number): void {
     const current = Number(this.crearCasaForm.get(field)?.value ?? min);
     if (current > min) {
       this.crearCasaForm.get(field)?.setValue(current - 1);
@@ -154,6 +159,7 @@ export class CrearCasaComponent {
       numeroHabitaciones: 3,
       numeroBanos: 2,
       numeroCocinas: 1,
+      numeroComedores: 1,
       numeroCamas: 1,
       tieneBano: false,
       tipoCama: ''
@@ -193,6 +199,7 @@ export class CrearCasaComponent {
       numeroHabitaciones: Number(this.crearCasaForm.value.numeroHabitaciones),
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
       numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),
+      numeroComedores: Number(this.crearCasaForm.value.numeroComedores),
       numeroCamas: Number(this.crearCasaForm.value.numeroCamas),
       tieneBano: Boolean(this.crearCasaForm.value.tieneBano),
       tipoCama: this.crearCasaForm.value.tipoCama!,

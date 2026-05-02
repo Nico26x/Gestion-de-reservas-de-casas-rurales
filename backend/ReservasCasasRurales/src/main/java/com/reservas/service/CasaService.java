@@ -35,6 +35,10 @@ public class CasaService {
             throw new RuntimeException("Debe tener al menos 1 cocina");
         }
 
+        if (dto.getNumeroComedores() == null || dto.getNumeroComedores() < 1) {
+            throw new RuntimeException("Debe tener al menos 1 comedor");
+        }
+
         if (foto == null || foto.isEmpty()) {
             throw new RuntimeException("Debe subir una imagen");
         }
@@ -56,6 +60,7 @@ public class CasaService {
         casa.setDireccion(dto.getDireccion());
         casa.setPoblacion(dto.getPoblacion());
         casa.setDescripcion(dto.getDescripcion());
+        casa.setNumeroComedores(dto.getNumeroComedores());
 
         Map data = imageService.upload(foto);
         String url = (String) data.get("url");

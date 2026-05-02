@@ -6,6 +6,7 @@ export interface CrearCasaRequest {
   numeroHabitaciones: number;
   numeroBanos: number;
   numeroCocinas: number;
+  numeroComedores: number;
   numeroCamas: number;
   tieneBano: boolean;
   tipoCama: string;

@@ -203,6 +203,14 @@
                   <small>Cocinas</small>
                 </div>
               </div>
+
+              <div class="feature-box">
+                <span class="feature-box__emoji">🍽</span>
+                <div>
+                  <strong>{{ casa.numeroComedores || 0 }}</strong>
+                  <small>Comedores</small>
+                </div>
+              </div>
             </div>
 
             <p class="house-description" *ngIf="casa.descripcion">{{ casa.descripcion }}</p>
