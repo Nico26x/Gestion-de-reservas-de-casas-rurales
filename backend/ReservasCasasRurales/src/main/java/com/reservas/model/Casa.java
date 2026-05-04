@@ -1,7 +1,10 @@
 package com.reservas.model;
 
 import jakarta.persistence.*;
+
 import java.util.List;
+//import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +23,7 @@ public class Casa {
     private Long id;
     private String nombre;
     private String direccion;
-    
+
     @Column(name = "poblacion")
     private String poblacion;
 
@@ -36,35 +39,23 @@ public class Casa {
     @JsonIgnore
     private Propietario propietario;
 
-    // Relaciones 
+    // Relaciones
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-    private List<Habitacion> habitaciones;
+    private Set<Habitacion> habitaciones;
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-    private List<Bano> banos;
+    private Set<Bano> banos;
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-    private List<Cocina> cocinas;
+    private Set<Cocina> cocinas;
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
-    private List<Paquete> paquetes;
+    private Set<Paquete> paquetes;
 
     @Column(name = "numero_comedores")
     private Integer numeroComedores;
 
-    // Getters para contar elementos en las colecciones
-    @JsonProperty("numeroHabitaciones")
-    public Integer getNumeroHabitaciones() {
-        return habitaciones != null ? habitaciones.size() : 0;
-    }
+    @Column(name = "numero_garajes")
+    private Integer numeroGarajes;
 
-    @JsonProperty("numeroBanos")
-    public Integer getNumeroBanos() {
-        return banos != null ? banos.size() : 0;
-    }
-
-    @JsonProperty("numeroCocinas")
-    public Integer getNumeroCocinas() {
-        return cocinas != null ? cocinas.size() : 0;
-    }
 }

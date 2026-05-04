@@ -1,14 +1,17 @@
 package com.reservas.service;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.reservas.dto.CasaRequestDTO;
+import com.reservas.dto.CasaResponseDTO;
 import com.reservas.model.*;
 import com.reservas.repository.CasaRepository;
 
@@ -47,6 +50,10 @@ public class CasaService {
             throw new RuntimeException("Debe indicar al menos 1 cama por habitación");
         }
 
+        if (dto.getNumeroGarajes() == null || dto.getNumeroGarajes() < 1) {
+            throw new RuntimeException("Debe indicar al menos 1 garaje");
+        }
+
         if (dto.getTieneBano() == null) {
             throw new RuntimeException("Debe indicar si la habitación tiene baño");
         }
@@ -61,14 +68,14 @@ public class CasaService {
         casa.setPoblacion(dto.getPoblacion());
         casa.setDescripcion(dto.getDescripcion());
         casa.setNumeroComedores(dto.getNumeroComedores());
-
+        casa.setNumeroGarajes(dto.getNumeroGarajes());
         Map data = imageService.upload(foto);
         String url = (String) data.get("url");
         casa.setFoto(url);
 
         casa.setPropietario(propietario);
 
-        List<Habitacion> habitaciones = new ArrayList<>();
+        Set<Habitacion> habitaciones = new HashSet<>();
         for (int i = 0; i < dto.getNumeroHabitaciones(); i++) {
             Habitacion h = new Habitacion();
             h.setCasa(casa);
@@ -79,14 +86,14 @@ public class CasaService {
             habitaciones.add(h);
         }
 
-        List<Bano> banos = new ArrayList<>();
+        Set<Bano> banos = new HashSet<>();
         for (int i = 0; i < dto.getNumeroBanos(); i++) {
             Bano b = new Bano();
             b.setCasa(casa);
             banos.add(b);
         }
 
-        List<Cocina> cocinas = new ArrayList<>();
+        Set<Cocina> cocinas = new HashSet<>();
         for (int i = 0; i < dto.getNumeroCocinas(); i++) {
             Cocina c = new Cocina();
             c.setCasa(casa);
@@ -106,5 +113,33 @@ public class CasaService {
 
     public List<Casa> findAll() {
         return casaRepository.findAll();
+    }
+
+    public CasaResponseDTO buscarPorId(Long id) {
+
+        Casa casa = casaRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
+
+        CasaResponseDTO dto = new CasaResponseDTO();
+
+        dto.setId(casa.getId());
+        dto.setNombre(casa.getNombre());
+        dto.setDireccion(casa.getDireccion());
+        dto.setPoblacion(casa.getPoblacion());
+        dto.setDescripcion(casa.getDescripcion());
+        dto.setFoto(casa.getFoto());
+        dto.setNumeroComedores(casa.getNumeroComedores());
+        dto.setNumeroGarajes(
+                casa.getNumeroGarajes() != null ? casa.getNumeroGarajes() : 0);
+        dto.setNumeroHabitaciones(
+                casa.getHabitaciones() != null ? casa.getHabitaciones().size() : 0);
+
+        dto.setNumeroBanos(
+                casa.getBanos() != null ? casa.getBanos().size() : 0);
+
+        dto.setNumeroCocinas(
+                casa.getCocinas() != null ? casa.getCocinas().size() : 0);
+
+        return dto;
     }
 }

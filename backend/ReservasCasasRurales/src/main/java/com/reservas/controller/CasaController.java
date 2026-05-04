@@ -1,6 +1,7 @@
 package com.reservas.controller;
 
 import com.reservas.dto.CasaRequestDTO;
+import com.reservas.dto.CasaResponseDTO;
 import com.reservas.model.Casa;
 import com.reservas.model.Propietario;
 import com.reservas.model.TipoCama;
@@ -37,6 +38,7 @@ public class CasaController {
             @RequestParam("numeroCocinas") int numeroCocinas,
             @RequestParam("numeroComedores") int numeroComedores,
             @RequestParam("numeroCamas") Integer numeroCamas,
+            @RequestParam("numeroGarajes") Integer numeroGarajes,
             @RequestParam("tieneBano") Boolean tieneBano,
             @RequestParam("tipoCama") TipoCama tipoCama,
             @RequestParam("foto") MultipartFile foto,
@@ -82,6 +84,7 @@ public class CasaController {
         dto.setNumeroCocinas(numeroCocinas);
         dto.setNumeroComedores(numeroComedores);
         dto.setNumeroCamas(numeroCamas);
+        dto.setNumeroGarajes(numeroGarajes);
         dto.setTieneBano(tieneBano);
         dto.setTipoCama(tipoCama);
 
@@ -99,5 +102,11 @@ public class CasaController {
         }
 
         return ResponseEntity.ok(casaService.findAll());
+    }
+
+    @GetMapping("/{id}")
+    public CasaResponseDTO getCasaDetalle(@PathVariable Long id) {
+
+        return casaService.buscarPorId(id);
     }
 }

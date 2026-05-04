@@ -17,6 +17,7 @@ public class CasaRequestDTO {
     private int numeroBanos;
     private int numeroCocinas;
     private Integer numeroComedores;
+    private Integer numeroGarajes;
 
     private Integer numeroCamas;
     private Boolean tieneBano;
