@@ -2,13 +2,11 @@ package com.reservas.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.HashSet;
 //import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,9 +24,6 @@ public class Casa {
 
     @Column(name = "poblacion")
     private String poblacion;
-
-    @Column(name = "foto")
-    private String foto;
 
     @Column(length = 1000)
     private String descripcion;
@@ -51,6 +46,9 @@ public class Casa {
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
     private Set<Paquete> paquetes;
+
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CasaFoto> fotos = new HashSet<>();
 
     @Column(name = "numero_comedores")
     private Integer numeroComedores;

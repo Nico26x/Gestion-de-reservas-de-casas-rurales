@@ -24,7 +24,7 @@ public class CasaService {
     @Autowired
     private ImageServiceImpl imageService;
 
-    public Casa crearCasa(CasaRequestDTO dto, MultipartFile foto, Propietario propietario) throws Exception {
+    public Casa crearCasa(CasaRequestDTO dto, List<MultipartFile> fotos, Propietario propietario) throws Exception {
 
         if (dto.getNumeroHabitaciones() < 3) {
             throw new RuntimeException("Debe tener al menos 3 habitaciones");
@@ -42,7 +42,7 @@ public class CasaService {
             throw new RuntimeException("Debe tener al menos 1 comedor");
         }
 
-        if (foto == null || foto.isEmpty()) {
+        if (fotos == null || fotos.isEmpty()) {
             throw new RuntimeException("Debe subir una imagen");
         }
 
@@ -69,9 +69,19 @@ public class CasaService {
         casa.setDescripcion(dto.getDescripcion());
         casa.setNumeroComedores(dto.getNumeroComedores());
         casa.setNumeroGarajes(dto.getNumeroGarajes());
-        Map data = imageService.upload(foto);
-        String url = (String) data.get("url");
-        casa.setFoto(url);
+        Set<CasaFoto> fotosCasa = new HashSet<>();
+
+        for (MultipartFile foto : fotos) {
+
+            Map data = imageService.upload(foto);
+            String url = (String) data.get("url");
+            CasaFoto casaFoto = new CasaFoto();
+            casaFoto.setUrl(url);
+            casaFoto.setCasa(casa);
+            fotosCasa.add(casaFoto);
+        }
+
+        casa.setFotos(fotosCasa);
 
         casa.setPropietario(propietario);
 
@@ -127,7 +137,11 @@ public class CasaService {
         dto.setDireccion(casa.getDireccion());
         dto.setPoblacion(casa.getPoblacion());
         dto.setDescripcion(casa.getDescripcion());
-        dto.setFoto(casa.getFoto());
+        dto.setFotos(
+                casa.getFotos()
+                        .stream()
+                        .map(CasaFoto::getUrl)
+                        .toList());
         dto.setNumeroComedores(casa.getNumeroComedores());
         dto.setNumeroGarajes(
                 casa.getNumeroGarajes() != null ? casa.getNumeroGarajes() : 0);

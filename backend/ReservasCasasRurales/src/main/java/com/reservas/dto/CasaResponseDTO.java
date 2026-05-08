@@ -1,5 +1,7 @@
 package com.reservas.dto;
 
+import java.util.List;
+
 import lombok.*;
 
 @Getter
@@ -11,7 +13,7 @@ public class CasaResponseDTO {
     private String direccion;
     private String poblacion;
     private String descripcion;
-    private String foto;
+    private List<String> fotos;
 
     private Integer numeroHabitaciones;
     private Integer numeroBanos;

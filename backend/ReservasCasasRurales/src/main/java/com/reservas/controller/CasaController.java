@@ -41,29 +41,38 @@ public class CasaController {
             @RequestParam("numeroGarajes") Integer numeroGarajes,
             @RequestParam("tieneBano") Boolean tieneBano,
             @RequestParam("tipoCama") TipoCama tipoCama,
-            @RequestParam("foto") MultipartFile foto,
+            @RequestParam("fotos") List<MultipartFile> fotos,
             Authentication authentication) throws Exception {
 
         // === DIAGNÓSTICO DE MULTIPART: Log al entrar al controlador ===
         System.out.println("\n========== [CasaController.crearCasa DIAGNOSTICS] ==========");
         System.out.println("  ✓ Request llegó al controller");
-        if (foto != null && !foto.isEmpty()) {
-            long fileSizeBytes = foto.getSize();
-            long fileSizeMB = fileSizeBytes / (1024 * 1024);
-            System.out.println("  Archivo recibido: " + foto.getOriginalFilename());
-            System.out.println("  Tamaño: " + fileSizeBytes + " bytes (~" + fileSizeMB + "MB)");
-            System.out.println("  Content-Type: " + foto.getContentType());
+        if (fotos != null && !fotos.isEmpty()) {
+
+            System.out.println("  Cantidad de fotos recibidas: " + fotos.size());
+
+            for (MultipartFile foto : fotos) {
+
+                long fileSizeBytes = foto.getSize();
+                long fileSizeMB = fileSizeBytes / (1024 * 1024);
+
+                System.out.println("  Archivo recibido: " + foto.getOriginalFilename());
+                System.out.println("  Tamaño: " + fileSizeBytes + " bytes (~" + fileSizeMB + "MB)");
+                System.out.println("  Content-Type: " + foto.getContentType());
+            }
+
         } else {
-            System.out.println("  ⚠ No se recibió archivo o está vacío");
+            System.out.println("  ⚠ No se recibieron fotos");
         }
+
         System.out.println("========================================================\n");
 
         if (authentication == null) {
             throw new RuntimeException("Usuario no autenticado");
         }
 
-        if (foto == null || foto.isEmpty()) {
-            throw new RuntimeException("La foto es obligatoria");
+        if (fotos == null || fotos.isEmpty()) {
+            throw new RuntimeException("Debe subir al menos una foto");
         }
 
         if (numeroHabitaciones <= 0 || numeroBanos <= 0 || numeroCocinas <= 0) {
@@ -88,7 +97,7 @@ public class CasaController {
         dto.setTieneBano(tieneBano);
         dto.setTipoCama(tipoCama);
 
-        Casa casa = casaService.crearCasa(dto, foto, propietario);
+        Casa casa = casaService.crearCasa(dto, fotos, propietario);
 
         return ResponseEntity.ok(casa);
     }
