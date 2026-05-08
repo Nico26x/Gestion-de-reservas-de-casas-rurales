@@ -69,9 +69,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/paquetes/**").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.DELETE, "/api/paquetes/**").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.POST, "/api/disponibilidad").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.GET, "/api/pagos/pendientes").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/pagos/*/verificar").hasAuthority("ROLE_PROPIETARIO")
 
                         // ── SOLO CLIENTE ──────────────────────────────
-                        .requestMatchers("/api/reservas/**").hasRole("CLIENTE")
+                        .requestMatchers("/api/reservas/**").hasAuthority("ROLE_CLIENTE")
+                        .requestMatchers(HttpMethod.POST, "/api/pagos").hasAuthority("ROLE_CLIENTE")
 
                         // ── TODO LO DEMÁS REQUIERE JWT ──────────────────────────────
                         .anyRequest().authenticated()
