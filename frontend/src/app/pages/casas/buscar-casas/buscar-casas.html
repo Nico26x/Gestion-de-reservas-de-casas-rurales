@@ -143,12 +143,16 @@
           [class.house-card--featured]="i === 0"
         >
           <div class="house-card__media">
-            <ng-container *ngIf="casa.foto; else housePlaceholder">
-              <img
-                [src]="casa.foto"
-                [alt]="casa.nombre || 'Casa rural'"
-                class="house-card__image"
-              />
+            <ng-container *ngIf="(casa.fotos && casa.fotos.length > 0) || casa.foto; else housePlaceholder">
+              <!-- Galería de fotos: mostrar todas las imágenes -->
+              <div class="house-card__gallery">
+                <img
+                  *ngFor="let foto of (casa.fotos && casa.fotos.length > 0 ? casa.fotos : (casa.foto ? [casa.foto] : []))"
+                  [src]="foto"
+                  [alt]="casa.nombre || 'Casa rural'"
+                  class="house-card__gallery-image"
+                />
+              </div>
             </ng-container>
 
             <ng-template #housePlaceholder>
@@ -209,6 +213,14 @@
                 <div>
                   <strong>{{ casa.numeroComedores || 0 }}</strong>
                   <small>Comedores</small>
+                </div>
+              </div>
+
+              <div class="feature-box">
+                <span class="feature-box__emoji">🚗</span>
+                <div>
+                  <strong>{{ casa.numeroGarajes || 0 }}</strong>
+                  <small>Garajes</small>
                 </div>
               </div>
             </div>
