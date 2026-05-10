@@ -103,14 +103,14 @@ public class CasaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Casa>> getCasasPorPoblacion(
+    public ResponseEntity<List<CasaResponseDTO>> getCasasPorPoblacion(
             @RequestParam(value = "poblacion", required = false) String poblacion) {
 
         if (poblacion != null) {
-            return ResponseEntity.ok(casaService.buscarPorPoblacion(poblacion));
+            return ResponseEntity.ok(casaService.buscarPorPoblacionConDTO(poblacion));
         }
 
-        return ResponseEntity.ok(casaService.findAll());
+        return ResponseEntity.ok(casaService.findAllConDTO());
     }
 
     @GetMapping("/{id}")

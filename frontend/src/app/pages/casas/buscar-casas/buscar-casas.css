@@ -473,10 +473,46 @@
   height: 250px;
   overflow: hidden;
   background: linear-gradient(180deg, #eaf3ff 0%, #dcecff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .house-card--featured .house-card__media {
   height: 320px;
+}
+
+.house-card__gallery {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 6px;
+  padding: 8px;
+  align-content: center;
+  justify-items: center;
+}
+
+.house-card--featured .house-card__gallery {
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  padding: 12px;
+}
+
+.house-card__gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease, filter 0.3s ease;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.house-card:hover .house-card__gallery-image {
+  transform: scale(1.04);
+  filter: brightness(1.08);
 }
 
 .house-card__image {
@@ -525,6 +561,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   background: linear-gradient(to top, rgba(10, 30, 59, 0.28), rgba(10, 30, 59, 0.02));
+  z-index: 2;
 }
 
 .location-pill {

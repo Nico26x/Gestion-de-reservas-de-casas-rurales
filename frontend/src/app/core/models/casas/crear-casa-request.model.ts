@@ -7,8 +7,9 @@ export interface CrearCasaRequest {
   numeroBanos: number;
   numeroCocinas: number;
   numeroComedores: number;
+  numeroGarajes: number;
   numeroCamas: number;
   tieneBano: boolean;
   tipoCama: string;
-  foto: File;
+  fotos: File[];
 }

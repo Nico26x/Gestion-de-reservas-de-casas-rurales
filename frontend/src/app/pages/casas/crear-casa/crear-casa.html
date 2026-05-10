@@ -149,6 +149,15 @@
             <button type="button" class="cl-rm-btn" (click)="increment('numeroComedores')">+</button>
           </div>
         </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🚗</div>
+          <p class="cl-room-name">Garajes</p>
+          <div class="cl-room-ctrl">
+            <button type="button" class="cl-rm-btn" (click)="decrement('numeroGarajes', 0)">−</button>
+            <span class="cl-rm-val">{{ numeroGarajes?.value }}</span>
+            <button type="button" class="cl-rm-btn" (click)="increment('numeroGarajes')">+</button>
+          </div>
+        </div>
       </div>
 
       <p class="cl-section-label">Configuración base de habitaciones</p>
@@ -234,6 +243,7 @@
         #fotoInput
         type="file"
         accept="image/*"
+        multiple
         style="display: none"
         (change)="onFileSelected($event)"
       />

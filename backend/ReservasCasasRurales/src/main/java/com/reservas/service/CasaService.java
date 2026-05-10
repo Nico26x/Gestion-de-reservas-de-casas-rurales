@@ -50,8 +50,8 @@ public class CasaService {
             throw new RuntimeException("Debe indicar al menos 1 cama por habitación");
         }
 
-        if (dto.getNumeroGarajes() == null || dto.getNumeroGarajes() < 1) {
-            throw new RuntimeException("Debe indicar al menos 1 garaje");
+        if (dto.getNumeroGarajes() == null || dto.getNumeroGarajes() < 0) {
+            throw new RuntimeException("Debe indicar un número válido de garajes");
         }
 
         if (dto.getTieneBano() == null) {
@@ -121,8 +121,22 @@ public class CasaService {
         return casaRepository.findByPoblacionIgnoreCase(poblacion);
     }
 
+    public List<CasaResponseDTO> buscarPorPoblacionConDTO(String poblacion) {
+        return casaRepository.findByPoblacionIgnoreCase(poblacion)
+                .stream()
+                .map(this::convertirACasaResponseDTO)
+                .toList();
+    }
+
     public List<Casa> findAll() {
         return casaRepository.findAll();
+    }
+
+    public List<CasaResponseDTO> findAllConDTO() {
+        return casaRepository.findAll()
+                .stream()
+                .map(this::convertirACasaResponseDTO)
+                .toList();
     }
 
     public CasaResponseDTO buscarPorId(Long id) {
@@ -130,6 +144,10 @@ public class CasaService {
         Casa casa = casaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
 
+        return convertirACasaResponseDTO(casa);
+    }
+
+    private CasaResponseDTO convertirACasaResponseDTO(Casa casa) {
         CasaResponseDTO dto = new CasaResponseDTO();
 
         dto.setId(casa.getId());
@@ -137,11 +155,19 @@ public class CasaService {
         dto.setDireccion(casa.getDireccion());
         dto.setPoblacion(casa.getPoblacion());
         dto.setDescripcion(casa.getDescripcion());
-        dto.setFotos(
-                casa.getFotos()
-                        .stream()
-                        .map(CasaFoto::getUrl)
-                        .toList());
+        
+        // Mapear fotos: extraer URLs de los objetos CasaFoto
+        if (casa.getFotos() != null && !casa.getFotos().isEmpty()) {
+            dto.setFotos(
+                    casa.getFotos()
+                            .stream()
+                            .map(CasaFoto::getUrl)
+                            .filter(url -> url != null && !url.isEmpty())
+                            .toList());
+        } else {
+            dto.setFotos(List.of());
+        }
+        
         dto.setNumeroComedores(casa.getNumeroComedores());
         dto.setNumeroGarajes(
                 casa.getNumeroGarajes() != null ? casa.getNumeroGarajes() : 0);

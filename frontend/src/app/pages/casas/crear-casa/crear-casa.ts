@@ -23,7 +23,7 @@ export class CrearCasaComponent {
   private casasService = inject(CasasService);
 
   loading = false;
-  selectedFile: File | null = null;
+  selectedFiles: File[] = [];
   imagePreview: string | null = null;
   private imagePreviewUrl: string | null = null;
 
@@ -36,6 +36,7 @@ export class CrearCasaComponent {
     numeroBanos: [2, [Validators.required, Validators.min(2)]],
     numeroCocinas: [1, [Validators.required, Validators.min(1)]],
     numeroComedores: [1, [Validators.required, Validators.min(1)]],
+    numeroGarajes: [0, [Validators.required, Validators.min(0)]],
     numeroCamas: [1, [Validators.required, Validators.min(1)]],
     tieneBano: [false, [Validators.required]],
     tipoCama: ['', [Validators.required]]
@@ -73,6 +74,10 @@ export class CrearCasaComponent {
     return this.crearCasaForm.get('numeroComedores');
   }
 
+  get numeroGarajes() {
+    return this.crearCasaForm.get('numeroGarajes');
+  }
+
   get numeroCamas() {
     return this.crearCasaForm.get('numeroCamas');
   }
@@ -85,12 +90,12 @@ export class CrearCasaComponent {
     return this.crearCasaForm.get('tipoCama');
   }
 
-  increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores'): void {
+  increment(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores' | 'numeroGarajes'): void {
     const current = Number(this.crearCasaForm.get(field)?.value ?? 0);
     this.crearCasaForm.get(field)?.setValue(current + 1);
   }
 
-  decrement(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores', min: number): void {
+  decrement(field: 'numeroHabitaciones' | 'numeroBanos' | 'numeroCocinas' | 'numeroComedores' | 'numeroGarajes', min: number): void {
     const current = Number(this.crearCasaForm.get(field)?.value ?? min);
     if (current > min) {
       this.crearCasaForm.get(field)?.setValue(current - 1);
@@ -99,10 +104,20 @@ export class CrearCasaComponent {
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const file = input.files?.[0] || null;
+    const files = Array.from(input.files || []);
 
-    if (file) {
-      // Diagnóstico: imprimir información del archivo
+    if (files.length === 0) {
+      this.selectedFiles = [];
+      this.imagePreview = null;
+      return;
+    }
+
+    // Validar archivos
+    const MAX_FILE_SIZE_MB = 25;
+    const validFiles: File[] = [];
+    let hasError = false;
+
+    for (const file of files) {
       const fileSizeMb = file.size / (1024 * 1024);
       console.log(`[FILE VALIDATION] Archivo seleccionado:`);
       console.log(`  Nombre: ${file.name}`);
@@ -110,43 +125,42 @@ export class CrearCasaComponent {
       console.log(`  Tamaño (MB): ${fileSizeMb.toFixed(2)}MB`);
       console.log(`  Tipo MIME: ${file.type}`);
 
-      // Validar tamaño máximo: 25MB
-      const MAX_FILE_SIZE_MB = 25;
       if (fileSizeMb > MAX_FILE_SIZE_MB) {
         console.warn(`[FILE VALIDATION] RECHAZADO: Archivo supera ${MAX_FILE_SIZE_MB}MB`);
         
         fireWarningAlert(
           'Archivo demasiado grande',
-          `La imagen pesa ${fileSizeMb.toFixed(2)}MB. El límite es ${MAX_FILE_SIZE_MB}MB.`
+          `La imagen "${file.name}" pesa ${fileSizeMb.toFixed(2)}MB. El límite es ${MAX_FILE_SIZE_MB}MB.`
         );
-
-        // Limpiar selección
-        this.selectedFile = null;
-        this.imagePreview = null;
-        if (this.imagePreviewUrl) {
-          URL.revokeObjectURL(this.imagePreviewUrl);
-          this.imagePreviewUrl = null;
-        }
-        if (input) {
-          input.value = '';
-        }
-        return;
+        hasError = true;
+      } else {
+        console.log(`[FILE VALIDATION] ACEPTADO: ${fileSizeMb.toFixed(2)}MB <= ${MAX_FILE_SIZE_MB}MB`);
+        validFiles.push(file);
       }
+    }
 
-      // Archivo válido: procesar preview
-      console.log(`[FILE VALIDATION] ACEPTADO: ${fileSizeMb.toFixed(2)}MB <= ${MAX_FILE_SIZE_MB}MB`);
-      this.selectedFile = file;
+    if (hasError && validFiles.length === 0) {
+      // Si todos los archivos fueron rechazados, limpiar
+      this.selectedFiles = [];
+      this.imagePreview = null;
+      if (input) {
+        input.value = '';
+      }
+      return;
+    }
 
+    // Guardar archivos válidos
+    this.selectedFiles = validFiles;
+
+    // Mostrar preview del primer archivo
+    if (validFiles.length > 0) {
       if (this.imagePreviewUrl) {
         URL.revokeObjectURL(this.imagePreviewUrl);
         this.imagePreviewUrl = null;
       }
 
-      this.imagePreviewUrl = URL.createObjectURL(file);
+      this.imagePreviewUrl = URL.createObjectURL(validFiles[0]);
       this.imagePreview = this.imagePreviewUrl;
-    } else {
-      this.selectedFile = null;
-      this.imagePreview = null;
     }
   }
 
@@ -160,11 +174,12 @@ export class CrearCasaComponent {
       numeroBanos: 2,
       numeroCocinas: 1,
       numeroComedores: 1,
+      numeroGarajes: 0,
       numeroCamas: 1,
       tieneBano: false,
       tipoCama: ''
     });
-    this.selectedFile = null;
+    this.selectedFiles = [];
     this.imagePreview = null;
 
     if (this.imagePreviewUrl) {
@@ -178,12 +193,12 @@ export class CrearCasaComponent {
   }
 
   onSubmit(): void {
-    if (this.crearCasaForm.invalid || !this.selectedFile) {
+    if (this.crearCasaForm.invalid || this.selectedFiles.length === 0) {
       this.crearCasaForm.markAllAsTouched();
 
       fireWarningAlert(
         'Formulario incompleto',
-        'Debes completar todos los campos y seleccionar una foto.'
+        'Debes completar todos los campos y seleccionar al menos una foto.'
       );
 
       return;
@@ -200,10 +215,11 @@ export class CrearCasaComponent {
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
       numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),
       numeroComedores: Number(this.crearCasaForm.value.numeroComedores),
+      numeroGarajes: Number(this.crearCasaForm.value.numeroGarajes),
       numeroCamas: Number(this.crearCasaForm.value.numeroCamas),
       tieneBano: Boolean(this.crearCasaForm.value.tieneBano),
       tipoCama: this.crearCasaForm.value.tipoCama!,
-      foto: this.selectedFile
+      fotos: this.selectedFiles
     };
 
     this.casasService.crearCasa(casaData).subscribe({
