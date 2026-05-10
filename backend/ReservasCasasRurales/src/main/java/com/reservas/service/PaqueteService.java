@@ -1,6 +1,7 @@
 package com.reservas.service;
 
 import com.reservas.dto.PaqueteRequestDTO;
+import com.reservas.dto.PaqueteResponseDTO;
 import com.reservas.model.*;
 import com.reservas.repository.CasaRepository;
 import com.reservas.repository.PaqueteRepository;
@@ -208,5 +209,61 @@ public class PaqueteService {
                 throw new RuntimeException("El precio por habitación debe ser mayor a 0");
             }
         }
+    }
+
+    //Obtener un paquete por id con validación de propietario
+    public PaqueteResponseDTO obtenerPaquete(Long paqueteId, String username) {
+        Paquete paquete = paqueteRepository.findById(paqueteId)
+                .orElseThrow(() -> new RuntimeException("Paquete no encontrado con id: " + paqueteId));
+
+        //Validar que el propietario sea dueño de la casa
+        if (!paquete.getCasa().getPropietario().getNombreCuenta().equals(username)) {
+            throw new RuntimeException("No tienes permiso para ver este paquete");
+        }
+
+        return convertirAPaqueteResponseDTO(paquete);
+    }
+
+    //Obtener paquetes de una casa con validación de propietario
+    public List<PaqueteResponseDTO> obtenerPaquetesPorCasa(Long casaId, String username) {
+        Casa casa = casaRepository.findById(casaId)
+                .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
+
+        //Validar que el propietario sea dueño de la casa
+        if (!casa.getPropietario().getNombreCuenta().equals(username)) {
+            throw new RuntimeException("No tienes permiso para ver los paquetes de esta casa");
+        }
+
+        List<Paquete> paquetes = paqueteRepository.findAll().stream()
+                .filter(p -> p.getCasa().getId().equals(casaId))
+                .toList();
+
+        return paquetes.stream()
+                .map(this::convertirAPaqueteResponseDTO)
+                .toList();
+    }
+
+    //Método auxiliar para convertir Paquete a PaqueteResponseDTO
+    private PaqueteResponseDTO convertirAPaqueteResponseDTO(Paquete paquete) {
+        PaqueteResponseDTO dto = new PaqueteResponseDTO();
+        dto.setId(paquete.getId());
+        dto.setFechaInicio(paquete.getFechaInicio());
+        dto.setFechaFin(paquete.getFechaFin());
+        dto.setPrecio(paquete.getPrecio());
+        dto.setPrecioHabitacion(paquete.getPrecioHabitacion());
+        dto.setModalidad(paquete.getModalidad());
+        dto.setCasaId(paquete.getCasa().getId());
+        dto.setNombreCasa(paquete.getCasa().getNombre());
+        dto.setPoblacionCasa(paquete.getCasa().getPoblacion());
+        return dto;
+    }
+
+    //Obtener todos los paquetes del propietario autenticado
+    public List<PaqueteResponseDTO> obtenerPaquetesDelPropietario(String username) {
+        List<Paquete> paquetes = paqueteRepository.findByCasaPropietarioNombreCuenta(username);
+
+        return paquetes.stream()
+                .map(this::convertirAPaqueteResponseDTO)
+                .toList();
     }
 }

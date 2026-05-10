@@ -15,4 +15,20 @@ export class PaquetesService {
   crearPaquete(data: CrearPaqueteRequest): Observable<Paquete> {
     return this.http.post<Paquete>(this.apiUrl, data);
   }
+
+  obtenerPaquete(id: number): Observable<Paquete> {
+    return this.http.get<Paquete>(`${this.apiUrl}/${id}`);
+  }
+
+  obtenerPaquetesPorCasa(casaId: number): Observable<Paquete[]> {
+    return this.http.get<Paquete[]>(this.apiUrl, { params: { casaId: casaId.toString() } });
+  }
+
+  obtenerPaquetesDelPropietario(): Observable<Paquete[]> {
+    return this.http.get<Paquete[]>(`${this.apiUrl}/propietario`);
+  }
+
+  modificarPaquete(id: number, data: CrearPaqueteRequest): Observable<Paquete> {
+    return this.http.put<Paquete>(`${this.apiUrl}/${id}`, data);
+  }
 }

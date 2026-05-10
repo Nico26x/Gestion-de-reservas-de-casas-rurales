@@ -1,0 +1,74 @@
+/* Estilos básicos sin diseño decorativo */
+
+.container {
+  width: 100%;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.no-reservas {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.tabla-container {
+  overflow-x: auto;
+}
+
+.tabla-reservas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.tabla-reservas thead {
+  background-color: #f5f5f5;
+}
+
+.tabla-reservas th,
+.tabla-reservas td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.tabla-reservas th {
+  font-weight: bold;
+}
+
+.tabla-reservas tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.tabla-reservas tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.btn-copiar,
+.btn-pago {
+  margin-right: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.btn-copiar:hover {
+  background-color: #e8e8e8;
+}
+
+.btn-pago:hover {
+  background-color: #e8e8e8;
+}

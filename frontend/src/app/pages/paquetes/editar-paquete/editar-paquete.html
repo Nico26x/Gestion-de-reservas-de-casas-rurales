@@ -1,0 +1,79 @@
+<div>
+  <h2>Editar Paquete</h2>
+
+  <div *ngIf="mensajeExito" style="color: green; margin: 10px 0;">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="mensajeError" style="color: red; margin: 10px 0;">
+    {{ mensajeError }}
+  </div>
+
+  <div *ngIf="cargando" style="color: blue; margin: 10px 0;">
+    Cargando...
+  </div>
+
+  <div *ngIf="editando && !cargando">
+    <form [formGroup]="paqueteForm" (ngSubmit)="modificarPaquete()">
+      <div>
+        <label>Casa ID:</label>
+        <input type="number" formControlName="casaId" />
+        <div *ngIf="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched" style="color: red;">
+          Casa ID es obligatoria
+        </div>
+      </div>
+
+      <div>
+        <label>Fecha Inicio:</label>
+        <input type="date" formControlName="fechaInicio" />
+        <div *ngIf="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched" style="color: red;">
+          Fecha inicio es obligatoria
+        </div>
+      </div>
+
+      <div>
+        <label>Fecha Fin:</label>
+        <input type="date" formControlName="fechaFin" />
+        <div *ngIf="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched" style="color: red;">
+          Fecha fin es obligatoria
+        </div>
+      </div>
+
+      <div>
+        <label>Modalidad:</label>
+        <select formControlName="modalidad">
+          <option value="">-- Selecciona modalidad --</option>
+          <option value="CASA_ENTERA">Casa Entera</option>
+          <option value="HABITACIONES">Habitaciones</option>
+          <option value="AMBAS">Ambas</option>
+        </select>
+        <div *ngIf="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched" style="color: red;">
+          Modalidad es obligatoria
+        </div>
+      </div>
+
+      <div>
+        <label>Precio:</label>
+        <input type="number" formControlName="precio" step="0.01" />
+        <div *ngIf="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched" style="color: red;">
+          <span *ngIf="paqueteForm.get('precio')?.hasError('required')">Precio es obligatorio para esta modalidad</span>
+          <span *ngIf="paqueteForm.get('precio')?.hasError('min')">Precio debe ser mayor a 0</span>
+        </div>
+      </div>
+
+      <div>
+        <label>Precio por Habitación:</label>
+        <input type="number" formControlName="precioHabitacion" step="0.01" />
+        <div *ngIf="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched" style="color: red;">
+          <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('required')">Precio por habitación es obligatorio para esta modalidad</span>
+          <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('min')">Precio debe ser mayor a 0</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <button type="submit" [disabled]="cargando">Guardar cambios</button>
+        <button type="button" (click)="volver()" [disabled]="cargando" style="margin-left: 10px;">Volver</button>
+      </div>
+    </form>
+  </div>
+</div>

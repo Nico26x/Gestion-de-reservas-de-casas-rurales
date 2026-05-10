@@ -39,4 +39,8 @@ public interface PaqueteRepository extends JpaRepository<Paquete, Long> {
             @Param("paqueteId") Long paqueteId,
             @Param("fechaInicio") LocalDate fechaInicio,
             @Param("fechaFin") LocalDate fechaFin);
+
+    // Obtener todos los paquetes de las casas del propietario autenticado
+    @Query("SELECT p FROM Paquete p WHERE p.casa.propietario.nombreCuenta = :nombreCuenta ORDER BY p.fechaInicio DESC")
+    List<Paquete> findByCasaPropietarioNombreCuenta(@Param("nombreCuenta") String nombreCuenta);
 }

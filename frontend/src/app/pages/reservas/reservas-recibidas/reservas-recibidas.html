@@ -1,0 +1,59 @@
+<div class="container">
+  <h1>Reservas Recibidas</h1>
+
+  <div *ngIf="loading" class="loading">
+    Cargando reservas...
+  </div>
+
+  <div *ngIf="!loading && reservas.length === 0" class="no-reservas">
+    <p>No hay reservas recibidas en este momento.</p>
+  </div>
+
+  <div *ngIf="!loading && reservas.length > 0" class="tabla-container">
+    <table class="tabla-reservas">
+      <thead>
+        <tr>
+          <th>Número Reserva</th>
+          <th>Casa</th>
+          <th>Población</th>
+          <th>Fecha Entrada</th>
+          <th>Noches</th>
+          <th>Teléfono Cliente</th>
+          <th>Importe Total</th>
+          <th>Anticipo 20%</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td>{{ reserva.numeroReserva }}</td>
+          <td>{{ reserva.nombreCasa }}</td>
+          <td>{{ reserva.poblacionCasa }}</td>
+          <td>{{ reserva.fechaEntrada }}</td>
+          <td>{{ reserva.numeroNoches }}</td>
+          <td>{{ reserva.telefonoCliente }}</td>
+          <td>{{ reserva.importeTotal | currency }}</td>
+          <td>{{ reserva.anticipo | currency }}</td>
+          <td [style.color]="obtenerColorEstado(reserva.estadoReserva)">
+            {{ reserva.estadoReserva }}
+          </td>
+          <td>
+            <button 
+              type="button" 
+              (click)="copiarNumeroReserva(reserva.numeroReserva)"
+              class="btn-copiar">
+              Copiar
+            </button>
+            <button 
+              type="button" 
+              (click)="irARegistrarPago(reserva.numeroReserva)"
+              class="btn-pago">
+              Registrar Pago
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

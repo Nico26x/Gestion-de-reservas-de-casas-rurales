@@ -315,6 +315,32 @@ public class ReservaService {
         return response;
     }
 
+    //Método para obtener las notificaciones de reservas del propietario autenticado
+    public List<com.reservas.dto.ReservaNotificacionDTO> obtenerNotificacionesReservas(String nombreCuenta) {
+        List<Reserva> reservas = reservaRepository.findByPropietarioNombreCuenta(nombreCuenta);
+        
+        List<com.reservas.dto.ReservaNotificacionDTO> notificaciones = new ArrayList<>();
+        
+        for (Reserva reserva : reservas) {
+            com.reservas.dto.ReservaNotificacionDTO dto = com.reservas.dto.ReservaNotificacionDTO.builder()
+                    .reservaId(reserva.getId())
+                    .numeroReserva(reserva.getNumeroReserva())
+                    .casaId(reserva.getCasaId().getId())
+                    .nombreCasa(reserva.getCasaId().getNombre())
+                    .poblacionCasa(reserva.getCasaId().getPoblacion())
+                    .fechaEntrada(reserva.getFechaEntrada())
+                    .numeroNoches(reserva.getNumeroNoches())
+                    .telefonoCliente(reserva.getTelefonoCliente())
+                    .importeTotal(reserva.getImporte())
+                    .anticipo(reserva.getAnticipo())
+                    .estadoReserva(reserva.getEstadoReserva() != null ? reserva.getEstadoReserva().toString() : "")
+                    .build();
+            
+            notificaciones.add(dto);
+        }
+        
+        return notificaciones;
+    }
 
     //Metodo auxiliar para generar un número de reserva único
     private Long generarNumeroReservaUnico() {

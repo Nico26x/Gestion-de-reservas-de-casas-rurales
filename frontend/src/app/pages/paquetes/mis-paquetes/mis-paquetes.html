@@ -1,0 +1,56 @@
+<div>
+  <h2>Mis paquetes</h2>
+
+  <div *ngIf="mensajeError" style="color: red; margin: 10px 0;">
+    {{ mensajeError }}
+  </div>
+
+  <div *ngIf="mensajeExito" style="color: green; margin: 10px 0;">
+    {{ mensajeExito }}
+  </div>
+
+  <div *ngIf="cargando" style="color: blue; margin: 10px 0;">
+    Cargando paquetes...
+  </div>
+
+  <div *ngIf="!cargando" style="margin: 10px 0;">
+    <button (click)="refrescar()">Refrescar</button>
+  </div>
+
+  <div *ngIf="!cargando && paquetes.length === 0">
+    <p>No tienes paquetes registrados.</p>
+  </div>
+
+  <div *ngIf="!cargando && paquetes.length > 0">
+    <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+      <thead>
+        <tr>
+          <th style="padding: 8px;">ID</th>
+          <th style="padding: 8px;">Casa</th>
+          <th style="padding: 8px;">Población</th>
+          <th style="padding: 8px;">Fecha Inicio</th>
+          <th style="padding: 8px;">Fecha Fin</th>
+          <th style="padding: 8px;">Modalidad</th>
+          <th style="padding: 8px;">Precio Casa</th>
+          <th style="padding: 8px;">Precio Habitación</th>
+          <th style="padding: 8px;">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let paquete of paquetes">
+          <td style="padding: 8px;">{{ paquete.id }}</td>
+          <td style="padding: 8px;">{{ paquete.nombreCasa }}</td>
+          <td style="padding: 8px;">{{ paquete.poblacionCasa }}</td>
+          <td style="padding: 8px;">{{ paquete.fechaInicio }}</td>
+          <td style="padding: 8px;">{{ paquete.fechaFin }}</td>
+          <td style="padding: 8px;">{{ paquete.modalidad }}</td>
+          <td style="padding: 8px;">{{ paquete.precio ?? '-' }}</td>
+          <td style="padding: 8px;">{{ paquete.precioHabitacion ?? '-' }}</td>
+          <td style="padding: 8px;">
+            <button (click)="editarPaquete(paquete.id!)">Editar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

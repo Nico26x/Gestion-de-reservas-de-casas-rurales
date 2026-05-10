@@ -2,10 +2,14 @@ package com.reservas.controller;
 
 import com.reservas.dto.ReservaRequestDTO;
 import com.reservas.dto.ReservaResponseDTO;
+import com.reservas.dto.ReservaNotificacionDTO;
 import com.reservas.service.ReservaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -28,6 +32,24 @@ public class ReservaController {
             return ResponseEntity.ok(response);
         }
         catch(RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    //Método GET /api/reservas/propietario. Obtiene las notificaciones de reservas del propietario autenticado
+    @GetMapping("/propietario")
+    public ResponseEntity<?> obtenerReservasPropietario(Authentication authentication) {
+        try {
+            if (authentication == null) {
+                return ResponseEntity.badRequest().body("Usuario no autenticado");
+            }
+
+            String nombreCuenta = authentication.getName();
+            List<ReservaNotificacionDTO> notificaciones = reservaService.obtenerNotificacionesReservas(nombreCuenta);
+            
+            return ResponseEntity.ok(notificaciones);
+
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

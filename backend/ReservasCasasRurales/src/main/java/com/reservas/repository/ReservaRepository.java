@@ -4,6 +4,8 @@ import com.reservas.model.Casa;
 import com.reservas.model.EstadoReserva;
 import com.reservas.model.Reserva;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -34,4 +36,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
             LocalDate fechaSalida,
             List<EstadoReserva> estadosReservas
     );
+
+    //Buscar todas las reservas de un propietario por su nombre de cuenta
+    @Query("SELECT r FROM Reserva r WHERE r.casaId.propietario.nombreCuenta = :nombreCuenta ORDER BY r.id DESC")
+    List<Reserva> findByPropietarioNombreCuenta(@Param("nombreCuenta") String nombreCuenta);
 }
