@@ -32,7 +32,7 @@ public class Paquete {
     @Column(name = "modalidad", nullable = false)
     private ModalidadDisponibilidad modalidad;
 
-    //  Relación con casa
+    //Relación con casa
     @ManyToOne
     @JoinColumn(name = "casa_id", nullable = false)
     @JsonIgnore

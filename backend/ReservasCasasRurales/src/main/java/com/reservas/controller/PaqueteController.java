@@ -17,10 +17,9 @@ public class PaqueteController {
         this.paqueteService = paqueteService;
     }
 
+    //POST /api/paquetes
     @PostMapping
-    public ResponseEntity<Paquete> crearPaquete(
-            @RequestBody PaqueteRequestDTO dto,
-            Authentication authentication) {
+    public ResponseEntity<Paquete> crearPaquete(@RequestBody PaqueteRequestDTO dto, Authentication authentication) {
 
         if (authentication == null) {
             return ResponseEntity.status(401).build();
@@ -31,5 +30,23 @@ public class PaqueteController {
         Paquete paquete = paqueteService.crearPaquete(dto, username);
 
         return ResponseEntity.ok(paquete);
+    }
+
+    //PUT /api/paquetes/{id}
+    @PutMapping
+    public ResponseEntity<?> modificarPaquete(@PathVariable Long id, @RequestBody PaqueteRequestDTO dto, Authentication authentication) {
+
+        if(authentication == null) {
+            return ResponseEntity.status(401).build();
+        }
+
+        try {
+            String username = authentication.getName();
+            Paquete paquete = paqueteService.modificarPaquete(id, dto, username);
+            return ResponseEntity.ok(paquete);
+        } catch(RuntimeException e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
