@@ -44,4 +44,8 @@ export class CasasService {
   obtenerTodas(): Observable<Casa[]> {
     return this.http.get<Casa[]>(this.apiUrl);
   }
+
+  obtenerCasaDetalle(id: number): Observable<Casa> {
+    return this.http.get<Casa>(`${this.apiUrl}/${id}`);
+  }
 }

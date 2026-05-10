@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.reservas.dto.CasaRequestDTO;
 import com.reservas.dto.CasaResponseDTO;
+import com.reservas.dto.HabitacionDetalleDTO;
 import com.reservas.model.*;
 import com.reservas.repository.CasaRepository;
 
@@ -180,6 +181,27 @@ public class CasaService {
         dto.setNumeroCocinas(
                 casa.getCocinas() != null ? casa.getCocinas().size() : 0);
 
+        // Mapear habitaciones con detalles
+        if (casa.getHabitaciones() != null && !casa.getHabitaciones().isEmpty()) {
+            dto.setHabitaciones(
+                    casa.getHabitaciones()
+                            .stream()
+                            .map(this::convertirAHabitacionDetalleDTO)
+                            .toList());
+        } else {
+            dto.setHabitaciones(List.of());
+        }
+
+        return dto;
+    }
+
+    private HabitacionDetalleDTO convertirAHabitacionDetalleDTO(Habitacion habitacion) {
+        HabitacionDetalleDTO dto = new HabitacionDetalleDTO();
+        dto.setId(habitacion.getId());
+        dto.setCodigoHabitacion(habitacion.getCodigoHabitacion());
+        dto.setNumeroCamas(habitacion.getNumeroCamas());
+        dto.setTipoCama(habitacion.getTipoCama());
+        dto.setTieneBano(habitacion.getTieneBano());
         return dto;
     }
 }

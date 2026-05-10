@@ -6,6 +6,7 @@ import { HomeComponent } from './pages/home/home';
 import { LoginComponent } from './pages/auth/login/login';
 import { RegisterComponent } from './pages/auth/register/register';
 import { CrearCasaComponent } from './pages/casas/crear-casa/crear-casa';
+import { DetalleCasaComponent } from './pages/casas/detalle-casa/detalle-casa';
 import { CrearPaqueteComponent } from './pages/paquetes/crear-paquete/crear-paquete';
 import { EditarPaqueteComponent } from './pages/paquetes/editar-paquete/editar-paquete';
 import { MisPaquetesComponent } from './pages/paquetes/mis-paquetes/mis-paquetes';
@@ -27,6 +28,8 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
 
   { path: 'casas/crear', component: CrearCasaComponent, canActivate: [authGuard] },
+  { path: 'casas/buscar', component: BuscarCasasComponent },
+  { path: 'casas/:id', component: DetalleCasaComponent },
   { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [authGuard] },
   { path: 'paquetes/:id/editar', component: EditarPaqueteComponent, canActivate: [ownerGuard] },
   { path: 'paquetes', component: MisPaquetesComponent, canActivate: [ownerGuard] },
@@ -34,9 +37,7 @@ export const routes: Routes = [
   { path: 'reservas/recibidas', component: ReservasRecibidasComponent, canActivate: [ownerGuard] },
   { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
-  { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [ownerGuard] },
   { path: 'pagos/registrar', component: RegistrarPagoComponent, canActivate: [authGuard] },
-  { path: 'casas/buscar', component: BuscarCasasComponent },
 
   { path: '**', component: NotFoundComponent }
 ];

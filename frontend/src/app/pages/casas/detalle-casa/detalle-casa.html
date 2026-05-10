@@ -1,0 +1,77 @@
+<section>
+  <h2>Detalle de casa</h2>
+
+  <button (click)="volver()">Volver</button>
+
+  <div *ngIf="cargando">
+    <p>Cargando información de la casa...</p>
+  </div>
+
+  <div *ngIf="mensajeError && !cargando">
+    <p style="color: red;">{{ mensajeError }}</p>
+  </div>
+
+  <div *ngIf="casa && !cargando">
+    <h3>{{ casa.nombre || 'Casa sin nombre' }}</h3>
+
+    <p>
+      <strong>Dirección:</strong> {{ casa.direccion || 'No disponible' }}
+    </p>
+
+    <p>
+      <strong>Población:</strong> {{ casa.poblacion || 'No disponible' }}
+    </p>
+
+    <p>
+      <strong>Descripción:</strong> {{ casa.descripcion || 'Sin descripción' }}
+    </p>
+
+    <div>
+      <h4>Galería de fotos</h4>
+      <div *ngIf="tieneFotos(); else sinFotos">
+        <div *ngFor="let foto of casa.fotos">
+          <img [src]="foto" [alt]="casa.nombre" style="max-width: 200px; margin: 10px;" />
+        </div>
+      </div>
+      <ng-template #sinFotos>
+        <p>No hay fotos disponibles</p>
+      </ng-template>
+    </div>
+
+    <div>
+      <h4>Características</h4>
+      <p>Habitaciones: {{ casa.numeroHabitaciones || 0 }}</p>
+      <p>Baños: {{ casa.numeroBanos || 0 }}</p>
+      <p>Cocinas: {{ casa.numeroCocinas || 0 }}</p>
+      <p>Comedores: {{ casa.numeroComedores || 0 }}</p>
+      <p>Garajes: {{ casa.numeroGarajes || 0 }}</p>
+    </div>
+
+    <div>
+      <h4>Habitaciones</h4>
+      <div *ngIf="tieneHabitaciones(); else sinHabitaciones">
+        <table border="1" cellpadding="8" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Número de camas</th>
+              <th>Tipo de cama</th>
+              <th>Tiene baño</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hab of casa.habitaciones">
+              <td>{{ hab.codigoHabitacion || 'N/A' }}</td>
+              <td>{{ hab.numeroCamas || 0 }}</td>
+              <td>{{ hab.tipoCama || 'N/A' }}</td>
+              <td>{{ hab.tieneBano ? 'Sí' : 'No' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #sinHabitaciones>
+        <p>No hay habitaciones registradas</p>
+      </ng-template>
+    </div>
+  </div>
+</section>

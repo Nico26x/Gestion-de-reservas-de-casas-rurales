@@ -230,9 +230,15 @@
             <div class="house-card__footer">
               <span class="house-card__hint">Alojamiento rural disponible para reserva</span>
 
-              <a routerLink="/reservas/crear" class="reserve-link">
-                Crear reserva
-              </a>
+              <div style="display: flex; gap: 10px;">
+                <a [routerLink]="['/casas', casa.id]">
+                  Ver detalle
+                </a>
+
+                <a routerLink="/reservas/crear" class="reserve-link">
+                  Crear reserva
+                </a>
+              </div>
             </div>
           </div>
         </article>
