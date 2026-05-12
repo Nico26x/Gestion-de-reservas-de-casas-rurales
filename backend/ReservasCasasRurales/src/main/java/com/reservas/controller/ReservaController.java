@@ -23,20 +23,21 @@ public class ReservaController {
         this.reservaService = reservaService;
     }
 
-    //Método POST /api/reservas. El cliente no necesita autenticación para realizar una reserva
+    // Método POST /api/reservas. El cliente no necesita autenticación para realizar
+    // una reserva
     @PostMapping
-    public ResponseEntity<?> realizarReserva(@RequestBody ReservaRequestDTO dto){
+    public ResponseEntity<?> realizarReserva(@RequestBody ReservaRequestDTO dto) {
 
         try {
             ReservaResponseDTO response = reservaService.realizarReserva(dto);
             return ResponseEntity.ok(response);
-        }
-        catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    //Método GET /api/reservas/propietario. Obtiene las notificaciones de reservas del propietario autenticado
+    // Método GET /api/reservas/propietario. Obtiene las notificaciones de reservas
+    // del propietario autenticado
     @GetMapping("/propietario")
     public ResponseEntity<?> obtenerReservasPropietario(Authentication authentication) {
         try {
@@ -46,11 +47,36 @@ public class ReservaController {
 
             String nombreCuenta = authentication.getName();
             List<ReservaNotificacionDTO> notificaciones = reservaService.obtenerNotificacionesReservas(nombreCuenta);
-            
+
             return ResponseEntity.ok(notificaciones);
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<?> cancelarReserva(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        try {
+
+            if (authentication == null) {
+                return ResponseEntity.badRequest()
+                        .body("Usuario no autenticado");
+            }
+
+            String nombreCuenta = authentication.getName();
+
+            String response = reservaService.cancelarReserva(id, nombreCuenta);
+
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+
+            return ResponseEntity.badRequest()
+                    .body(e.getMessage());
         }
     }
 }

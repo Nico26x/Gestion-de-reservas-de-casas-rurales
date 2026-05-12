@@ -36,7 +36,8 @@ public class SecurityConfig {
     private CustomUserDetailsService userDetailsService;
 
     /**
-     * Cadena de filtros — define rutas públicas vs protegidas con autorización por rol.
+     * Cadena de filtros — define rutas públicas vs protegidas con autorización por
+     * rol.
      * NOTA Spring Boot 4.x: se usa .csrf(AbstractHttpConfigurer::disable)
      * en lugar de .csrf().disable() que fue removido.
      */
@@ -72,19 +73,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/pagos/pendientes").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.PUT, "/api/pagos/*/verificar").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.GET, "/api/reservas/propietario").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/reservas/*/cancelar").hasAuthority("ROLE_PROPIETARIO")
 
                         // ── SOLO CLIENTE ──────────────────────────────
                         .requestMatchers("/api/reservas/**").hasAuthority("ROLE_CLIENTE")
-                        .requestMatchers(HttpMethod.POST, "/api/pagos").hasAnyAuthority("ROLE_CLIENTE", "ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.POST, "/api/pagos")
+                        .hasAnyAuthority("ROLE_CLIENTE", "ROLE_PROPIETARIO")
 
                         // ── TODO LO DEMÁS REQUIERE JWT ──────────────────────────────
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
 
                 // Sin sesión en servidor — usamos JWT (stateless)
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authenticationProvider(authenticationProvider())
 
@@ -118,7 +118,7 @@ public class SecurityConfig {
 
     /**
      * Proveedor de autenticación: usa nuestro UserDetailsService + BCrypt.
-    */
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);

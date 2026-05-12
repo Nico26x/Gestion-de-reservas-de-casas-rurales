@@ -24,10 +24,10 @@ public class ReservaService {
     private final PaqueteRepository paqueteRepository;
 
     public ReservaService(CasaRepository casaRepository,
-                          ReservaRepository reservaRepository,
-                          DisponibilidadRepository disponibilidadRepository,
-                          DisponibilidadHabitacionRepository disponibilidadHabitacionRepository,
-                          PaqueteRepository paqueteRepository) {
+            ReservaRepository reservaRepository,
+            DisponibilidadRepository disponibilidadRepository,
+            DisponibilidadHabitacionRepository disponibilidadHabitacionRepository,
+            PaqueteRepository paqueteRepository) {
         this.casaRepository = casaRepository;
         this.reservaRepository = reservaRepository;
         this.disponibilidadRepository = disponibilidadRepository;
@@ -42,7 +42,7 @@ public class ReservaService {
 
     private ReservaResponseDTO realizarReservaInternal(ReservaRequestDTO dto) {
 
-        //Validaciones básicas
+        // Validaciones básicas
         if (dto.getCasaId() == null) {
             throw new RuntimeException("Debe enviar el id de la casa");
         }
@@ -56,7 +56,7 @@ public class ReservaService {
             throw new RuntimeException("Debe enviar el teléfono de contacto");
         }
 
-        //Validar tipoReserva obligatoriamente ────────────────────────────────
+        // Validar tipoReserva obligatoriamente ────────────────────────────────
         if (dto.getTipoReserva() == null || dto.getTipoReserva().trim().isEmpty()) {
             throw new RuntimeException("Debe enviar el tipo de reserva");
         }
@@ -64,31 +64,29 @@ public class ReservaService {
         String tipoReserva = dto.getTipoReserva().trim().toUpperCase();
         if (!tipoReserva.equals("HABITACIONES") && !tipoReserva.equals("CASA_COMPLETA")) {
             throw new RuntimeException(
-                    "El tipo de reserva no es válido. Valores permitidos: HABITACIONES o CASA_COMPLETA"
-            );
+                    "El tipo de reserva no es válido. Valores permitidos: HABITACIONES o CASA_COMPLETA");
         }
 
         Casa casa = casaRepository.findById(dto.getCasaId())
                 .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
 
-        //Validar coherencia entre tipoReserva y habitacionIds ────────────────────────────────
+        // Validar coherencia entre tipoReserva y habitacionIds
+        // ────────────────────────────────
         if (tipoReserva.equals("HABITACIONES")) {
             // Si es por habitaciones, debe tener al menos una habitación seleccionada
             if (dto.getHabitacionIds() == null || dto.getHabitacionIds().isEmpty()) {
                 throw new RuntimeException(
-                        "Si la reserva es por habitaciones, debe seleccionar al menos una habitación"
-                );
+                        "Si la reserva es por habitaciones, debe seleccionar al menos una habitación");
             }
         } else if (tipoReserva.equals("CASA_COMPLETA")) {
             // Si es casa completa, no debe tener habitaciones seleccionadas
             if (dto.getHabitacionIds() != null && !dto.getHabitacionIds().isEmpty()) {
                 throw new RuntimeException(
-                        "Si la reserva es de casa completa, no debe enviar habitaciones seleccionadas"
-                );
+                        "Si la reserva es de casa completa, no debe enviar habitaciones seleccionadas");
             }
         }
 
-        //Determinar tipo de reserva ──────────────────────────────
+        // Determinar tipo de reserva ──────────────────────────────
         boolean esPorHabitaciones = tipoReserva.equals("HABITACIONES");
 
         // Si es por habitaciones, verificar que las habitaciones existan en la casa
@@ -97,8 +95,7 @@ public class ReservaService {
             // Validar que no haya IDs duplicados en habitacionIds
             if (dto.getHabitacionIds().size() != new java.util.HashSet<>(dto.getHabitacionIds()).size()) {
                 throw new RuntimeException(
-                        "No se puede seleccionar la misma habitación más de una vez"
-                );
+                        "No se puede seleccionar la misma habitación más de una vez");
             }
 
             for (Long habId : dto.getHabitacionIds()) {
@@ -106,22 +103,22 @@ public class ReservaService {
                         .filter(h -> h.getId().equals(habId))
                         .findFirst()
                         .orElseThrow(() -> new RuntimeException(
-                                "La habitación con id " + habId + " no pertenece a esta casa"
-                        ));
+                                "La habitación con id " + habId + " no pertenece a esta casa"));
                 habitacionesAReservar.add(habitacion);
             }
         }
 
-        //Validar disponibilidad día por día. Si algún día no está disponible, no se hace la reserva.
+        // Validar disponibilidad día por día. Si algún día no está disponible, no se
+        // hace la reserva.
         LocalDate fechaSalida = dto.getFechaEntrada().plusDays(dto.getNumeroNoches());
-        
-        // Map para guardar disponibilidades bloqueadas y reutilizarlas en la actualización
+
+        // Map para guardar disponibilidades bloqueadas y reutilizarlas en la
+        // actualización
         Map<LocalDate, Disponibilidad> disponibilidadesBloqueadas = new HashMap<>();
 
         for (LocalDate fecha = dto.getFechaEntrada();
 
-            fecha.isBefore(fechaSalida);
-            fecha = fecha.plusDays(1)) {
+                fecha.isBefore(fechaSalida); fecha = fecha.plusDays(1)) {
 
             LocalDate fechaEntrada = fecha;
             // Usar bloqueo pesimista para evitar condiciones de carrera
@@ -129,58 +126,53 @@ public class ReservaService {
                     .findByCasaIdAndFechaWithLock(casa.getId(), fecha)
                     .orElseThrow(() -> new RuntimeException(
                             "La casa no está disponible el día " + fechaEntrada + ". " +
-                                    "El propietario no ha definido disponibilidad para esa fecha."
-                    ));
-            
-            // Guardar disponibilidad bloqueada para reutilizarla en la fase de actualización
+                                    "El propietario no ha definido disponibilidad para esa fecha."));
+
+            // Guardar disponibilidad bloqueada para reutilizarla en la fase de
+            // actualización
             disponibilidadesBloqueadas.put(fecha, disponibilidad);
 
             if (esPorHabitaciones) {
 
-                //Validar que la modalidad permita reserva por habitaciones
+                // Validar que la modalidad permita reserva por habitaciones
                 if (disponibilidad.getModalidad() == ModalidadDisponibilidad.CASA_ENTERA) {
                     throw new RuntimeException(
                             "El día " + fecha + " solo permite reserva de casa completa, " +
-                                    "no por habitaciones."
-                    );
+                                    "no por habitaciones.");
                 }
 
-                //Validar que cada habitación solicitada esté LIBRE ese día
+                // Validar que cada habitación solicitada esté LIBRE ese día
                 for (Habitacion habitacion : habitacionesAReservar) {
                     // Usar bloqueo pesimista para evitar condiciones de carrera
                     DisponibilidadHabitacion dh = disponibilidadHabitacionRepository
                             .findByDisponibilidadIdAndHabitacionIdWithLock(
                                     disponibilidad.getId(),
-                                    habitacion.getId()
-                            )
+                                    habitacion.getId())
                             .orElseThrow(() -> new RuntimeException(
                                     "No se encontró disponibilidad para la habitación " +
-                                            habitacion.getId() + " el día " + fechaEntrada
-                            ));
+                                            habitacion.getId() + " el día " + fechaEntrada));
 
                     if (dh.getEstado() != EstadoDisponibilidad.LIBRE) {
                         throw new RuntimeException(
                                 "La habitación " + habitacion.getCodigoHabitacion() +
                                         " no está disponible el día " + fecha +
-                                        ". Estado: " + dh.getEstado()
-                        );
+                                        ". Estado: " + dh.getEstado());
                     }
                 }
-            }
-            else {
-                //Validar que la modalidad permita reserva de casa completa
+            } else {
+                // Validar que la modalidad permita reserva de casa completa
                 if (disponibilidad.getModalidad() == ModalidadDisponibilidad.HABITACIONES) {
                     throw new RuntimeException(
                             "El día " + fecha + " solo permite reserva por habitaciones, " +
-                                    "no de casa completa."
-                    );
+                                    "no de casa completa.");
                 }
 
-                //Validar si hay habitaciones ocupadas, por lo tanto no se puede reservar la casa completa
+                // Validar si hay habitaciones ocupadas, por lo tanto no se puede reservar la
+                // casa completa
 
                 // Usar bloqueo pesimista para evitar condiciones de carrera
-                List<DisponibilidadHabitacion> habitaciones =
-                        disponibilidadHabitacionRepository.findByDisponibilidadIdWithLock(disponibilidad.getId());
+                List<DisponibilidadHabitacion> habitaciones = disponibilidadHabitacionRepository
+                        .findByDisponibilidadIdWithLock(disponibilidad.getId());
 
                 boolean algunaOcupada = habitaciones.stream()
                         .anyMatch(h -> h.getEstado() != EstadoDisponibilidad.LIBRE);
@@ -188,61 +180,56 @@ public class ReservaService {
                 if (algunaOcupada) {
                     throw new RuntimeException(
                             "No se puede reservar la casa completa el día " + fecha +
-                                    " porque hay habitaciones ocupadas"
-                        );
+                                    " porque hay habitaciones ocupadas");
                 }
 
-                //Validar que la casa esté LIBRE ese día
+                // Validar que la casa esté LIBRE ese día
                 if (disponibilidad.getEstadoCasa() != EstadoDisponibilidad.LIBRE) {
                     throw new RuntimeException(
                             "La casa no está disponible el día " + fecha +
-                                    ". Estado: " + disponibilidad.getEstadoCasa()
-                    );
+                                    ". Estado: " + disponibilidad.getEstadoCasa());
                 }
             }
         }
 
-        //Calcular importe. Buscar el paquete que cubra las fechas solicitadas
+        // Calcular importe. Buscar el paquete que cubra las fechas solicitadas
         LocalDate fechaFin = dto.getFechaEntrada().plusDays(dto.getNumeroNoches() - 1);
 
         Paquete paquete = paqueteRepository
                 .findByCasaIdAndFechaInicioLessThanEqualAndFechaFinGreaterThanEqual(
                         casa.getId(),
                         dto.getFechaEntrada(),
-                        fechaFin
-                )
+                        fechaFin)
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException(
-                        "No existe un paquete de alquiler que cubra las fechas solicitadas"
-                ));
+                        "No existe un paquete de alquiler que cubra las fechas solicitadas"));
 
         double importe;
         if (esPorHabitaciones) {
             if (paquete.getPrecioHabitacion() == null) {
                 throw new RuntimeException(
-                        "El paquete no tiene definido un precio por habitación"
-                );
+                        "El paquete no tiene definido un precio por habitación");
             }
-            // Importe = precio por noche por habitación × cantidad de habitaciones × número de noches
+            // Importe = precio por noche por habitación × cantidad de habitaciones × número
+            // de noches
             importe = paquete.getPrecioHabitacion() * habitacionesAReservar.size() * dto.getNumeroNoches();
         } else {
             if (paquete.getPrecio() == null) {
                 throw new RuntimeException(
-                        "El paquete no tiene definido un precio para casa completa"
-                );
+                        "El paquete no tiene definido un precio para casa completa");
             }
             // Importe = precio por noche de casa completa × número de noches
             importe = paquete.getPrecio() * dto.getNumeroNoches();
         }
 
-        //Generar número de reserva único
+        // Generar número de reserva único
         Long numeroReserva = generarNumeroReservaUnico();
 
-        //Calcular anticipo del 20%
+        // Calcular anticipo del 20%
         double anticipo = importe * 0.20;
 
-        //Guardar la reserva
+        // Guardar la reserva
         Reserva reserva = new Reserva();
         reserva.setNumeroReserva(numeroReserva);
         reserva.setFechaEntrada(dto.getFechaEntrada());
@@ -256,36 +243,34 @@ public class ReservaService {
 
         reservaRepository.save(reserva);
 
-        //Actualizar disponibilidad a RESERVADA
-        for (LocalDate fecha = dto.getFechaEntrada();
-             fecha.isBefore(fechaSalida);
-             fecha = fecha.plusDays(1)) {
+        // Actualizar disponibilidad a RESERVADA
+        for (LocalDate fecha = dto.getFechaEntrada(); fecha.isBefore(fechaSalida); fecha = fecha.plusDays(1)) {
 
             // Reutilizar disponibilidad ya bloqueada en la fase de validación
             Disponibilidad disponibilidad = disponibilidadesBloqueadas.get(fecha);
 
             if (esPorHabitaciones) {
-                //Marcar solo las habitaciones reservadas como RESERVADA
+                // Marcar solo las habitaciones reservadas como RESERVADA
                 for (Habitacion habitacion : habitacionesAReservar) {
                     // Usar bloqueo pesimista para consistencia con fase de validación
                     DisponibilidadHabitacion dh = disponibilidadHabitacionRepository
                             .findByDisponibilidadIdAndHabitacionIdWithLock(
                                     disponibilidad.getId(),
-                                    habitacion.getId()
-                            ).get();
+                                    habitacion.getId())
+                            .get();
                     dh.setEstado(EstadoDisponibilidad.RESERVADA);
                     disponibilidadHabitacionRepository.save(dh);
                 }
-            }
-            else {
-                //Marcar la casa completa como RESERVADA
+            } else {
+                // Marcar la casa completa como RESERVADA
                 disponibilidad.setEstadoCasa(EstadoDisponibilidad.RESERVADA);
                 disponibilidadRepository.save(disponibilidad);
 
-                //Bloquear todas las habitaciones como reservadas cuand se realiza una reserva de casa completa
+                // Bloquear todas las habitaciones como reservadas cuand se realiza una reserva
+                // de casa completa
                 // Usar bloqueo pesimista para consistencia con fase de validación
-                List<DisponibilidadHabitacion> habitaciones =
-                        disponibilidadHabitacionRepository.findByDisponibilidadIdWithLock(disponibilidad.getId());
+                List<DisponibilidadHabitacion> habitaciones = disponibilidadHabitacionRepository
+                        .findByDisponibilidadIdWithLock(disponibilidad.getId());
 
                 for (DisponibilidadHabitacion dh : habitaciones) {
                     dh.setEstado(EstadoDisponibilidad.RESERVADA);
@@ -294,7 +279,7 @@ public class ReservaService {
             }
         }
 
-        //Construir y retornar la respuesta
+        // Construir y retornar la respuesta
         ReservaResponseDTO response = new ReservaResponseDTO();
         response.setNumeroReserva(numeroReserva);
         response.setFechaEntrada(dto.getFechaEntrada());
@@ -309,18 +294,19 @@ public class ReservaService {
                 "Reserva creada exitosamente. Debe consignar $" + anticipo +
                         " antes de 3 días en la cuenta " +
                         casa.getPropietario().getNumeroCuentaBancaria() +
-                        " indicando el número de reserva: " + numeroReserva
-        );
+                        " indicando el número de reserva: " + numeroReserva);
+        response.setReservaId(reserva.getId());
 
         return response;
     }
 
-    //Método para obtener las notificaciones de reservas del propietario autenticado
+    // Método para obtener las notificaciones de reservas del propietario
+    // autenticado
     public List<com.reservas.dto.ReservaNotificacionDTO> obtenerNotificacionesReservas(String nombreCuenta) {
         List<Reserva> reservas = reservaRepository.findByPropietarioNombreCuenta(nombreCuenta);
-        
+
         List<com.reservas.dto.ReservaNotificacionDTO> notificaciones = new ArrayList<>();
-        
+
         for (Reserva reserva : reservas) {
             com.reservas.dto.ReservaNotificacionDTO dto = com.reservas.dto.ReservaNotificacionDTO.builder()
                     .reservaId(reserva.getId())
@@ -335,21 +321,116 @@ public class ReservaService {
                     .anticipo(reserva.getAnticipo())
                     .estadoReserva(reserva.getEstadoReserva() != null ? reserva.getEstadoReserva().toString() : "")
                     .build();
-            
+
             notificaciones.add(dto);
         }
-        
+
         return notificaciones;
     }
 
-    //Metodo auxiliar para generar un número de reserva único
+    // Metodo auxiliar para generar un número de reserva único
     private Long generarNumeroReservaUnico() {
         Random random = new Random();
         Long numero;
         do {
-            //Genera un número entre 100000 y 999999
+            // Genera un número entre 100000 y 999999
             numero = 100000L + (long) (random.nextDouble() * 900000);
         } while (reservaRepository.existsByNumeroReserva(numero));
         return numero;
+    }
+
+    @Transactional
+    public String cancelarReserva(Long reservaId, String nombreCuenta) {
+
+        // Buscar reserva
+        Reserva reserva = reservaRepository.findById(reservaId)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+        // Validar propietario autenticado
+        if (!reserva.getCasaId()
+                .getPropietario()
+                .getNombreCuenta()
+                .equals(nombreCuenta)) {
+
+            throw new RuntimeException(
+                    "No tiene permisos para cancelar esta reserva");
+        }
+
+        // Validar que no esté ya cancelada
+        if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+            throw new RuntimeException("La reserva ya está cancelada");
+        }
+
+        // Cambiar estado de reserva
+        reserva.setEstadoReserva(EstadoReserva.CANCELADA);
+
+        // Obtener rango de fechas
+        LocalDate fechaInicio = reserva.getFechaEntrada();
+        LocalDate fechaFin = fechaInicio.plusDays(reserva.getNumeroNoches());
+
+        boolean esPorHabitaciones = reserva.getHabitaciones() != null &&
+                !reserva.getHabitaciones().isEmpty();
+
+        // Recorrer fechas y liberar disponibilidad
+        for (LocalDate fecha = fechaInicio; fecha.isBefore(fechaFin); fecha = fecha.plusDays(1)) {
+
+            // Variable final para usar en lambdas
+            final LocalDate fechaActual = fecha;
+
+            Disponibilidad disponibilidad = disponibilidadRepository
+                    .findByCasaIdAndFechaWithLock(
+                            reserva.getCasaId().getId(),
+                            fechaActual)
+                    .orElseThrow(() -> new RuntimeException(
+                            "No existe disponibilidad para la fecha " + fechaActual));
+
+            // =========================================
+            // RESERVA POR HABITACIONES
+            // =========================================
+            if (esPorHabitaciones) {
+
+                for (Habitacion habitacion : reserva.getHabitaciones()) {
+
+                    DisponibilidadHabitacion dh = disponibilidadHabitacionRepository
+                            .findByDisponibilidadIdAndHabitacionIdWithLock(
+                                    disponibilidad.getId(),
+                                    habitacion.getId())
+                            .orElseThrow(() -> new RuntimeException(
+                                    "No se encontró disponibilidad habitación"));
+
+                    dh.setEstado(EstadoDisponibilidad.LIBRE);
+
+                    disponibilidadHabitacionRepository.save(dh);
+                }
+            }
+
+            // =========================================
+            // RESERVA CASA COMPLETA
+            // =========================================
+            else {
+
+                // Liberar casa
+                disponibilidad.setEstadoCasa(EstadoDisponibilidad.LIBRE);
+
+                disponibilidadRepository.save(disponibilidad);
+
+                // Liberar habitaciones
+                List<DisponibilidadHabitacion> habitaciones = disponibilidadHabitacionRepository
+                        .findByDisponibilidadIdWithLock(
+                                disponibilidad.getId());
+
+                for (DisponibilidadHabitacion dh : habitaciones) {
+
+                    dh.setEstado(EstadoDisponibilidad.LIBRE);
+
+                    disponibilidadHabitacionRepository.save(dh);
+                }
+            }
+        }
+
+        // Guardar reserva cancelada
+        reservaRepository.save(reserva);
+
+        return "Reserva cancelada correctamente";
     }
 }

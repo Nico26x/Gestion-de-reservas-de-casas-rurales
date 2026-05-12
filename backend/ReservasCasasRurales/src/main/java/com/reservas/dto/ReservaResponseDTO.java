@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Data
 public class ReservaResponseDTO {
 
+    private Long reservaId;
     private Long numeroReserva;
     private LocalDate fechaEntrada;
     private Integer numeroNoches;
