@@ -40,4 +40,17 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     //Buscar todas las reservas de un propietario por su nombre de cuenta
     @Query("SELECT r FROM Reserva r WHERE r.casaId.propietario.nombreCuenta = :nombreCuenta ORDER BY r.id DESC")
     List<Reserva> findByPropietarioNombreCuenta(@Param("nombreCuenta") String nombreCuenta);
+    
+    @Query("""
+    SELECT r
+    FROM Reserva r
+    WHERE r.estadoReserva = :estado
+    AND r.fechaCreacion <= :fechaLimite
+    AND r.casaId.propietario.nombreCuenta = :nombreCuenta
+  """)
+    List<Reserva> buscarReservasVencidasPorPropietario(
+        @Param("estado") EstadoReserva estado,
+        @Param("fechaLimite") LocalDate fechaLimite,
+        @Param("nombreCuenta") String nombreCuenta
+);
 }

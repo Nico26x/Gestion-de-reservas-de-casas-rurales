@@ -16,6 +16,12 @@ import com.reservas.dto.HabitacionDetalleDTO;
 import com.reservas.model.*;
 import com.reservas.repository.CasaRepository;
 
+import com.reservas.repository.ReservaRepository;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Arrays;
+
+
+
 @Service
 public class CasaService {
 
@@ -24,6 +30,9 @@ public class CasaService {
 
     @Autowired
     private ImageServiceImpl imageService;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     public Casa crearCasa(CasaRequestDTO dto, List<MultipartFile> fotos, Propietario propietario) throws Exception {
 
@@ -204,4 +213,28 @@ public class CasaService {
         dto.setTieneBano(habitacion.getTieneBano());
         return dto;
     }
+
+    @Transactional
+    public void eliminarCasa(Long idCasa, String usernamePropietario) {
+
+    Casa casa = casaRepository.findById(idCasa)
+            .orElseThrow(() -> new RuntimeException("Casa no encontrada"));
+
+    if (!casa.getPropietario().getNombreCuenta().equals(usernamePropietario)) {
+        throw new RuntimeException("No tiene permiso para eliminar esta casa");
+    }
+
+    boolean tieneReservasActivas = !reservaRepository
+            .findByCasaIdAndEstadoReservaIn(
+                    casa,
+                    Arrays.asList(EstadoReserva.PENDIENTE, EstadoReserva.CONFIRMADA)
+            )
+            .isEmpty();
+
+    if (tieneReservasActivas) {
+        throw new RuntimeException("No se puede eliminar la casa porque tiene reservas activas");
+    }
+
+    casaRepository.delete(casa);
+}
 }

@@ -74,6 +74,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/pagos/*/verificar").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.GET, "/api/reservas/propietario").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.PUT, "/api/reservas/*/cancelar").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.GET, "/api/reservas/vencidas").hasAuthority("ROLE_PROPIETARIO")
+                        .requestMatchers(HttpMethod.PUT, "/api/reservas/*/vencida").hasAuthority("ROLE_PROPIETARIO")
 
                         // ── SOLO CLIENTE ──────────────────────────────
                         .requestMatchers("/api/reservas/**").hasAuthority("ROLE_CLIENTE")

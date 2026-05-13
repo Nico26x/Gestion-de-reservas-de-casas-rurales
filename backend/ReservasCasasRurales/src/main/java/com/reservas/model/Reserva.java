@@ -20,6 +20,10 @@ public class Reserva {
     @Column(name = "numero_reserva", nullable = false, unique = true)
     private Long numeroReserva;
 
+    // Fecha en la que se creó la reserva
+    @Column(name = "fecha_creacion", nullable = false)
+    private LocalDate fechaCreacion;
+
     //Fecha en que el cliente entra a la casa
     @Column(name = "fecha_entrada", nullable = false)
     private LocalDate fechaEntrada;

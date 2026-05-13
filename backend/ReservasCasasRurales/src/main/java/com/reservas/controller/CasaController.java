@@ -118,4 +118,19 @@ public class CasaController {
 
         return casaService.buscarPorId(id);
     }
+
+    @DeleteMapping("/{id}")
+    
+    public ResponseEntity<String> eliminarCasa(
+        @PathVariable Long id,
+        Authentication authentication) {
+
+    if (authentication == null) {
+        throw new RuntimeException("Usuario no autenticado");
+    }
+
+    casaService.eliminarCasa(id, authentication.getName());
+
+    return ResponseEntity.ok("Casa eliminada correctamente");
+}
 }

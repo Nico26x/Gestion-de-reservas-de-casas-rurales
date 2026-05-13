@@ -232,6 +232,7 @@ public class ReservaService {
         // Guardar la reserva
         Reserva reserva = new Reserva();
         reserva.setNumeroReserva(numeroReserva);
+        reserva.setFechaCreacion(LocalDate.now());
         reserva.setFechaEntrada(dto.getFechaEntrada());
         reserva.setNumeroNoches(dto.getNumeroNoches());
         reserva.setTelefonoCliente(dto.getTelefonoCliente());
@@ -301,136 +302,235 @@ public class ReservaService {
     }
 
     // Método para obtener las notificaciones de reservas del propietario
-    // autenticado
+// autenticado
     public List<com.reservas.dto.ReservaNotificacionDTO> obtenerNotificacionesReservas(String nombreCuenta) {
-        List<Reserva> reservas = reservaRepository.findByPropietarioNombreCuenta(nombreCuenta);
 
-        List<com.reservas.dto.ReservaNotificacionDTO> notificaciones = new ArrayList<>();
+    List<Reserva> reservas = reservaRepository.findByPropietarioNombreCuenta(nombreCuenta);
 
-        for (Reserva reserva : reservas) {
-            com.reservas.dto.ReservaNotificacionDTO dto = com.reservas.dto.ReservaNotificacionDTO.builder()
-                    .reservaId(reserva.getId())
-                    .numeroReserva(reserva.getNumeroReserva())
-                    .casaId(reserva.getCasaId().getId())
-                    .nombreCasa(reserva.getCasaId().getNombre())
-                    .poblacionCasa(reserva.getCasaId().getPoblacion())
-                    .fechaEntrada(reserva.getFechaEntrada())
-                    .numeroNoches(reserva.getNumeroNoches())
-                    .telefonoCliente(reserva.getTelefonoCliente())
-                    .importeTotal(reserva.getImporte())
-                    .anticipo(reserva.getAnticipo())
-                    .estadoReserva(reserva.getEstadoReserva() != null ? reserva.getEstadoReserva().toString() : "")
-                    .build();
+    List<com.reservas.dto.ReservaNotificacionDTO> notificaciones = new ArrayList<>();
 
-            notificaciones.add(dto);
-        }
+    for (Reserva reserva : reservas) {
 
-        return notificaciones;
+        com.reservas.dto.ReservaNotificacionDTO dto =
+                com.reservas.dto.ReservaNotificacionDTO.builder()
+                        .reservaId(reserva.getId())
+                        .numeroReserva(reserva.getNumeroReserva())
+                        .casaId(reserva.getCasaId().getId())
+                        .nombreCasa(reserva.getCasaId().getNombre())
+                        .poblacionCasa(reserva.getCasaId().getPoblacion())
+                        .fechaEntrada(reserva.getFechaEntrada())
+                        .numeroNoches(reserva.getNumeroNoches())
+                        .telefonoCliente(reserva.getTelefonoCliente())
+                        .importeTotal(reserva.getImporte())
+                        .anticipo(reserva.getAnticipo())
+                        .estadoReserva(
+                                reserva.getEstadoReserva() != null
+                                        ? reserva.getEstadoReserva().toString()
+                                        : "")
+                        .build();
+
+        notificaciones.add(dto);
     }
 
-    // Metodo auxiliar para generar un número de reserva único
-    private Long generarNumeroReservaUnico() {
-        Random random = new Random();
-        Long numero;
-        do {
-            // Genera un número entre 100000 y 999999
-            numero = 100000L + (long) (random.nextDouble() * 900000);
-        } while (reservaRepository.existsByNumeroReserva(numero));
-        return numero;
+    return notificaciones;
+}
+
+     public List<ReservaResponseDTO> listarReservasVencidas(String nombreCuentaPropietario) {
+
+    LocalDate fechaLimite = LocalDate.now().minusDays(3);
+
+    List<Reserva> reservas = reservaRepository.buscarReservasVencidasPorPropietario(
+            EstadoReserva.PENDIENTE,
+            fechaLimite,
+            nombreCuentaPropietario
+    );
+
+    List<ReservaResponseDTO> response = new ArrayList<>();
+
+    for (Reserva reserva : reservas) {
+
+        ReservaResponseDTO dto = new ReservaResponseDTO();
+
+        dto.setNumeroReserva(reserva.getNumeroReserva());
+        dto.setFechaEntrada(reserva.getFechaEntrada());
+        dto.setNumeroNoches(reserva.getNumeroNoches());
+        dto.setImporte(reserva.getImporte());
+        dto.setAnticipo(reserva.getAnticipo());
+        dto.setTelefonoCliente(reserva.getTelefonoCliente());
+        dto.setNombreCasa(reserva.getCasaId().getNombre());
+        dto.setNumeroCuentaBancaria(
+                reserva.getCasaId().getPropietario().getNumeroCuentaBancaria()
+        );
+        dto.setEstado(reserva.getEstadoReserva().name());
+        dto.setMensaje("Reserva vencida encontrada");
+
+        response.add(dto);
     }
 
-    @Transactional
-    public String cancelarReserva(Long reservaId, String nombreCuenta) {
+    return response;
+}
 
-        // Buscar reserva
-        Reserva reserva = reservaRepository.findById(reservaId)
-                .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+   @Transactional
+public ReservaResponseDTO gestionarReservaVencida(
+        Long idReserva,
+        String accion,
+        String nombreCuentaPropietario) {
 
-        // Validar propietario autenticado
-        if (!reserva.getCasaId()
-                .getPropietario()
-                .getNombreCuenta()
-                .equals(nombreCuenta)) {
+    Reserva reserva = reservaRepository.findById(idReserva)
+            .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
-            throw new RuntimeException(
-                    "No tiene permisos para cancelar esta reserva");
-        }
+    if (!reserva.getCasaId().getPropietario().getNombreCuenta()
+            .equals(nombreCuentaPropietario)) {
 
-        // Validar que no esté ya cancelada
-        if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
-            throw new RuntimeException("La reserva ya está cancelada");
-        }
+        throw new RuntimeException("No tiene permiso para gestionar esta reserva");
+    }
 
-        // Cambiar estado de reserva
+    if (reserva.getEstadoReserva() != EstadoReserva.PENDIENTE) {
+        throw new RuntimeException("Solo se pueden gestionar reservas pendientes");
+    }
+
+    LocalDate fechaLimite = LocalDate.now().minusDays(3);
+
+    if (reserva.getFechaCreacion().isAfter(fechaLimite)) {
+        throw new RuntimeException("La reserva todavía no ha vencido el plazo de pago");
+    }
+
+    String accionNormalizada = accion.trim().toUpperCase();
+
+    if (accionNormalizada.equals("ANULAR")) {
         reserva.setEstadoReserva(EstadoReserva.CANCELADA);
+    } else if (accionNormalizada.equals("MANTENER")) {
+        reserva.setEstadoReserva(EstadoReserva.PENDIENTE);
+    } else {
+        throw new RuntimeException("Acción inválida. Use ANULAR o MANTENER");
+    }
 
-        // Obtener rango de fechas
-        LocalDate fechaInicio = reserva.getFechaEntrada();
-        LocalDate fechaFin = fechaInicio.plusDays(reserva.getNumeroNoches());
+    Reserva reservaActualizada = reservaRepository.save(reserva);
 
-        boolean esPorHabitaciones = reserva.getHabitaciones() != null &&
-                !reserva.getHabitaciones().isEmpty();
+    ReservaResponseDTO response = new ReservaResponseDTO();
 
-        // Recorrer fechas y liberar disponibilidad
-        for (LocalDate fecha = fechaInicio; fecha.isBefore(fechaFin); fecha = fecha.plusDays(1)) {
+    response.setReservaId(reservaActualizada.getId());
+    response.setNumeroReserva(reservaActualizada.getNumeroReserva());
+    response.setFechaEntrada(reservaActualizada.getFechaEntrada());
+    response.setNumeroNoches(reservaActualizada.getNumeroNoches());
+    response.setImporte(reservaActualizada.getImporte());
+    response.setAnticipo(reservaActualizada.getAnticipo());
+    response.setTelefonoCliente(reservaActualizada.getTelefonoCliente());
+    response.setNombreCasa(reservaActualizada.getCasaId().getNombre());
+    response.setNumeroCuentaBancaria(
+            reservaActualizada.getCasaId()
+                    .getPropietario()
+                    .getNumeroCuentaBancaria()
+    );
+    response.setEstado(reservaActualizada.getEstadoReserva().name());
+    response.setMensaje("Reserva gestionada correctamente");
 
-            // Variable final para usar en lambdas
-            final LocalDate fechaActual = fecha;
+    return response;
+}
 
-            Disponibilidad disponibilidad = disponibilidadRepository
-                    .findByCasaIdAndFechaWithLock(
-                            reserva.getCasaId().getId(),
-                            fechaActual)
-                    .orElseThrow(() -> new RuntimeException(
-                            "No existe disponibilidad para la fecha " + fechaActual));
+// Metodo auxiliar para generar un número de reserva único
+private Long generarNumeroReservaUnico() {
+    Random random = new Random();
+    Long numero;
+    do {
+        // Genera un número entre 100000 y 999999
+        numero = 100000L + (long) (random.nextDouble() * 900000);
+    } while (reservaRepository.existsByNumeroReserva(numero));
+    return numero;
+}
 
-            // =========================================
-            // RESERVA POR HABITACIONES
-            // =========================================
-            if (esPorHabitaciones) {
+@Transactional
+public String cancelarReserva(Long reservaId, String nombreCuenta) {
 
-                for (Habitacion habitacion : reserva.getHabitaciones()) {
+    // Buscar reserva
+    Reserva reserva = reservaRepository.findById(reservaId)
+            .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
 
-                    DisponibilidadHabitacion dh = disponibilidadHabitacionRepository
-                            .findByDisponibilidadIdAndHabitacionIdWithLock(
-                                    disponibilidad.getId(),
-                                    habitacion.getId())
-                            .orElseThrow(() -> new RuntimeException(
-                                    "No se encontró disponibilidad habitación"));
+    // Validar propietario autenticado
+    if (!reserva.getCasaId()
+            .getPropietario()
+            .getNombreCuenta()
+            .equals(nombreCuenta)) {
 
-                    dh.setEstado(EstadoDisponibilidad.LIBRE);
+        throw new RuntimeException(
+                "No tiene permisos para cancelar esta reserva");
+    }
 
-                    disponibilidadHabitacionRepository.save(dh);
-                }
-            }
+    // Validar que no esté ya cancelada
+    if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+        throw new RuntimeException("La reserva ya está cancelada");
+    }
 
-            // =========================================
-            // RESERVA CASA COMPLETA
-            // =========================================
-            else {
+    // Cambiar estado de reserva
+    reserva.setEstadoReserva(EstadoReserva.CANCELADA);
 
-                // Liberar casa
-                disponibilidad.setEstadoCasa(EstadoDisponibilidad.LIBRE);
+    // Obtener rango de fechas
+    LocalDate fechaInicio = reserva.getFechaEntrada();
+    LocalDate fechaFin = fechaInicio.plusDays(reserva.getNumeroNoches());
 
-                disponibilidadRepository.save(disponibilidad);
+    boolean esPorHabitaciones = reserva.getHabitaciones() != null &&
+            !reserva.getHabitaciones().isEmpty();
 
-                // Liberar habitaciones
-                List<DisponibilidadHabitacion> habitaciones = disponibilidadHabitacionRepository
-                        .findByDisponibilidadIdWithLock(
-                                disponibilidad.getId());
+    // Recorrer fechas y liberar disponibilidad
+    for (LocalDate fecha = fechaInicio; fecha.isBefore(fechaFin); fecha = fecha.plusDays(1)) {
 
-                for (DisponibilidadHabitacion dh : habitaciones) {
+        // Variable final para usar en lambdas
+        final LocalDate fechaActual = fecha;
 
-                    dh.setEstado(EstadoDisponibilidad.LIBRE);
+        Disponibilidad disponibilidad = disponibilidadRepository
+                .findByCasaIdAndFechaWithLock(
+                        reserva.getCasaId().getId(),
+                        fechaActual)
+                .orElseThrow(() -> new RuntimeException(
+                        "No existe disponibilidad para la fecha " + fechaActual));
 
-                    disponibilidadHabitacionRepository.save(dh);
-                }
+        // =========================================
+        // RESERVA POR HABITACIONES
+        // =========================================
+        if (esPorHabitaciones) {
+
+            for (Habitacion habitacion : reserva.getHabitaciones()) {
+
+                DisponibilidadHabitacion dh = disponibilidadHabitacionRepository
+                        .findByDisponibilidadIdAndHabitacionIdWithLock(
+                                disponibilidad.getId(),
+                                habitacion.getId())
+                        .orElseThrow(() -> new RuntimeException(
+                                "No se encontró disponibilidad habitación"));
+
+                dh.setEstado(EstadoDisponibilidad.LIBRE);
+
+                disponibilidadHabitacionRepository.save(dh);
             }
         }
 
-        // Guardar reserva cancelada
-        reservaRepository.save(reserva);
+        // =========================================
+        // RESERVA CASA COMPLETA
+        // =========================================
+        else {
 
-        return "Reserva cancelada correctamente";
+            // Liberar casa
+            disponibilidad.setEstadoCasa(EstadoDisponibilidad.LIBRE);
+
+            disponibilidadRepository.save(disponibilidad);
+
+            // Liberar habitaciones
+            List<DisponibilidadHabitacion> habitaciones = disponibilidadHabitacionRepository
+                    .findByDisponibilidadIdWithLock(
+                            disponibilidad.getId());
+
+            for (DisponibilidadHabitacion dh : habitaciones) {
+
+                dh.setEstado(EstadoDisponibilidad.LIBRE);
+
+                disponibilidadHabitacionRepository.save(dh);
+            }
+        }
     }
+
+    // Guardar reserva cancelada
+    reservaRepository.save(reserva);
+
+    return "Reserva cancelada correctamente";
+}
 }
