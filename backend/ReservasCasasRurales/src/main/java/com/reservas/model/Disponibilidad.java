@@ -12,10 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(
-        name = "disponibilidad",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"casa_id", "fecha"})
-)
+@Table(name = "disponibilidad", uniqueConstraints = @UniqueConstraint(columnNames = {"casa_id", "fecha"}))
 public class Disponibilidad {
 
     @Id

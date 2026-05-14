@@ -1,4 +1,5 @@
 package com.reservas.service;
+
 import com.reservas.dto.RegistroRequestDTO;
 import com.reservas.dto.RegistroResponseDTO;
 import com.reservas.model.Propietario;
@@ -6,7 +7,6 @@ import com.reservas.model.Rol;
 import com.reservas.repository.PropietarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class PropietarioService {

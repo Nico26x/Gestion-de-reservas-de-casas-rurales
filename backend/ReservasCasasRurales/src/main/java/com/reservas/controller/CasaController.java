@@ -27,6 +27,7 @@ public class CasaController {
         this.propietarioService = propietarioService;
     }
 
+    //POST /api/casas - Crear casa
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Casa> crearCasa(
             @RequestParam("nombre") String nombre,
@@ -102,6 +103,7 @@ public class CasaController {
         return ResponseEntity.ok(casa);
     }
 
+    //GET /api/casas — Buscar casas por población
     @GetMapping
     public ResponseEntity<List<CasaResponseDTO>> getCasasPorPoblacion(
             @RequestParam(value = "poblacion", required = false) String poblacion) {
@@ -113,12 +115,14 @@ public class CasaController {
         return ResponseEntity.ok(casaService.findAllConDTO());
     }
 
+    //GET /api/casas/{id} — Ver detalle de una casa
     @GetMapping("/{id}")
     public CasaResponseDTO getCasaDetalle(@PathVariable Long id) {
 
         return casaService.buscarPorId(id);
     }
 
+    //DELETE /api/casas/{id} — Eliminar casa
     @DeleteMapping("/{id}")
     
     public ResponseEntity<String> eliminarCasa(
@@ -132,5 +136,41 @@ public class CasaController {
     casaService.eliminarCasa(id, authentication.getName());
 
     return ResponseEntity.ok("Casa eliminada correctamente");
-}
+    }
+
+    //PUT /api/casas/{id} — Modificar casa
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    public ResponseEntity<?> modificarCasa(@PathVariable Long id, @RequestParam("nombre") String nombre, @RequestParam("direccion") String direccion, @RequestParam("poblacion") String poblacion, @RequestParam(value = "descripcion", required = false) String descripcion, @RequestParam("numeroHabitaciones") int numeroHabitaciones, @RequestParam("numeroBanos") int numeroBanos, @RequestParam("numeroCocinas") int numeroCocinas, @RequestParam("numeroComedores") int numeroComedores, @RequestParam("numeroCamas") Integer numeroCamas, @RequestParam("numeroGarajes") Integer numeroGarajes, @RequestParam("tieneBano") Boolean tieneBano, @RequestParam("tipoCama") TipoCama tipoCama,
+            // Fotos opcionales: si se envían reemplazan las actuales, si no se mantienen
+            @RequestParam(value = "fotos", required = false) List<MultipartFile> fotos,
+            Authentication authentication) throws Exception {
+
+        if (authentication == null) {
+            return ResponseEntity.status(401).body("Usuario no autenticado");
+        }
+
+        try {
+            String username = authentication.getName();
+
+            CasaRequestDTO dto = new CasaRequestDTO();
+            dto.setNombre(nombre);
+            dto.setDireccion(direccion);
+            dto.setPoblacion(poblacion);
+            dto.setDescripcion(descripcion);
+            dto.setNumeroHabitaciones(numeroHabitaciones);
+            dto.setNumeroBanos(numeroBanos);
+            dto.setNumeroCocinas(numeroCocinas);
+            dto.setNumeroComedores(numeroComedores);
+            dto.setNumeroCamas(numeroCamas);
+            dto.setNumeroGarajes(numeroGarajes);
+            dto.setTieneBano(tieneBano);
+            dto.setTipoCama(tipoCama);
+
+            CasaResponseDTO response = casaService.modificarCasa(id, dto, fotos, username);
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

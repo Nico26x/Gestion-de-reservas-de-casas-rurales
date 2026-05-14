@@ -1,9 +1,7 @@
 package com.reservas.model;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
-//import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,13 +33,13 @@ public class Casa {
     private Propietario propietario;
 
     // Relaciones
-    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Habitacion> habitaciones;
 
-    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Bano> banos;
 
-    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Cocina> cocinas;
 
     @OneToMany(mappedBy = "casa", cascade = CascadeType.ALL)
