@@ -1,79 +1,164 @@
-<div>
-  <h2>Editar Paquete</h2>
-
-  <div *ngIf="mensajeExito" style="color: green; margin: 10px 0;">
-    {{ mensajeExito }}
+<div class="ep-shell">
+  <!-- LOADING STATE -->
+  <div *ngIf="cargando" class="ep-loading-state">
+    <div class="ep-loading-state__spinner"></div>
+    <p>Cargando paquete...</p>
   </div>
 
-  <div *ngIf="mensajeError" style="color: red; margin: 10px 0;">
-    {{ mensajeError }}
-  </div>
+  <!-- CONTENT -->
+  <div *ngIf="!cargando" class="ep-content">
+    <!-- HEADER -->
+    <div class="ep-header">
+      <h1 class="ep-header__title">Editar paquete de alquiler</h1>
+      <p class="ep-header__description">Actualiza las fechas, modalidad y precios del paquete de alquiler</p>
+    </div>
 
-  <div *ngIf="cargando" style="color: blue; margin: 10px 0;">
-    Cargando...
-  </div>
-
-  <div *ngIf="editando && !cargando">
-    <form [formGroup]="paqueteForm" (ngSubmit)="modificarPaquete()">
-      <div>
-        <label>Casa ID:</label>
-        <input type="number" formControlName="casaId" />
-        <div *ngIf="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched" style="color: red;">
-          Casa ID es obligatoria
-        </div>
+    <!-- ALERTS -->
+    <div *ngIf="mensajeExito" class="ep-alert ep-alert--success">
+      <div class="ep-alert__icon">✓</div>
+      <div class="ep-alert__content">
+        <div class="ep-alert__title">Éxito</div>
+        <div class="ep-alert__message">{{ mensajeExito }}</div>
       </div>
+    </div>
 
-      <div>
-        <label>Fecha Inicio:</label>
-        <input type="date" formControlName="fechaInicio" />
-        <div *ngIf="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched" style="color: red;">
-          Fecha inicio es obligatoria
-        </div>
+    <div *ngIf="mensajeError" class="ep-alert ep-alert--error">
+      <div class="ep-alert__icon">✕</div>
+      <div class="ep-alert__content">
+        <div class="ep-alert__title">Error</div>
+        <div class="ep-alert__message">{{ mensajeError }}</div>
       </div>
+    </div>
 
-      <div>
-        <label>Fecha Fin:</label>
-        <input type="date" formControlName="fechaFin" />
-        <div *ngIf="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched" style="color: red;">
-          Fecha fin es obligatoria
-        </div>
-      </div>
+    <!-- FORM SECTION -->
+    <div *ngIf="editando" class="ep-form-section">
+      <div class="ep-form-wrapper">
+        <form [formGroup]="paqueteForm" (ngSubmit)="modificarPaquete()">
+          <!-- SECCIÓN: INFORMACIÓN GENERAL -->
+          <div class="ep-section">
+            <h3 class="ep-section-title">Información del Paquete</h3>
 
-      <div>
-        <label>Modalidad:</label>
-        <select formControlName="modalidad">
-          <option value="">-- Selecciona modalidad --</option>
-          <option value="CASA_ENTERA">Casa Entera</option>
-          <option value="HABITACIONES">Habitaciones</option>
-          <option value="AMBAS">Ambas</option>
-        </select>
-        <div *ngIf="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched" style="color: red;">
-          Modalidad es obligatoria
-        </div>
-      </div>
+            <div class="ep-form-group">
+              <label class="ep-label" for="casaId">Casa Asociada</label>
+              <input
+                id="casaId"
+                type="number"
+                class="ep-input"
+                [class.ep-input--error]="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched"
+                formControlName="casaId"
+                placeholder="ID de la casa"
+              />
+              <div *ngIf="paqueteForm.get('casaId')?.invalid && paqueteForm.get('casaId')?.touched" class="ep-error">
+                Casa es obligatoria
+              </div>
+            </div>
 
-      <div>
-        <label>Precio:</label>
-        <input type="number" formControlName="precio" step="0.01" />
-        <div *ngIf="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched" style="color: red;">
-          <span *ngIf="paqueteForm.get('precio')?.hasError('required')">Precio es obligatorio para esta modalidad</span>
-          <span *ngIf="paqueteForm.get('precio')?.hasError('min')">Precio debe ser mayor a 0</span>
-        </div>
-      </div>
+            <div class="ep-form-group">
+              <label class="ep-label" for="modalidad">Modalidad de Alquiler</label>
+              <select
+                id="modalidad"
+                class="ep-input ep-select"
+                [class.ep-input--error]="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched"
+                formControlName="modalidad"
+              >
+                <option value="">-- Selecciona modalidad --</option>
+                <option value="CASA_ENTERA">Casa Entera</option>
+                <option value="HABITACIONES">Habitaciones</option>
+                <option value="AMBAS">Ambas</option>
+              </select>
+              <div *ngIf="paqueteForm.get('modalidad')?.invalid && paqueteForm.get('modalidad')?.touched" class="ep-error">
+                Modalidad es obligatoria
+              </div>
+            </div>
+          </div>
 
-      <div>
-        <label>Precio por Habitación:</label>
-        <input type="number" formControlName="precioHabitacion" step="0.01" />
-        <div *ngIf="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched" style="color: red;">
-          <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('required')">Precio por habitación es obligatorio para esta modalidad</span>
-          <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('min')">Precio debe ser mayor a 0</span>
-        </div>
-      </div>
+          <!-- SECCIÓN: FECHAS -->
+          <div class="ep-section">
+            <h3 class="ep-section-title">Fechas del Paquete</h3>
 
-      <div style="margin-top: 20px;">
-        <button type="submit" [disabled]="cargando">Guardar cambios</button>
-        <button type="button" (click)="volver()" [disabled]="cargando" style="margin-left: 10px;">Volver</button>
+            <div class="ep-form-grid">
+              <div class="ep-form-group">
+                <label class="ep-label" for="fechaInicio">Fecha de Inicio</label>
+                <input
+                  id="fechaInicio"
+                  type="date"
+                  class="ep-input"
+                  [class.ep-input--error]="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched"
+                  formControlName="fechaInicio"
+                />
+                <div *ngIf="paqueteForm.get('fechaInicio')?.invalid && paqueteForm.get('fechaInicio')?.touched" class="ep-error">
+                  Fecha de inicio es obligatoria
+                </div>
+              </div>
+
+              <div class="ep-form-group">
+                <label class="ep-label" for="fechaFin">Fecha de Fin</label>
+                <input
+                  id="fechaFin"
+                  type="date"
+                  class="ep-input"
+                  [class.ep-input--error]="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched"
+                  formControlName="fechaFin"
+                />
+                <div *ngIf="paqueteForm.get('fechaFin')?.invalid && paqueteForm.get('fechaFin')?.touched" class="ep-error">
+                  Fecha de fin es obligatoria
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECCIÓN: PRECIOS -->
+          <div class="ep-section">
+            <h3 class="ep-section-title">Precios</h3>
+
+            <div class="ep-form-grid">
+              <div class="ep-form-group">
+                <label class="ep-label" for="precio">Precio Casa Completa</label>
+                <input
+                  id="precio"
+                  type="number"
+                  class="ep-input"
+                  [class.ep-input--error]="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched"
+                  formControlName="precio"
+                  step="0.01"
+                  placeholder="Precio"
+                />
+                <div *ngIf="paqueteForm.get('precio')?.invalid && paqueteForm.get('precio')?.touched" class="ep-error">
+                  <span *ngIf="paqueteForm.get('precio')?.hasError('required')">Precio es obligatorio para esta modalidad</span>
+                  <span *ngIf="paqueteForm.get('precio')?.hasError('min')">Precio debe ser mayor a 0</span>
+                </div>
+              </div>
+
+              <div class="ep-form-group">
+                <label class="ep-label" for="precioHabitacion">Precio por Habitación</label>
+                <input
+                  id="precioHabitacion"
+                  type="number"
+                  class="ep-input"
+                  [class.ep-input--error]="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched"
+                  formControlName="precioHabitacion"
+                  step="0.01"
+                  placeholder="Precio por habitación"
+                />
+                <div *ngIf="paqueteForm.get('precioHabitacion')?.invalid && paqueteForm.get('precioHabitacion')?.touched" class="ep-error">
+                  <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('required')">Precio por habitación es obligatorio para esta modalidad</span>
+                  <span *ngIf="paqueteForm.get('precioHabitacion')?.hasError('min')">Precio debe ser mayor a 0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BOTONES -->
+          <div class="ep-form-actions">
+            <button type="submit" class="ep-btn ep-btn--primary" [disabled]="cargando">
+              Guardar cambios
+            </button>
+            <button type="button" class="ep-btn ep-btn--secondary" (click)="volver()" [disabled]="cargando">
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
 </div>

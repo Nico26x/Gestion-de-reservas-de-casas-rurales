@@ -1,0 +1,520 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.ep-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(180deg, #f8fbff 0%, #eff6ff 54%, #edf4ff 100%);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+.ep-loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ep-loading-state__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid #d9e8fb;
+  border-top-color: #3274dc;
+  animation: spin 0.9s linear infinite;
+}
+
+.ep-loading-state p {
+  margin: 0;
+  color: #58749a;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   CONTENT WRAPPER
+   ========================================================= */
+.ep-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.ep-header {
+  border-radius: 24px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+}
+
+.ep-section-mini {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #3f77ca;
+}
+
+.ep-header__title {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #153761;
+  line-height: 1.2;
+}
+
+.ep-header__description {
+  margin: 0;
+  color: #5e789d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+.ep-alert {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border: 1px solid;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ep-alert--success {
+  background: #e5f5e5;
+  border-color: #b3e5b3;
+}
+
+.ep-alert--success .ep-alert__icon {
+  color: #2d7a3e;
+  font-weight: 800;
+}
+
+.ep-alert--error {
+  background: #ffe5e5;
+  border-color: #f0d5d5;
+}
+
+.ep-alert--error .ep-alert__icon {
+  color: #c33a3a;
+  font-weight: 800;
+}
+
+.ep-alert__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.ep-alert__content {
+  flex: 1;
+}
+
+.ep-alert__title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.ep-alert__message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FORM SECTION
+   ========================================================= */
+.ep-form-section {
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+  overflow: hidden;
+}
+
+.ep-form-wrapper {
+  padding: 2.5rem;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+.ep-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+.ep-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e6f0ff;
+}
+
+.ep-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ep-section-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #153761;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.9rem;
+  color: #3f77ca;
+}
+
+/* =========================================================
+   FORM GROUPS & FIELDS
+   ========================================================= */
+.ep-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ep-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.ep-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #153761;
+}
+
+/* =========================================================
+   INPUTS & SELECTS
+   ========================================================= */
+.ep-input {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #d9e8fb;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: #153761;
+  background: #f7faff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ep-input:focus {
+  border-color: #3274dc;
+  box-shadow: 0 0 0 3px rgba(50, 116, 220, 0.12);
+  background: #ffffff;
+}
+
+.ep-input::placeholder {
+  color: #a0b9d8;
+}
+
+.ep-input--error {
+  border-color: #e24b4a;
+  background: #fff8f8;
+}
+
+.ep-input--error:focus {
+  border-color: #e24b4a;
+  box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12);
+}
+
+.ep-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%233274dc' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.ep-select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   ERRORS
+   ========================================================= */
+.ep-error {
+  font-size: 0.8rem;
+  color: #c33a3a;
+  font-weight: 500;
+}
+
+/* =========================================================
+   FORM ACTIONS
+   ========================================================= */
+.ep-form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e6f0ff;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.ep-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.ep-btn--primary {
+  background: linear-gradient(180deg, #4a9ef5 0%, #3274dc 100%);
+  color: #ffffff;
+  border: 1px solid #2d6bc4;
+}
+
+.ep-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(50, 116, 220, 0.3);
+}
+
+.ep-btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.ep-btn--secondary {
+  background: rgba(255, 255, 255, 0.5);
+  color: #3274dc;
+  border: 1.5px solid #d9e8fb;
+}
+
+.ep-btn--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #b3d9ff;
+  box-shadow: 0 2px 8px rgba(50, 116, 220, 0.15);
+}
+
+.ep-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+@media (max-width: 1024px) {
+  .ep-shell {
+    padding: 1.5rem;
+  }
+
+  .ep-header {
+    padding: 2rem;
+  }
+
+  .ep-header__title {
+    font-size: 1.75rem;
+  }
+
+  .ep-form-wrapper {
+    padding: 2rem;
+  }
+
+  .ep-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .ep-shell {
+    padding: 1rem;
+  }
+
+  .ep-header {
+    padding: 1.5rem;
+  }
+
+  .ep-header__title {
+    font-size: 1.5rem;
+  }
+
+  .ep-header__description {
+    font-size: 0.9rem;
+  }
+
+  .ep-section-mini {
+    font-size: 0.65rem;
+  }
+
+  .ep-form-wrapper {
+    padding: 1.5rem;
+  }
+
+  .ep-form-group {
+    gap: 0.4rem;
+  }
+
+  .ep-label {
+    font-size: 0.85rem;
+  }
+
+  .ep-input {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .ep-form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ep-btn {
+    width: 100%;
+    padding: 0.7rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .ep-section-title {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ep-shell {
+    padding: 0.75rem;
+  }
+
+  .ep-header {
+    padding: 1.25rem;
+  }
+
+  .ep-header__title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .ep-header__description {
+    font-size: 0.85rem;
+  }
+
+  .ep-section-mini {
+    font-size: 0.6rem;
+  }
+
+  .ep-form-wrapper {
+    padding: 1.25rem;
+  }
+
+  .ep-form-section {
+    border-radius: 16px;
+  }
+
+  .ep-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .ep-section {
+    padding-bottom: 1rem;
+    gap: 1rem;
+  }
+
+  .ep-form-group {
+    gap: 0.35rem;
+  }
+
+  .ep-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .ep-input {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.88rem;
+    border-radius: 10px;
+  }
+
+  .ep-select {
+    background-size: 10px 6px;
+    background-position: right 0.75rem center;
+    padding-right: 2rem;
+  }
+
+  .ep-error {
+    font-size: 0.75rem;
+  }
+
+  .ep-form-actions {
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+
+  .ep-btn {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .ep-section-title {
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+  }
+}
