@@ -1,216 +1,304 @@
-<div class="container">
-  <h1>Editar casa</h1>
+<section class="cl-wrap">
+  <div class="cl-bg-lines"></div>
 
-  <div *ngIf="cargando" class="loading">
-    Cargando casa...
-  </div>
+  <!-- Planos cayendo -->
+  <svg class="cl-plane plane-1" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <rect x="8" y="8" width="124" height="164" stroke="#D0E0F4" stroke-width="0.5"/>
+    <line x1="12" y1="30" x2="128" y2="30" stroke="#85B7EB" stroke-width="0.8"/>
+    <text x="70" y="24" font-size="9" fill="#185FA5" text-anchor="middle" font-family="monospace">PLANTA BAJA</text>
+    <rect x="18" y="40" width="48" height="55" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="74" y="40" width="56" height="25" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="74" y="73" width="56" height="22" fill="#f0f7ff" stroke="#85B7EB" stroke-width="0.8"/>
+    <line x1="12" y1="105" x2="128" y2="105" stroke="#85B7EB" stroke-width="0.8"/>
+    <rect x="22" y="112" width="96" height="55" fill="#f7faff" stroke="#378ADD" stroke-width="1"/>
+    <line x1="70" y1="112" x2="70" y2="167" stroke="#85B7EB" stroke-width="0.8"/>
+    <circle cx="42" cy="20" r="4" stroke="#185FA5" stroke-width="1" fill="none"/>
+    <circle cx="98" cy="20" r="4" stroke="#185FA5" stroke-width="1" fill="none"/>
+  </svg>
 
-  <div *ngIf="error && !cargando" class="error">
-    <p>{{ error }}</p>
-  </div>
+  <svg class="cl-plane plane-2" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <rect x="8" y="8" width="124" height="164" stroke="#D0E0F4" stroke-width="0.5"/>
+    <text x="70" y="22" font-size="8" fill="#185FA5" text-anchor="middle" font-family="monospace">FACHADA</text>
+    <polygon points="70,35 20,80 120,80" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="35" y="80" width="70" height="90" fill="#f7faff" stroke="#378ADD" stroke-width="1"/>
+    <rect x="55" y="120" width="30" height="50" fill="#EBF4FD" stroke="#378ADD" stroke-width="1"/>
+    <rect x="42" y="90" width="20" height="20" fill="white" stroke="#85B7EB" stroke-width="0.8"/>
+    <rect x="78" y="90" width="20" height="20" fill="white" stroke="#85B7EB" stroke-width="0.8"/>
+    <line x1="12" y1="170" x2="128" y2="170" stroke="#185FA5" stroke-width="1"/>
+  </svg>
 
-  <div *ngIf="!cargando && !error" class="formulario-container">
-    <form [formGroup]="formulario">
-      <div class="form-group">
-        <label for="nombre">Nombre *</label>
+  <svg class="cl-plane plane-3" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <rect x="1" y="1" width="138" height="178" fill="white" stroke="#B5D4F4" stroke-width="1.5"/>
+    <line x1="12" y1="28" x2="128" y2="28" stroke="#85B7EB" stroke-width="0.8"/>
+    <text x="70" y="21" font-size="8" fill="#185FA5" text-anchor="middle" font-family="monospace">PLANTA ALTA</text>
+    <rect x="15" y="35" width="110" height="130" stroke="#378ADD" stroke-width="1" fill="#f7faff"/>
+    <line x1="70" y1="35" x2="70" y2="165" stroke="#D0E0F4" stroke-width="0.8"/>
+    <line x1="15" y1="100" x2="125" y2="100" stroke="#D0E0F4" stroke-width="0.8"/>
+    <rect x="20" y="40" width="44" height="54" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="76" y="40" width="44" height="54" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="20" y="106" width="44" height="53" fill="#EBF4FD" stroke="#378ADD" stroke-width="0.8"/>
+    <rect x="76" y="106" width="44" height="53" fill="#f0f7ff" stroke="#85B7EB" stroke-width="0.8"/>
+  </svg>
+
+  <!-- Tarjeta principal -->
+  <div class="cl-card">
+    <div class="cl-top-stripe"></div>
+
+    <div class="cl-header">
+      <div class="cl-house-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 12l8.954-8.955a1.5 1.5 0 012.122 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"/>
+        </svg>
+      </div>
+      <div>
+        <p class="cl-h1">Editar Casa Rural</p>
+        <p class="cl-h2">Actualiza la información de tu casa rural</p>
+      </div>
+    </div>
+
+    <div *ngIf="cargando" class="cl-loading">
+      <div class="cl-spinner"></div>
+      <p>Cargando casa...</p>
+    </div>
+
+    <div *ngIf="error && !cargando" class="cl-error-box">
+      <p>{{ error }}</p>
+    </div>
+
+    <form class="cl-body" [formGroup]="formulario" *ngIf="!cargando && !error" novalidate>
+
+      <!-- Sección: Información básica -->
+      <p class="cl-section-label">Información básica</p>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="nombre">Nombre de la propiedad</label>
         <input
-          type="text"
           id="nombre"
+          class="cl-inp"
+          [class.cl-inp--error]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched"
+          type="text"
+          placeholder="Ej: Casa El Roble"
           formControlName="nombre"
-          placeholder="Nombre de la casa"
-          [class.invalid]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
-        <span *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched" class="error-msg">
+        />
+        <span class="cl-error" *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
           Campo requerido
         </span>
       </div>
 
-      <div class="form-group">
-        <label for="direccion">Dirección *</label>
+      <div class="cl-field">
+        <label class="cl-lbl" for="direccion">Dirección</label>
         <input
-          type="text"
           id="direccion"
-          formControlName="direccion"
-          placeholder="Dirección"
-          [class.invalid]="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched">
-        <span *ngIf="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="poblacion">Población *</label>
-        <input
+          class="cl-inp"
+          [class.cl-inp--error]="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched"
           type="text"
+          placeholder="Calle, vereda, municipio..."
+          formControlName="direccion"
+        />
+        <span class="cl-error" *ngIf="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="cl-field">
+        <label class="cl-lbl" for="poblacion">Población</label>
+        <input
           id="poblacion"
+          class="cl-inp"
+          [class.cl-inp--error]="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched"
+          type="text"
+          placeholder="Ej: Salento, Filandia, Circasia..."
           formControlName="poblacion"
-          placeholder="Población"
-          [class.invalid]="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched">
-        <span *ngIf="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched" class="error-msg">
+        />
+        <span class="cl-error" *ngIf="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched">
           Campo requerido
         </span>
       </div>
 
-      <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea
-          id="descripcion"
-          formControlName="descripcion"
-          placeholder="Descripción de la casa"></textarea>
+      <!-- Sección: Distribución -->
+      <p class="cl-section-label">Distribución</p>
+
+      <div class="cl-rooms-grid">
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🛏</div>
+          <p class="cl-room-name">Habitaciones</p>
+          <input
+            type="number"
+            min="3"
+            formControlName="numeroHabitaciones"
+            class="cl-room-input"
+            [class.cl-inp--error]="formulario.get('numeroHabitaciones')?.invalid && formulario.get('numeroHabitaciones')?.touched"
+          />
+        </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🚿</div>
+          <p class="cl-room-name">Baños</p>
+          <input
+            type="number"
+            min="2"
+            formControlName="numeroBanos"
+            class="cl-room-input"
+            [class.cl-inp--error]="formulario.get('numeroBanos')?.invalid && formulario.get('numeroBanos')?.touched"
+          />
+        </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🍳</div>
+          <p class="cl-room-name">Cocinas</p>
+          <input
+            type="number"
+            min="1"
+            formControlName="numeroCocinas"
+            class="cl-room-input"
+            [class.cl-inp--error]="formulario.get('numeroCocinas')?.invalid && formulario.get('numeroCocinas')?.touched"
+          />
+        </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🍽</div>
+          <p class="cl-room-name">Comedores</p>
+          <input
+            type="number"
+            min="1"
+            formControlName="numeroComedores"
+            class="cl-room-input"
+            [class.cl-inp--error]="formulario.get('numeroComedores')?.invalid && formulario.get('numeroComedores')?.touched"
+          />
+        </div>
+        <div class="cl-room-card">
+          <div class="cl-room-icon">🚗</div>
+          <p class="cl-room-name">Garajes</p>
+          <input
+            type="number"
+            min="0"
+            formControlName="numeroGarajes"
+            class="cl-room-input"
+            [class.cl-inp--error]="formulario.get('numeroGarajes')?.invalid && formulario.get('numeroGarajes')?.touched"
+          />
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="numeroHabitaciones">Número de habitaciones *</label>
-        <input
-          type="number"
-          id="numeroHabitaciones"
-          formControlName="numeroHabitaciones"
-          min="3"
-          [class.invalid]="formulario.get('numeroHabitaciones')?.invalid && formulario.get('numeroHabitaciones')?.touched">
-        <span *ngIf="formulario.get('numeroHabitaciones')?.hasError('required') && formulario.get('numeroHabitaciones')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-        <span *ngIf="formulario.get('numeroHabitaciones')?.hasError('min') && formulario.get('numeroHabitaciones')?.touched" class="error-msg">
-          Mínimo 3 habitaciones
-        </span>
-      </div>
+      <p class="cl-section-label">Configuración base de habitaciones</p>
 
-      <div class="form-group">
-        <label for="numeroBanos">Número de baños *</label>
+      <div class="cl-field">
+        <label class="cl-lbl" for="numeroCamas">Número de camas por habitación</label>
         <input
-          type="number"
-          id="numeroBanos"
-          formControlName="numeroBanos"
-          min="2"
-          [class.invalid]="formulario.get('numeroBanos')?.invalid && formulario.get('numeroBanos')?.touched">
-        <span *ngIf="formulario.get('numeroBanos')?.hasError('required') && formulario.get('numeroBanos')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-        <span *ngIf="formulario.get('numeroBanos')?.hasError('min') && formulario.get('numeroBanos')?.touched" class="error-msg">
-          Mínimo 2 baños
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="numeroCocinas">Número de cocinas *</label>
-        <input
-          type="number"
-          id="numeroCocinas"
-          formControlName="numeroCocinas"
-          min="1"
-          [class.invalid]="formulario.get('numeroCocinas')?.invalid && formulario.get('numeroCocinas')?.touched">
-        <span *ngIf="formulario.get('numeroCocinas')?.hasError('required') && formulario.get('numeroCocinas')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-        <span *ngIf="formulario.get('numeroCocinas')?.hasError('min') && formulario.get('numeroCocinas')?.touched" class="error-msg">
-          Mínimo 1 cocina
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="numeroComedores">Número de comedores *</label>
-        <input
-          type="number"
-          id="numeroComedores"
-          formControlName="numeroComedores"
-          min="1"
-          [class.invalid]="formulario.get('numeroComedores')?.invalid && formulario.get('numeroComedores')?.touched">
-        <span *ngIf="formulario.get('numeroComedores')?.hasError('required') && formulario.get('numeroComedores')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-        <span *ngIf="formulario.get('numeroComedores')?.hasError('min') && formulario.get('numeroComedores')?.touched" class="error-msg">
-          Mínimo 1 comedor
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="numeroCamas">Número de camas *</label>
-        <input
-          type="number"
           id="numeroCamas"
-          formControlName="numeroCamas"
+          class="cl-inp"
+          [class.cl-inp--error]="formulario.get('numeroCamas')?.invalid && formulario.get('numeroCamas')?.touched"
+          type="number"
           min="1"
-          [class.invalid]="formulario.get('numeroCamas')?.invalid && formulario.get('numeroCamas')?.touched">
-        <span *ngIf="formulario.get('numeroCamas')?.hasError('required') && formulario.get('numeroCamas')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-        <span *ngIf="formulario.get('numeroCamas')?.hasError('min') && formulario.get('numeroCamas')?.touched" class="error-msg">
+          formControlName="numeroCamas"
+        />
+        <span class="cl-error" *ngIf="formulario.get('numeroCamas')?.invalid && formulario.get('numeroCamas')?.touched">
           Mínimo 1 cama
         </span>
       </div>
 
-      <div class="form-group">
-        <label for="numeroGarajes">Número de garajes *</label>
-        <input
-          type="number"
-          id="numeroGarajes"
-          formControlName="numeroGarajes"
-          min="0"
-          [class.invalid]="formulario.get('numeroGarajes')?.invalid && formulario.get('numeroGarajes')?.touched">
-        <span *ngIf="formulario.get('numeroGarajes')?.invalid && formulario.get('numeroGarajes')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="tieneBano">Tiene baño *</label>
-        <select id="tieneBano" formControlName="tieneBano" 
-          [class.invalid]="formulario.get('tieneBano')?.invalid && formulario.get('tieneBano')?.touched">
-          <option [value]="false">No</option>
-          <option [value]="true">Sí</option>
-        </select>
-        <span *ngIf="formulario.get('tieneBano')?.invalid && formulario.get('tieneBano')?.touched" class="error-msg">
-          Campo requerido
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label for="tipoCama">Tipo de cama *</label>
-        <select id="tipoCama" formControlName="tipoCama" 
-          [class.invalid]="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched">
-          <option value="">Selecciona un tipo</option>
+      <div class="cl-field">
+        <label class="cl-lbl" for="tipoCama">Tipo de cama</label>
+        <select
+          id="tipoCama"
+          class="cl-inp"
+          [class.cl-inp--error]="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched"
+          formControlName="tipoCama"
+        >
+          <option value="">Seleccione una opción</option>
           <option value="SENCILLA">SENCILLA</option>
           <option value="DOBLE">DOBLE</option>
         </select>
-        <span *ngIf="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched" class="error-msg">
-          Campo requerido
+        <span class="cl-error" *ngIf="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched">
+          Este campo es obligatorio
         </span>
       </div>
 
-      <div class="form-group">
-        <label for="fotos">Fotos nuevas</label>
-        <input
-          type="file"
-          id="fotos"
-          multiple
-          accept="image/*"
-          (change)="onFotosSeleccionadas($event)">
-        <p *ngIf="fotosSeleccionadas.length > 0" class="fotos-info">
-          {{ fotosSeleccionadas.length }} foto(s) seleccionada(s)
-        </p>
+      <div class="cl-field">
+        <label class="cl-lbl" for="tieneBano">¿La habitación tiene baño?</label>
+        <select
+          id="tieneBano"
+          class="cl-inp"
+          formControlName="tieneBano"
+        >
+          <option [ngValue]="true">Sí</option>
+          <option [ngValue]="false">No</option>
+        </select>
       </div>
 
-      <div *ngIf="fotosActuales.length > 0" class="fotos-actuales">
-        <h3>Fotos actuales</h3>
-        <div class="fotos-lista">
-          <img *ngFor="let foto of fotosActuales" [src]="foto" [alt]="'Foto de casa'" class="foto-thumbnail">
-        </div>
+      <div class="cl-field">
+        <label class="cl-lbl" for="descripcion">Descripción general</label>
+        <textarea
+          id="descripcion"
+          class="cl-inp"
+          placeholder="Cuéntanos sobre la casa: ubicación, comodidades, ambiente, etc..."
+          formControlName="descripcion"
+          rows="4"
+        ></textarea>
       </div>
 
-      <div class="botones">
+      <!-- Sección: Fotos actuales -->
+      <p class="cl-section-label" *ngIf="fotosActuales.length > 0">Fotos actuales</p>
+
+      <div class="cl-fotos-grid" *ngIf="fotosActuales.length > 0">
+        <img *ngFor="let foto of fotosActuales" [src]="foto" [alt]="'Foto actual'" class="cl-foto-thumbnail"/>
+      </div>
+
+      <!-- Sección: Fotografía -->
+      <p class="cl-section-label">Fotografía nueva</p>
+
+      <div
+        class="cl-upload"
+        [class.cl-upload--has-file]="fotosSeleccionadas.length > 0"
+        (click)="fotoInput.click()"
+      >
+        <ng-container *ngIf="fotosSeleccionadas.length === 0">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#378ADD" stroke-width="1.5"
+               style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+          </svg>
+          <p class="cl-up-txt">Seleccionar imágenes · JPG, PNG, WEBP</p>
+        </ng-container>
+        <ng-container *ngIf="fotosSeleccionadas.length > 0">
+          <p class="cl-up-txt cl-up-txt--change">{{ fotosSeleccionadas.length }} imagen(es) seleccionada(s)</p>
+        </ng-container>
+      </div>
+
+      <input
+        #fotoInput
+        type="file"
+        accept="image/*"
+        multiple
+        style="display: none"
+        (change)="onFotosSeleccionadas($event)"
+      />
+
+      <!-- Botones -->
+      <div class="cl-buttons-group">
         <button
           type="button"
           (click)="guardarCambios()"
           [disabled]="guardando"
-          class="btn-guardar">
-          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+          class="cl-btn">
+          <ng-container *ngIf="!guardando">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            Guardar cambios
+          </ng-container>
+          <ng-container *ngIf="guardando">
+            <div class="cl-spinner"></div>
+            Guardando...
+          </ng-container>
         </button>
         <button
           type="button"
           (click)="cancelar()"
-          class="btn-cancelar">
+          class="cl-btn cl-btn--secondary">
           Cancelar
         </button>
       </div>
     </form>
   </div>
-</div>
+</section>
+

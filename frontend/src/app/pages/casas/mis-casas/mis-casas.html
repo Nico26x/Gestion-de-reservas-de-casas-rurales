@@ -1,52 +1,147 @@
-<div class="container">
-  <h1>Mis casas</h1>
-
-  <div *ngIf="cargando" class="loading">
-    Cargando casas...
+<div class="mc-shell">
+  <div class="mc-header">
+    <div>
+      <p class="mc-section-mini">Gestión</p>
+      <h1 class="mc-title">Mis casas</h1>
+    </div>
+    <p class="mc-description">Administra las casas rurales que tienes registradas</p>
   </div>
 
-  <div *ngIf="!cargando && casas.length === 0" class="no-casas">
-    <p>No tienes casas registradas.</p>
-  </div>
+  <!-- Estado de carga -->
+  <section class="mc-loading-state" *ngIf="cargando">
+    <div class="mc-loading-state__spinner"></div>
+    <p>Cargando tus casas...</p>
+  </section>
 
-  <div *ngIf="!cargando && casas.length > 0" class="tabla-container">
-    <table class="tabla-casas">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Población</th>
-          <th>Dirección</th>
-          <th>Habitaciones</th>
-          <th>Baños</th>
-          <th>Cocinas</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let casa of casas">
-          <td>{{ casa.nombre }}</td>
-          <td>{{ casa.poblacion }}</td>
-          <td>{{ casa.direccion }}</td>
-          <td>{{ casa.numeroHabitaciones }}</td>
-          <td>{{ casa.numeroBanos }}</td>
-          <td>{{ casa.numeroCocinas }}</td>
-          <td>
-            <button 
-              type="button"
-              [routerLink]="['/casas/editar', casa.id]"
-              class="btn-editar">
-              Editar
-            </button>
-            <button 
-              type="button" 
-              (click)="eliminarCasa(casa)"
-              [disabled]="eliminandoId === casa.id"
-              class="btn-eliminar">
-              {{ eliminandoId === casa.id ? 'Eliminando...' : 'Eliminar' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Estado vacío -->
+  <section class="mc-empty-state" *ngIf="!cargando && casas.length === 0">
+    <div class="mc-empty-state__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5.5 10.5V20h13V10.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h3>No tienes casas registradas</h3>
+    <p>Comienza a registrar una casa rural para poder administrarla desde aquí.</p>
+    <a routerLink="/casas/crear" class="mc-btn mc-btn--primary">
+      Registrar una casa
+    </a>
+  </section>
+
+  <!-- Grid de casas -->
+  <div class="mc-grid" *ngIf="!cargando && casas.length > 0">
+    <article
+      class="mc-house-card"
+      *ngFor="let casa of casas; let i = index"
+      [class.mc-house-card--featured]="i === 0"
+    >
+      <!-- Área de media -->
+      <div class="mc-house-card__media">
+        <ng-container *ngIf="(casa.fotos && casa.fotos.length > 0) || casa.foto; else housePlaceholder">
+          <div class="mc-house-card__gallery">
+            <img
+              *ngFor="let foto of (casa.fotos && casa.fotos.length > 0 ? casa.fotos : (casa.foto ? [casa.foto] : []))"
+              [src]="foto"
+              [alt]="casa.nombre || 'Casa rural'"
+              class="mc-house-card__gallery-image"
+            />
+          </div>
+        </ng-container>
+
+        <ng-template #housePlaceholder>
+          <div class="mc-house-card__placeholder">
+            <div class="mc-house-card__placeholder-icon">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3 11.5L12 4l9 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5.5 10.5V20h13V10.5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M9 20v-5.5h6V20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span>Imagen no disponible</span>
+          </div>
+        </ng-template>
+
+        <div class="mc-house-card__overlay">
+          <span class="mc-location-pill">{{ casa.poblacion || 'Sin población' }}</span>
+        </div>
+      </div>
+
+      <!-- Contenido -->
+      <div class="mc-house-card__content">
+        <div class="mc-house-card__top">
+          <div>
+            <h3>{{ casa.nombre || 'Casa rural sin nombre' }}</h3>
+            <p>{{ casa.direccion || 'Dirección no disponible' }}</p>
+          </div>
+          <span class="mc-house-id" *ngIf="casa.id">#{{ casa.id }}</span>
+        </div>
+
+        <!-- Features -->
+        <div class="mc-features-strip">
+          <div class="mc-feature-box">
+            <span class="mc-feature-box__emoji">🛏</span>
+            <div>
+              <strong>{{ casa.numeroHabitaciones || 0 }}</strong>
+              <small>Habitaciones</small>
+            </div>
+          </div>
+
+          <div class="mc-feature-box">
+            <span class="mc-feature-box__emoji">🚿</span>
+            <div>
+              <strong>{{ casa.numeroBanos || 0 }}</strong>
+              <small>Baños</small>
+            </div>
+          </div>
+
+          <div class="mc-feature-box">
+            <span class="mc-feature-box__emoji">🍳</span>
+            <div>
+              <strong>{{ casa.numeroCocinas || 0 }}</strong>
+              <small>Cocinas</small>
+            </div>
+          </div>
+
+          <div class="mc-feature-box">
+            <span class="mc-feature-box__emoji">🍽</span>
+            <div>
+              <strong>{{ casa.numeroComedores || 0 }}</strong>
+              <small>Comedores</small>
+            </div>
+          </div>
+
+          <div class="mc-feature-box">
+            <span class="mc-feature-box__emoji">🚗</span>
+            <div>
+              <strong>{{ casa.numeroGarajes || 0 }}</strong>
+              <small>Garajes</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <p class="mc-house-description" *ngIf="casa.descripcion">{{ casa.descripcion }}</p>
+
+        <!-- Acciones -->
+        <div class="mc-house-card__footer">
+          <button
+            type="button"
+            [routerLink]="['/casas/editar', casa.id]"
+            class="mc-btn mc-btn--primary mc-btn--small">
+            Editar
+          </button>
+
+          <button
+            type="button"
+            (click)="eliminarCasa(casa)"
+            [disabled]="eliminandoId === casa.id"
+            class="mc-btn mc-btn--danger mc-btn--small">
+            {{ eliminandoId === casa.id ? 'Eliminando...' : 'Eliminar' }}
+          </button>
+        </div>
+      </div>
+    </article>
   </div>
 </div>
+
