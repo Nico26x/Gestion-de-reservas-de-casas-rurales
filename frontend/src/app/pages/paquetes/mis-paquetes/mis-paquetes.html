@@ -1,56 +1,112 @@
-<div>
-  <h2>Mis paquetes</h2>
+<div class="mp-shell">
+  <!-- Estado de carga -->
+  <section class="mp-loading-state" *ngIf="cargando">
+    <div class="mp-loading-state__spinner"></div>
+    <p>Cargando paquetes...</p>
+  </section>
 
-  <div *ngIf="mensajeError" style="color: red; margin: 10px 0;">
-    {{ mensajeError }}
-  </div>
+  <!-- Contenido principal -->
+  <div *ngIf="!cargando" class="mp-content">
+    <!-- Header -->
+    <header class="mp-header">
+      <div>
+        <p class="mp-section-mini">Gestión de paquetes</p>
+        <h1 class="mp-header__title">Mis paquetes</h1>
+        <p class="mp-header__description">Consulta y administra los paquetes de alquiler de tus casas rurales</p>
+      </div>
+      <button class="mp-btn mp-btn--secondary" (click)="refrescar()" title="Refrescar lista de paquetes">
+        🔄 Refrescar
+      </button>
+    </header>
 
-  <div *ngIf="mensajeExito" style="color: green; margin: 10px 0;">
-    {{ mensajeExito }}
-  </div>
+    <!-- Mensajes de error/éxito -->
+    <div *ngIf="mensajeError" class="mp-alert mp-alert--error">
+      <span class="mp-alert__icon">!</span>
+      <div class="mp-alert__content">
+        <p class="mp-alert__title">Error</p>
+        <p class="mp-alert__message">{{ mensajeError }}</p>
+      </div>
+    </div>
 
-  <div *ngIf="cargando" style="color: blue; margin: 10px 0;">
-    Cargando paquetes...
-  </div>
+    <div *ngIf="mensajeExito" class="mp-alert mp-alert--success">
+      <span class="mp-alert__icon">✓</span>
+      <div class="mp-alert__content">
+        <p class="mp-alert__title">Éxito</p>
+        <p class="mp-alert__message">{{ mensajeExito }}</p>
+      </div>
+    </div>
 
-  <div *ngIf="!cargando" style="margin: 10px 0;">
-    <button (click)="refrescar()">Refrescar</button>
-  </div>
+    <!-- Estado vacío -->
+    <section class="mp-empty-state" *ngIf="paquetes.length === 0">
+      <div class="mp-empty-state__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M20 7H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm0 12H4V9h16v10z" stroke="currentColor" stroke-width="1.5" fill="currentColor" opacity="0.5"/>
+        </svg>
+      </div>
+      <h3>No tienes paquetes registrados</h3>
+      <p>Comienza creando nuevos paquetes de alquiler para tus casas rurales</p>
+    </section>
 
-  <div *ngIf="!cargando && paquetes.length === 0">
-    <p>No tienes paquetes registrados.</p>
-  </div>
-
-  <div *ngIf="!cargando && paquetes.length > 0">
-    <table border="1" style="border-collapse: collapse; width: 100%; margin-top: 20px;">
-      <thead>
-        <tr>
-          <th style="padding: 8px;">ID</th>
-          <th style="padding: 8px;">Casa</th>
-          <th style="padding: 8px;">Población</th>
-          <th style="padding: 8px;">Fecha Inicio</th>
-          <th style="padding: 8px;">Fecha Fin</th>
-          <th style="padding: 8px;">Modalidad</th>
-          <th style="padding: 8px;">Precio Casa</th>
-          <th style="padding: 8px;">Precio Habitación</th>
-          <th style="padding: 8px;">Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let paquete of paquetes">
-          <td style="padding: 8px;">{{ paquete.id }}</td>
-          <td style="padding: 8px;">{{ paquete.nombreCasa }}</td>
-          <td style="padding: 8px;">{{ paquete.poblacionCasa }}</td>
-          <td style="padding: 8px;">{{ paquete.fechaInicio }}</td>
-          <td style="padding: 8px;">{{ paquete.fechaFin }}</td>
-          <td style="padding: 8px;">{{ paquete.modalidad }}</td>
-          <td style="padding: 8px;">{{ paquete.precio ?? '-' }}</td>
-          <td style="padding: 8px;">{{ paquete.precioHabitacion ?? '-' }}</td>
-          <td style="padding: 8px;">
-            <button (click)="editarPaquete(paquete.id!)">Editar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Tabla de paquetes -->
+    <section class="mp-table-wrapper" *ngIf="paquetes.length > 0">
+      <div class="mp-table-container">
+        <table class="mp-tabla-paquetes">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Casa</th>
+              <th>Población</th>
+              <th>Fechas</th>
+              <th>Modalidad</th>
+              <th>Precios</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let paquete of paquetes" class="mp-paquete-row">
+              <td class="mp-cell-id">
+                <span class="mp-id-badge">#{{ paquete.id }}</span>
+              </td>
+              <td class="mp-cell-casa">{{ paquete.nombreCasa }}</td>
+              <td class="mp-cell-poblacion">{{ paquete.poblacionCasa }}</td>
+              <td class="mp-cell-fechas">
+                <div class="mp-fecha-item">
+                  <span class="mp-fecha-label">Inicio:</span>
+                  <span class="mp-fecha-value">{{ paquete.fechaInicio }}</span>
+                </div>
+                <div class="mp-fecha-item">
+                  <span class="mp-fecha-label">Fin:</span>
+                  <span class="mp-fecha-value">{{ paquete.fechaFin }}</span>
+                </div>
+              </td>
+              <td class="mp-cell-modalidad">
+                <span class="mp-modalidad-badge">{{ paquete.modalidad }}</span>
+              </td>
+              <td class="mp-cell-precios">
+                <div class="mp-precio-item">
+                  <span class="mp-precio-label">Casa:</span>
+                  <span class="mp-precio-value">$ {{ paquete.precio ?? '-' }}</span>
+                </div>
+                <div class="mp-precio-item">
+                  <span class="mp-precio-label">Hab:</span>
+                  <span class="mp-precio-value">$ {{ paquete.precioHabitacion ?? '-' }}</span>
+                </div>
+              </td>
+              <td class="mp-cell-accion">
+                <button
+                  type="button"
+                  (click)="editarPaquete(paquete.id!)"
+                  class="mp-btn mp-btn--small mp-btn--primary"
+                  title="Editar paquete"
+                >
+                  Editar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </div>
+

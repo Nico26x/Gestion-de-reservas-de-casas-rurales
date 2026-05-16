@@ -1,0 +1,572 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mp-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(180deg, #f8fbff 0%, #eff6ff 54%, #edf4ff 100%);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+.mp-loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mp-loading-state__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid #d9e8fb;
+  border-top-color: #3274dc;
+  animation: spin 0.9s linear infinite;
+}
+
+.mp-loading-state p {
+  margin: 0;
+  color: #58749a;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.mp-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.mp-header {
+  border-radius: 24px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.mp-section-mini {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #3f77ca;
+}
+
+.mp-header__title {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #153761;
+  line-height: 1.2;
+}
+
+.mp-header__description {
+  margin: 0;
+  color: #5e789d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+.mp-alert {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border: 1px solid;
+}
+
+.mp-alert--success {
+  background: #e5f5e5;
+  border-color: #b3e5b3;
+}
+
+.mp-alert--success .mp-alert__icon {
+  color: #2d7a3e;
+  font-weight: 800;
+}
+
+.mp-alert--error {
+  background: #ffe5e5;
+  border-color: #f0d5d5;
+}
+
+.mp-alert--error .mp-alert__icon {
+  color: #c33a3a;
+  font-weight: 800;
+}
+
+.mp-alert__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.mp-alert__content {
+  flex: 1;
+}
+
+.mp-alert__title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.mp-alert__message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+.mp-empty-state {
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(124, 160, 220, 0.18);
+  box-shadow: 0 16px 40px rgba(35, 70, 125, 0.08);
+}
+
+.mp-empty-state__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #4a7dca;
+  border: 1px solid #dae8fb;
+}
+
+.mp-empty-state__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.mp-empty-state h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #173863;
+  font-weight: 800;
+}
+
+.mp-empty-state p {
+  margin: 0;
+  color: #5e789d;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+.mp-table-wrapper {
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+}
+
+.mp-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mp-tabla-paquetes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.mp-tabla-paquetes thead {
+  background: linear-gradient(180deg, #f0f7ff 0%, #e6f0ff 100%);
+  border-bottom: 2px solid #d9e8fb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mp-tabla-paquetes th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #153761;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.mp-tabla-paquetes tbody tr {
+  border-bottom: 1px solid #e6f0ff;
+  transition: background-color 0.2s ease;
+}
+
+.mp-tabla-paquetes tbody tr:hover {
+  background: linear-gradient(90deg, rgba(52, 116, 220, 0.04), transparent);
+}
+
+.mp-tabla-paquetes td {
+  padding: 1rem;
+  color: #2b5c8c;
+}
+
+.mp-paquete-row {
+  position: relative;
+}
+
+.mp-cell-id {
+  font-weight: 700;
+}
+
+.mp-id-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #2f67b6;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: 1px solid #dae8fb;
+}
+
+.mp-cell-casa {
+  font-weight: 600;
+  color: #153761;
+}
+
+.mp-cell-poblacion {
+  font-size: 0.85rem;
+  color: #5a7a9d;
+}
+
+.mp-cell-fechas {
+  font-size: 0.85rem;
+}
+
+.mp-fecha-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.mp-fecha-label {
+  font-size: 0.75rem;
+  color: #7095be;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.mp-fecha-value {
+  color: #153761;
+  font-weight: 500;
+}
+
+.mp-cell-modalidad {
+  text-align: center;
+}
+
+.mp-modalidad-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #2f67b6;
+  font-weight: 700;
+  font-size: 0.8rem;
+  border: 1px solid #dae8fb;
+}
+
+.mp-cell-precios {
+  font-size: 0.85rem;
+}
+
+.mp-precio-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.mp-precio-label {
+  font-size: 0.75rem;
+  color: #7095be;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  min-width: 35px;
+}
+
+.mp-precio-value {
+  color: #153761;
+  font-weight: 600;
+}
+
+.mp-cell-accion {
+  text-align: center;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.mp-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.mp-btn--primary {
+  background: linear-gradient(180deg, #4a9ef5 0%, #3274dc 100%);
+  color: #ffffff;
+  border: 1px solid #2d6bc4;
+}
+
+.mp-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(50, 116, 220, 0.3);
+}
+
+.mp-btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mp-btn--secondary {
+  background: rgba(255, 255, 255, 0.5);
+  color: #3274dc;
+  border: 1.5px solid #d9e8fb;
+}
+
+.mp-btn--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #b3d9ff;
+  box-shadow: 0 2px 8px rgba(50, 116, 220, 0.15);
+}
+
+.mp-btn--small {
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+}
+
+.mp-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1024px) {
+  .mp-shell {
+    padding: 1.5rem;
+  }
+
+  .mp-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mp-tabla-paquetes th {
+    padding: 1rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .mp-tabla-paquetes td {
+    padding: 0.9rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .mp-cell-fechas,
+  .mp-cell-precios {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .mp-shell {
+    padding: 1rem;
+  }
+
+  .mp-header {
+    padding: 1.5rem;
+    flex-direction: column;
+  }
+
+  .mp-header__title {
+    font-size: 1.5rem;
+  }
+
+  .mp-tabla-paquetes th {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .mp-tabla-paquetes td {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .mp-id-badge {
+    min-width: 40px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .mp-modalidad-badge {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .mp-fecha-item,
+  .mp-precio-item {
+    margin-bottom: 0.3rem;
+  }
+
+  .mp-fecha-label,
+  .mp-precio-label {
+    font-size: 0.7rem;
+  }
+
+  .mp-fecha-value,
+  .mp-precio-value {
+    font-size: 0.8rem;
+  }
+
+  .mp-btn--small {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .mp-shell {
+    padding: 0.75rem;
+  }
+
+  .mp-header {
+    padding: 1.25rem;
+  }
+
+  .mp-header__title {
+    font-size: 1.25rem;
+  }
+
+  .mp-section-mini {
+    font-size: 0.65rem;
+  }
+
+  .mp-tabla-paquetes {
+    font-size: 0.75rem;
+  }
+
+  .mp-tabla-paquetes th {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .mp-tabla-paquetes td {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .mp-id-badge {
+    min-width: 35px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .mp-modalidad-badge {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .mp-fecha-label,
+  .mp-precio-label {
+    font-size: 0.6rem;
+    min-width: 30px;
+  }
+
+  .mp-fecha-value,
+  .mp-precio-value {
+    font-size: 0.75rem;
+  }
+
+  .mp-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .mp-btn--small {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.65rem;
+  }
+
+  .mp-empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .mp-empty-state h3 {
+    font-size: 1.1rem;
+  }
+
+  .mp-empty-state p {
+    font-size: 0.85rem;
+  }
+}
