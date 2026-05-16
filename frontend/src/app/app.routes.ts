@@ -13,6 +13,7 @@ import { EditarPaqueteComponent } from './pages/paquetes/editar-paquete/editar-p
 import { MisPaquetesComponent } from './pages/paquetes/mis-paquetes/mis-paquetes';
 import { CrearReservaComponent } from './pages/reservas/crear-reserva/crear-reserva';
 import { ReservasRecibidasComponent } from './pages/reservas/reservas-recibidas/reservas-recibidas';
+import { ReservasVencidasComponent } from './pages/reservas/reservas-vencidas/reservas-vencidas';
 import { NotFoundComponent } from './pages/not-found/not-found';
 import { DefinirDisponibilidadComponent } from './pages/disponibilidad/definir-disponibilidad/definir-disponibilidad';
 import { ConsultarDisponibilidadComponent } from './pages/disponibilidad/consultar-disponibilidad/consultar-disponibilidad';
@@ -37,6 +38,7 @@ export const routes: Routes = [
   { path: 'paquetes', component: MisPaquetesComponent, canActivate: [ownerGuard] },
   { path: 'reservas/crear', component: CrearReservaComponent, canActivate: [authGuard] },
   { path: 'reservas/recibidas', component: ReservasRecibidasComponent, canActivate: [ownerGuard] },
+  { path: 'reservas/vencidas', component: ReservasVencidasComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'pagos/registrar', component: RegistrarPagoComponent, canActivate: [authGuard] },

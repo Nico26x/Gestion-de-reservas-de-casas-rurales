@@ -351,6 +351,7 @@ public class ReservaService {
 
         ReservaResponseDTO dto = new ReservaResponseDTO();
 
+        dto.setReservaId(reserva.getId());
         dto.setNumeroReserva(reserva.getNumeroReserva());
         dto.setFechaEntrada(reserva.getFechaEntrada());
         dto.setNumeroNoches(reserva.getNumeroNoches());
@@ -399,6 +400,8 @@ public ReservaResponseDTO gestionarReservaVencida(
 
     if (accionNormalizada.equals("ANULAR")) {
         reserva.setEstadoReserva(EstadoReserva.CANCELADA);
+        // Liberar disponibilidad al anular
+        liberarDisponibilidadDeReserva(reserva);
     } else if (accionNormalizada.equals("MANTENER")) {
         reserva.setEstadoReserva(EstadoReserva.PENDIENTE);
     } else {
@@ -439,31 +442,7 @@ private Long generarNumeroReservaUnico() {
     return numero;
 }
 
-@Transactional
-public String cancelarReserva(Long reservaId, String nombreCuenta) {
-
-    // Buscar reserva
-    Reserva reserva = reservaRepository.findById(reservaId)
-            .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
-
-    // Validar propietario autenticado
-    if (!reserva.getCasaId()
-            .getPropietario()
-            .getNombreCuenta()
-            .equals(nombreCuenta)) {
-
-        throw new RuntimeException(
-                "No tiene permisos para cancelar esta reserva");
-    }
-
-    // Validar que no esté ya cancelada
-    if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
-        throw new RuntimeException("La reserva ya está cancelada");
-    }
-
-    // Cambiar estado de reserva
-    reserva.setEstadoReserva(EstadoReserva.CANCELADA);
-
+private void liberarDisponibilidadDeReserva(Reserva reserva) {
     // Obtener rango de fechas
     LocalDate fechaInicio = reserva.getFechaEntrada();
     LocalDate fechaFin = fechaInicio.plusDays(reserva.getNumeroNoches());
@@ -527,6 +506,35 @@ public String cancelarReserva(Long reservaId, String nombreCuenta) {
             }
         }
     }
+}
+
+@Transactional
+public String cancelarReserva(Long reservaId, String nombreCuenta) {
+
+    // Buscar reserva
+    Reserva reserva = reservaRepository.findById(reservaId)
+            .orElseThrow(() -> new RuntimeException("Reserva no encontrada"));
+
+    // Validar propietario autenticado
+    if (!reserva.getCasaId()
+            .getPropietario()
+            .getNombreCuenta()
+            .equals(nombreCuenta)) {
+
+        throw new RuntimeException(
+                "No tiene permisos para cancelar esta reserva");
+    }
+
+    // Validar que no esté ya cancelada
+    if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+        throw new RuntimeException("La reserva ya está cancelada");
+    }
+
+    // Cambiar estado de reserva
+    reserva.setEstadoReserva(EstadoReserva.CANCELADA);
+
+    // Liberar disponibilidad
+    liberarDisponibilidadDeReserva(reserva);
 
     // Guardar reserva cancelada
     reservaRepository.save(reserva);
