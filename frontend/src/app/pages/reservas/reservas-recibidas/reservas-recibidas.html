@@ -1,67 +1,100 @@
-<div class="container">
-  <h1>Reservas Recibidas</h1>
+<div class="rr-shell">
+  <!-- Estado de carga -->
+  <section class="rr-loading-state" *ngIf="loading">
+    <div class="rr-loading-state__spinner"></div>
+    <p>Cargando reservas...</p>
+  </section>
 
-  <div *ngIf="loading" class="loading">
-    Cargando reservas...
-  </div>
+  <!-- Contenido principal -->
+  <div *ngIf="!loading" class="rr-content">
+    <!-- Header -->
+    <header class="rr-header">
+      <div>
+        <p class="rr-section-mini">Gestión de reservas</p>
+        <h1 class="rr-header__title">Reservas recibidas</h1>
+        <p class="rr-header__description">Consulta y gestiona las reservas realizadas sobre tus casas rurales</p>
+      </div>
+    </header>
 
-  <div *ngIf="!loading && reservas.length === 0" class="no-reservas">
-    <p>No hay reservas recibidas en este momento.</p>
-  </div>
+    <!-- Estado vacío -->
+    <section class="rr-empty-state" *ngIf="reservas.length === 0">
+      <div class="rr-empty-state__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9 22v-12h6v12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No tienes reservas recibidas</h3>
+      <p>Cuando tus casas reciban reservas, aparecerán listadas aquí.</p>
+    </section>
 
-  <div *ngIf="!loading && reservas.length > 0" class="tabla-container">
-    <table class="tabla-reservas">
-      <thead>
-        <tr>
-          <th>Número Reserva</th>
-          <th>Casa</th>
-          <th>Población</th>
-          <th>Fecha Entrada</th>
-          <th>Noches</th>
-          <th>Teléfono Cliente</th>
-          <th>Importe Total</th>
-          <th>Anticipo 20%</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reserva of reservas">
-          <td>{{ reserva.numeroReserva }}</td>
-          <td>{{ reserva.nombreCasa }}</td>
-          <td>{{ reserva.poblacionCasa }}</td>
-          <td>{{ reserva.fechaEntrada }}</td>
-          <td>{{ reserva.numeroNoches }}</td>
-          <td>{{ reserva.telefonoCliente }}</td>
-          <td>{{ reserva.importeTotal | currency }}</td>
-          <td>{{ reserva.anticipo | currency }}</td>
-          <td [style.color]="obtenerColorEstado(reserva.estadoReserva)">
-            {{ reserva.estadoReserva }}
-          </td>
-          <td>
-            <button 
-              type="button" 
-              (click)="copiarNumeroReserva(reserva.numeroReserva)"
-              class="btn-copiar">
-              Copiar
-            </button>
-            <button 
-              type="button" 
-              (click)="irARegistrarPago(reserva.numeroReserva)"
-              class="btn-pago">
-              Registrar Pago
-            </button>
-            <button 
-              type="button" 
-              (click)="cancelarReserva(reserva)"
-              [disabled]="cancelandoId === reserva.reservaId"
-              *ngIf="reserva.estadoReserva !== 'CANCELADA'"
-              class="btn-cancelar">
-              {{ cancelandoId === reserva.reservaId ? 'Cancelando...' : 'Cancelar' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Tabla de reservas -->
+    <section class="rr-table-wrapper" *ngIf="reservas.length > 0">
+      <div class="rr-table-container">
+        <table class="rr-tabla-reservas">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Casa</th>
+              <th>Población</th>
+              <th>Entrada</th>
+              <th>Noches</th>
+              <th>Teléfono</th>
+              <th>Importe</th>
+              <th>Anticipo</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reserva of reservas" [class.rr-row--cancelada]="reserva.estadoReserva === 'CANCELADA'">
+              <td class="rr-cell-numero">
+                <span class="rr-numero-badge">{{ reserva.numeroReserva }}</span>
+              </td>
+              <td>{{ reserva.nombreCasa }}</td>
+              <td>{{ reserva.poblacionCasa }}</td>
+              <td class="rr-fecha">{{ reserva.fechaEntrada }}</td>
+              <td class="rr-noches">{{ reserva.numeroNoches }}</td>
+              <td class="rr-telefono">{{ reserva.telefonoCliente }}</td>
+              <td class="rr-importe">{{ reserva.importeTotal | currency }}</td>
+              <td class="rr-anticipo">{{ reserva.anticipo | currency }}</td>
+              <td>
+                <span class="rr-badge" [ngClass]="'rr-badge--' + obtenerClaseEstado(reserva.estadoReserva)">
+                  {{ reserva.estadoReserva }}
+                </span>
+              </td>
+              <td class="rr-acciones">
+                <div class="rr-acciones-group">
+                  <button 
+                    type="button" 
+                    (click)="copiarNumeroReserva(reserva.numeroReserva)"
+                    title="Copiar número de reserva"
+                    class="rr-btn rr-btn--icon">
+                    📋
+                  </button>
+                  <button 
+                    type="button" 
+                    (click)="irARegistrarPago(reserva.numeroReserva)"
+                    title="Registrar pago"
+                    class="rr-btn rr-btn--primary rr-btn--small">
+                    Pago
+                  </button>
+                  <button 
+                    type="button" 
+                    (click)="cancelarReserva(reserva)"
+                    [disabled]="cancelandoId === reserva.reservaId"
+                    *ngIf="reserva.estadoReserva !== 'CANCELADA'"
+                    title="Cancelar reserva"
+                    class="rr-btn rr-btn--danger rr-btn--small">
+                    {{ cancelandoId === reserva.reservaId ? '...' : '✕' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </div>
+

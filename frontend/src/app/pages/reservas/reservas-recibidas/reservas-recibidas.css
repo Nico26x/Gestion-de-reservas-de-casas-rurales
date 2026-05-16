@@ -1,74 +1,494 @@
-/* Estilos básicos sin diseño decorativo */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-.container {
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.rr-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(180deg, #f8fbff 0%, #eff6ff 54%, #edf4ff 100%);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+.rr-loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rr-loading-state__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid #d9e8fb;
+  border-top-color: #3274dc;
+  animation: spin 0.9s linear infinite;
+}
+
+.rr-loading-state p {
+  margin: 0;
+  color: #58749a;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.rr-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.rr-header {
+  border-radius: 24px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+}
+
+.rr-section-mini {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #3f77ca;
+}
+
+.rr-header__title {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #153761;
+  line-height: 1.2;
+}
+
+.rr-header__description {
+  margin: 0;
+  color: #5e789d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+.rr-empty-state {
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(124, 160, 220, 0.18);
+  box-shadow: 0 16px 40px rgba(35, 70, 125, 0.08);
+}
+
+.rr-empty-state__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #4a7dca;
+  border: 1px solid #dae8fb;
+}
+
+.rr-empty-state__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.rr-empty-state h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #173863;
+  font-weight: 800;
+}
+
+.rr-empty-state p {
+  margin: 0;
+  color: #5e789d;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+.rr-table-wrapper {
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+}
+
+.rr-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rr-tabla-reservas {
   width: 100%;
-  padding: 20px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
 }
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+.rr-tabla-reservas thead {
+  background: linear-gradient(180deg, #f0f7ff 0%, #e6f0ff 100%);
+  border-bottom: 2px solid #d9e8fb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.loading {
-  text-align: center;
-  padding: 20px;
+.rr-tabla-reservas th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #153761;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
-.no-reservas {
-  text-align: center;
-  padding: 20px;
+.rr-tabla-reservas tbody tr {
+  border-bottom: 1px solid #e6f0ff;
+  transition: background-color 0.2s ease;
+}
+
+.rr-tabla-reservas tbody tr:hover {
+  background: linear-gradient(90deg, rgba(52, 116, 220, 0.04), transparent);
+}
+
+.rr-tabla-reservas tbody tr.rr-row--cancelada {
+  opacity: 0.65;
+  background: rgba(248, 251, 255, 0.5);
+}
+
+.rr-tabla-reservas td {
+  padding: 1rem;
+  color: #2b5c8c;
+  word-break: break-word;
+}
+
+.rr-cell-numero {
+  font-weight: 700;
+}
+
+.rr-numero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #2f67b6;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid #dae8fb;
+}
+
+.rr-fecha,
+.rr-noches,
+.rr-telefono {
+  font-size: 0.85rem;
+  color: #5a7a9d;
+}
+
+.rr-importe,
+.rr-anticipo {
+  font-weight: 600;
+  color: #163a6d;
+}
+
+/* =========================================================
+   BADGES (Estado)
+   ========================================================= */
+.rr-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 90px;
+}
+
+.rr-badge--pendiente {
+  background: #fff8e5;
+  color: #b89600;
+  border: 1px solid #ffe4a0;
+}
+
+.rr-badge--confirmada {
+  background: #e5f5e5;
+  color: #2d7a3e;
+  border: 1px solid #b3e5b3;
+}
+
+.rr-badge--expirada {
+  background: #ffe5e5;
+  color: #c33a3a;
+  border: 1px solid #f0d5d5;
+}
+
+.rr-badge--cancelada {
+  background: #e8e8e8;
+  color: #666;
+  border: 1px solid #d0d0d0;
+}
+
+.rr-badge--default {
+  background: #f0f0f0;
   color: #666;
 }
 
-.tabla-container {
-  overflow-x: auto;
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+.rr-acciones {
+  position: relative;
 }
 
-.tabla-reservas {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.rr-acciones-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.tabla-reservas thead {
-  background-color: #f5f5f5;
-}
-
-.tabla-reservas th,
-.tabla-reservas td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-.tabla-reservas th {
-  font-weight: bold;
-}
-
-.tabla-reservas tbody tr:nth-child(even) {
-  background-color: #fafafa;
-}
-
-.tabla-reservas tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
-.btn-copiar,
-.btn-pago {
-  margin-right: 8px;
-  padding: 6px 12px;
-  font-size: 12px;
+.rr-btn {
+  padding: 0.55rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  border-radius: 4px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
 }
 
-.btn-copiar:hover {
-  background-color: #e8e8e8;
+.rr-btn--icon {
+  background: transparent;
+  color: #3274dc;
+  border: none;
+  padding: 0.4rem;
+  min-width: auto;
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
 }
 
-.btn-pago:hover {
-  background-color: #e8e8e8;
+.rr-btn--icon:hover:not(:disabled) {
+  background: rgba(52, 116, 220, 0.1);
+  border-radius: 8px;
+}
+
+.rr-btn--primary {
+  background: linear-gradient(180deg, #4a9ef5 0%, #3274dc 100%);
+  color: #ffffff;
+  border: 1px solid #2d6bc4;
+}
+
+.rr-btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 135, 240, 0.25);
+}
+
+.rr-btn--danger {
+  background: #fff5f5;
+  color: #c33a3a;
+  border: 1.5px solid #f0d5d5;
+}
+
+.rr-btn--danger:hover:not(:disabled) {
+  background: #ffe5e5;
+  border-color: #e24b4a;
+}
+
+.rr-btn--danger:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.rr-btn--small {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.75rem;
+}
+
+.rr-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1024px) {
+  .rr-shell {
+    padding: 1.5rem;
+  }
+
+  .rr-tabla-reservas th {
+    padding: 1rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .rr-tabla-reservas td {
+    padding: 0.9rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .rr-acciones-group {
+    gap: 0.35rem;
+  }
+
+  .rr-btn--small {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .rr-shell {
+    padding: 1rem;
+  }
+
+  .rr-header {
+    padding: 1.5rem;
+  }
+
+  .rr-header__title {
+    font-size: 1.5rem;
+  }
+
+  .rr-tabla-reservas th {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .rr-tabla-reservas td {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .rr-numero-badge {
+    min-width: 50px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .rr-badge {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+    min-width: 75px;
+  }
+
+  .rr-acciones-group {
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+  }
+
+  .rr-btn--icon {
+    width: 28px;
+    height: 28px;
+    padding: 0.3rem;
+    font-size: 0.9rem;
+  }
+
+  .rr-btn--small {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rr-shell {
+    padding: 0.75rem;
+  }
+
+  .rr-header {
+    padding: 1.25rem;
+  }
+
+  .rr-header__title {
+    font-size: 1.3rem;
+  }
+
+  .rr-section-mini {
+    font-size: 0.7rem;
+  }
+
+  .rr-tabla-reservas {
+    font-size: 0.75rem;
+  }
+
+  .rr-tabla-reservas th {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .rr-tabla-reservas td {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .rr-acciones {
+    white-space: normal;
+  }
+
+  .rr-acciones-group {
+    width: 100%;
+  }
+
+  .rr-btn {
+    flex: 1;
+    min-width: 32px;
+  }
+
+  .rr-btn--icon {
+    width: 26px;
+    height: 26px;
+    font-size: 0.9rem;
+  }
+
+  .rr-btn--small {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.6rem;
+  }
 }

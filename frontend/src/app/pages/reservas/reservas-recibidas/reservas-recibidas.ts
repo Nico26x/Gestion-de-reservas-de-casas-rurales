@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 import { ReservasService } from '../../../core/services/reservas/reservas.service';
 import { ReservaNotificacion } from '../../../core/models/reservas/reserva-notificacion.model';
 import {
@@ -52,12 +53,21 @@ export class ReservasRecibidasComponent implements OnInit {
     this.router.navigate(['/pagos/registrar'], { queryParams: { numeroReserva } });
   }
 
-  cancelarReserva(reserva: ReservaNotificacion): void {
-    const confirmacion = window.confirm(
-      `¿Estás seguro de que deseas cancelar la reserva ${reserva.numeroReserva}?`
-    );
+  async cancelarReserva(reserva: ReservaNotificacion): Promise<void> {
+    const resultado = await Swal.fire({
+      title: '¿Cancelar reserva?',
+      text: `¿Estás seguro de que deseas cancelar la reserva ${reserva.numeroReserva}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      background: '#ffffff',
+      color: '#10243a'
+    });
 
-    if (!confirmacion) {
+    if (!resultado.isConfirmed) {
       return;
     }
 
@@ -89,6 +99,21 @@ export class ReservasRecibidasComponent implements OnInit {
         return 'gray';
       default:
         return 'black';
+    }
+  }
+
+  obtenerClaseEstado(estado: string): string {
+    switch (estado) {
+      case 'PENDIENTE':
+        return 'pendiente';
+      case 'CONFIRMADA':
+        return 'confirmada';
+      case 'EXPIRADA':
+        return 'expirada';
+      case 'CANCELADA':
+        return 'cancelada';
+      default:
+        return 'default';
     }
   }
 }
