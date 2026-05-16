@@ -8,6 +8,7 @@ import { RegisterComponent } from './pages/auth/register/register';
 import { CrearCasaComponent } from './pages/casas/crear-casa/crear-casa';
 import { DetalleCasaComponent } from './pages/casas/detalle-casa/detalle-casa';
 import { MisCasasComponent } from './pages/casas/mis-casas/mis-casas';
+import { EditarCasaComponent } from './pages/casas/editar-casa/editar-casa';
 import { CrearPaqueteComponent } from './pages/paquetes/crear-paquete/crear-paquete';
 import { EditarPaqueteComponent } from './pages/paquetes/editar-paquete/editar-paquete';
 import { MisPaquetesComponent } from './pages/paquetes/mis-paquetes/mis-paquetes';
@@ -31,6 +32,7 @@ export const routes: Routes = [
 
   { path: 'casas/crear', component: CrearCasaComponent, canActivate: [authGuard] },
   { path: 'casas/mis-casas', component: MisCasasComponent, canActivate: [authGuard] },
+  { path: 'casas/editar/:id', component: EditarCasaComponent, canActivate: [authGuard] },
   { path: 'casas/buscar', component: BuscarCasasComponent },
   { path: 'casas/:id', component: DetalleCasaComponent },
   { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [authGuard] },

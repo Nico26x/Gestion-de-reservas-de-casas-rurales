@@ -56,4 +56,12 @@ export class CasasService {
   eliminarCasa(casaId: number): Observable<string> {
     return this.http.delete(`${this.apiUrl}/${casaId}`, { responseType: 'text' });
   }
+
+  actualizarCasa(id: number, formData: FormData): Observable<Casa> {
+    return this.http.put<Casa>(`${this.apiUrl}/${id}`, formData);
+  }
+
+  obtenerCasaPorId(id: number): Observable<Casa> {
+    return this.http.get<Casa>(`${this.apiUrl}/${id}`);
+  }
 }

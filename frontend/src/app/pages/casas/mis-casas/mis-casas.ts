@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { CasasService } from '../../../core/services/casas/casas.service';
 import { Casa } from '../../../core/models/casas/casa.model';
 import {
@@ -10,7 +11,7 @@ import {
 @Component({
   selector: 'app-mis-casas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './mis-casas.html',
   styleUrl: './mis-casas.css'
 })

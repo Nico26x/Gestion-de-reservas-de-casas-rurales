@@ -32,6 +32,12 @@
           <td>{{ casa.numeroCocinas }}</td>
           <td>
             <button 
+              type="button"
+              [routerLink]="['/casas/editar', casa.id]"
+              class="btn-editar">
+              Editar
+            </button>
+            <button 
               type="button" 
               (click)="eliminarCasa(casa)"
               [disabled]="eliminandoId === casa.id"

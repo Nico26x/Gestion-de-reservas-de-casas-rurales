@@ -1,0 +1,216 @@
+<div class="container">
+  <h1>Editar casa</h1>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando casa...
+  </div>
+
+  <div *ngIf="error && !cargando" class="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <div *ngIf="!cargando && !error" class="formulario-container">
+    <form [formGroup]="formulario">
+      <div class="form-group">
+        <label for="nombre">Nombre *</label>
+        <input
+          type="text"
+          id="nombre"
+          formControlName="nombre"
+          placeholder="Nombre de la casa"
+          [class.invalid]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
+        <span *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="direccion">Dirección *</label>
+        <input
+          type="text"
+          id="direccion"
+          formControlName="direccion"
+          placeholder="Dirección"
+          [class.invalid]="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched">
+        <span *ngIf="formulario.get('direccion')?.invalid && formulario.get('direccion')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="poblacion">Población *</label>
+        <input
+          type="text"
+          id="poblacion"
+          formControlName="poblacion"
+          placeholder="Población"
+          [class.invalid]="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched">
+        <span *ngIf="formulario.get('poblacion')?.invalid && formulario.get('poblacion')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          formControlName="descripcion"
+          placeholder="Descripción de la casa"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroHabitaciones">Número de habitaciones *</label>
+        <input
+          type="number"
+          id="numeroHabitaciones"
+          formControlName="numeroHabitaciones"
+          min="3"
+          [class.invalid]="formulario.get('numeroHabitaciones')?.invalid && formulario.get('numeroHabitaciones')?.touched">
+        <span *ngIf="formulario.get('numeroHabitaciones')?.hasError('required') && formulario.get('numeroHabitaciones')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+        <span *ngIf="formulario.get('numeroHabitaciones')?.hasError('min') && formulario.get('numeroHabitaciones')?.touched" class="error-msg">
+          Mínimo 3 habitaciones
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroBanos">Número de baños *</label>
+        <input
+          type="number"
+          id="numeroBanos"
+          formControlName="numeroBanos"
+          min="2"
+          [class.invalid]="formulario.get('numeroBanos')?.invalid && formulario.get('numeroBanos')?.touched">
+        <span *ngIf="formulario.get('numeroBanos')?.hasError('required') && formulario.get('numeroBanos')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+        <span *ngIf="formulario.get('numeroBanos')?.hasError('min') && formulario.get('numeroBanos')?.touched" class="error-msg">
+          Mínimo 2 baños
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroCocinas">Número de cocinas *</label>
+        <input
+          type="number"
+          id="numeroCocinas"
+          formControlName="numeroCocinas"
+          min="1"
+          [class.invalid]="formulario.get('numeroCocinas')?.invalid && formulario.get('numeroCocinas')?.touched">
+        <span *ngIf="formulario.get('numeroCocinas')?.hasError('required') && formulario.get('numeroCocinas')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+        <span *ngIf="formulario.get('numeroCocinas')?.hasError('min') && formulario.get('numeroCocinas')?.touched" class="error-msg">
+          Mínimo 1 cocina
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroComedores">Número de comedores *</label>
+        <input
+          type="number"
+          id="numeroComedores"
+          formControlName="numeroComedores"
+          min="1"
+          [class.invalid]="formulario.get('numeroComedores')?.invalid && formulario.get('numeroComedores')?.touched">
+        <span *ngIf="formulario.get('numeroComedores')?.hasError('required') && formulario.get('numeroComedores')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+        <span *ngIf="formulario.get('numeroComedores')?.hasError('min') && formulario.get('numeroComedores')?.touched" class="error-msg">
+          Mínimo 1 comedor
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroCamas">Número de camas *</label>
+        <input
+          type="number"
+          id="numeroCamas"
+          formControlName="numeroCamas"
+          min="1"
+          [class.invalid]="formulario.get('numeroCamas')?.invalid && formulario.get('numeroCamas')?.touched">
+        <span *ngIf="formulario.get('numeroCamas')?.hasError('required') && formulario.get('numeroCamas')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+        <span *ngIf="formulario.get('numeroCamas')?.hasError('min') && formulario.get('numeroCamas')?.touched" class="error-msg">
+          Mínimo 1 cama
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="numeroGarajes">Número de garajes *</label>
+        <input
+          type="number"
+          id="numeroGarajes"
+          formControlName="numeroGarajes"
+          min="0"
+          [class.invalid]="formulario.get('numeroGarajes')?.invalid && formulario.get('numeroGarajes')?.touched">
+        <span *ngIf="formulario.get('numeroGarajes')?.invalid && formulario.get('numeroGarajes')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="tieneBano">Tiene baño *</label>
+        <select id="tieneBano" formControlName="tieneBano" 
+          [class.invalid]="formulario.get('tieneBano')?.invalid && formulario.get('tieneBano')?.touched">
+          <option [value]="false">No</option>
+          <option [value]="true">Sí</option>
+        </select>
+        <span *ngIf="formulario.get('tieneBano')?.invalid && formulario.get('tieneBano')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="tipoCama">Tipo de cama *</label>
+        <select id="tipoCama" formControlName="tipoCama" 
+          [class.invalid]="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched">
+          <option value="">Selecciona un tipo</option>
+          <option value="SENCILLA">SENCILLA</option>
+          <option value="DOBLE">DOBLE</option>
+        </select>
+        <span *ngIf="formulario.get('tipoCama')?.invalid && formulario.get('tipoCama')?.touched" class="error-msg">
+          Campo requerido
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="fotos">Fotos nuevas</label>
+        <input
+          type="file"
+          id="fotos"
+          multiple
+          accept="image/*"
+          (change)="onFotosSeleccionadas($event)">
+        <p *ngIf="fotosSeleccionadas.length > 0" class="fotos-info">
+          {{ fotosSeleccionadas.length }} foto(s) seleccionada(s)
+        </p>
+      </div>
+
+      <div *ngIf="fotosActuales.length > 0" class="fotos-actuales">
+        <h3>Fotos actuales</h3>
+        <div class="fotos-lista">
+          <img *ngFor="let foto of fotosActuales" [src]="foto" [alt]="'Foto de casa'" class="foto-thumbnail">
+        </div>
+      </div>
+
+      <div class="botones">
+        <button
+          type="button"
+          (click)="guardarCambios()"
+          [disabled]="guardando"
+          class="btn-guardar">
+          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+        <button
+          type="button"
+          (click)="cancelar()"
+          class="btn-cancelar">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
