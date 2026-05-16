@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
 import { CasasService } from '../../../core/services/casas/casas.service';
 import { Casa } from '../../../core/models/casas/casa.model';
 import {
@@ -41,17 +42,26 @@ export class MisCasasComponent implements OnInit {
     });
   }
 
-  eliminarCasa(casa: Casa): void {
+  async eliminarCasa(casa: Casa): Promise<void> {
     if (!casa.id) {
       fireErrorAlert('Error', 'ID de casa no válido');
       return;
     }
 
-    const confirmacion = window.confirm(
-      `¿Estás seguro de que deseas eliminar esta casa? Esta acción no se puede deshacer.`
-    );
+    const resultado = await Swal.fire({
+      title: '¿Eliminar casa?',
+      text: '¿Estás seguro de que deseas eliminar esta casa? Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      background: '#ffffff',
+      color: '#10243a'
+    });
 
-    if (!confirmacion) {
+    if (!resultado.isConfirmed) {
       return;
     }
 
