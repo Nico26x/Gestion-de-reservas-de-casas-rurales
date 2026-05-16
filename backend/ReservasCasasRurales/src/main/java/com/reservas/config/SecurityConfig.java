@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/auth/registro").permitAll()
 
+                        .requestMatchers(HttpMethod.GET, "/api/casas/propietario").hasAuthority("ROLE_PROPIETARIO")
                         .requestMatchers(HttpMethod.GET, "/api/casas/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/disponibilidad/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/reservas").permitAll()

@@ -31,6 +31,9 @@ public class CasaService {
     @Autowired
     private ReservaRepository reservaRepository;
 
+    @Autowired
+    private PropietarioService propietarioService;
+
     public Casa crearCasa(CasaRequestDTO dto, List<MultipartFile> fotos, Propietario propietario) throws Exception {
 
         if (dto.getNumeroHabitaciones() < 3) {
@@ -364,5 +367,13 @@ public class CasaService {
 
         Casa casaGuardada = casaRepository.save(casa);
         return convertirACasaResponseDTO(casaGuardada);
+    }
+
+    public List<CasaResponseDTO> listarCasasDelPropietarioAutenticado(String username) {
+        Propietario propietario = propietarioService.buscarPorUsername(username);
+        List<Casa> casas = casaRepository.findByPropietario(propietario);
+        return casas.stream()
+                .map(this::convertirACasaResponseDTO)
+                .toList();
     }
 }

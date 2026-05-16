@@ -48,4 +48,12 @@ export class CasasService {
   obtenerCasaDetalle(id: number): Observable<Casa> {
     return this.http.get<Casa>(`${this.apiUrl}/${id}`);
   }
+
+  listarMisCasas(): Observable<Casa[]> {
+    return this.http.get<Casa[]>(`${this.apiUrl}/propietario`);
+  }
+
+  eliminarCasa(casaId: number): Observable<string> {
+    return this.http.delete(`${this.apiUrl}/${casaId}`, { responseType: 'text' });
+  }
 }

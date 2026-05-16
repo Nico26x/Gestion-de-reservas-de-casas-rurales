@@ -103,6 +103,21 @@ public class CasaController {
         return ResponseEntity.ok(casa);
     }
 
+    //GET /api/casas/propietario — Obtener casas del propietario autenticado
+    @GetMapping("/propietario")
+    public ResponseEntity<List<CasaResponseDTO>> listarCasasDelPropietario(
+            Authentication authentication) {
+
+        if (authentication == null) {
+            throw new RuntimeException("Usuario no autenticado");
+        }
+
+        String username = authentication.getName();
+        List<CasaResponseDTO> casas = casaService.listarCasasDelPropietarioAutenticado(username);
+
+        return ResponseEntity.ok(casas);
+    }
+
     //GET /api/casas — Buscar casas por población
     @GetMapping
     public ResponseEntity<List<CasaResponseDTO>> getCasasPorPoblacion(

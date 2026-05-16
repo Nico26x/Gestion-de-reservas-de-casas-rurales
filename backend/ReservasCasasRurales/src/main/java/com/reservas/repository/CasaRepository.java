@@ -1,6 +1,7 @@
 package com.reservas.repository;
 
 import com.reservas.model.Casa;
+import com.reservas.model.Propietario;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ public interface CasaRepository extends JpaRepository<Casa, Long> {
 
     @EntityGraph(attributePaths = {"habitaciones", "banos", "cocinas", "fotos"})
     List<Casa> findAll();
+
+    @EntityGraph(attributePaths = {"habitaciones", "banos", "cocinas", "fotos"})
+    List<Casa> findByPropietario(Propietario propietario);
 
     //Optional<Casa> findById(Long id);
 }

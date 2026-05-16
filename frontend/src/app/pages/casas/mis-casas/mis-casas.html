@@ -1,0 +1,46 @@
+<div class="container">
+  <h1>Mis casas</h1>
+
+  <div *ngIf="cargando" class="loading">
+    Cargando casas...
+  </div>
+
+  <div *ngIf="!cargando && casas.length === 0" class="no-casas">
+    <p>No tienes casas registradas.</p>
+  </div>
+
+  <div *ngIf="!cargando && casas.length > 0" class="tabla-container">
+    <table class="tabla-casas">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Población</th>
+          <th>Dirección</th>
+          <th>Habitaciones</th>
+          <th>Baños</th>
+          <th>Cocinas</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let casa of casas">
+          <td>{{ casa.nombre }}</td>
+          <td>{{ casa.poblacion }}</td>
+          <td>{{ casa.direccion }}</td>
+          <td>{{ casa.numeroHabitaciones }}</td>
+          <td>{{ casa.numeroBanos }}</td>
+          <td>{{ casa.numeroCocinas }}</td>
+          <td>
+            <button 
+              type="button" 
+              (click)="eliminarCasa(casa)"
+              [disabled]="eliminandoId === casa.id"
+              class="btn-eliminar">
+              {{ eliminandoId === casa.id ? 'Eliminando...' : 'Eliminar' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
