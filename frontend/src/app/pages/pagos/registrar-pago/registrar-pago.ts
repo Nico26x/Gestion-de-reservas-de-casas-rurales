@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 import { PagosService } from '../../../core/services/pagos/pagos.service';
 import { PagoRequest } from '../../../core/models/pagos/pago-request.model';
 import { PagoResponse } from '../../../core/models/pagos/pago-response.model';
@@ -12,7 +13,7 @@ import {
 } from '../../../shared/utils/sweet-alert.util';
 
 /**
- * Componente para registrar pagos de reservas (HU13)
+ * Componente para registrar pagos de reservas
  * Permite a clientes registrar pagos y a propietarios verificarlos
  */
 @Component({
@@ -134,37 +135,52 @@ export class RegistrarPagoComponent implements OnInit {
   /**
    * Verifica un pago (solo propietarios)
    */
-  verificarPago(pagoId: number): void {
-    if (confirm('¿Confirmas que verificaste este pago?')) {
-      this.verificandoId = pagoId;
-      this.limpiarMensajes();
+  async verificarPago(pagoId: number): Promise<void> {
+    const resultado = await Swal.fire({
+      title: '¿Verificar pago?',
+      text: '¿Confirmas que verificaste este pago?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Verificar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#3274dc',
+      cancelButtonColor: '#999',
+      background: '#ffffff',
+      color: '#10243a'
+    });
 
-      this.pagosService.verificarPago(pagoId).subscribe({
-        next: (response: PagoResponse) => {
-          this.verificandoId = null;
-          this.pagoResponseData = response;
-          this.mensajeExito = response.mensaje;
-
-          fireSuccessAlert(
-            'Pago verificado',
-            `Pago de $${response.monto} verificado. Reserva ${response.numeroReserva} ahora ${response.estadoReserva}`
-          );
-
-          // Recargar lista de pagos pendientes
-          this.cargarPagosPendientes();
-        },
-        error: (err: any) => {
-          this.verificandoId = null;
-          const errorMsg = err?.error?.mensaje || err?.error?.message || 'Error al verificar pago';
-          this.mensajeError = errorMsg;
-
-          fireErrorAlert(
-            'Error al verificar pago',
-            errorMsg
-          );
-        }
-      });
+    if (!resultado.isConfirmed) {
+      return;
     }
+
+    this.verificandoId = pagoId;
+    this.limpiarMensajes();
+
+    this.pagosService.verificarPago(pagoId).subscribe({
+      next: (response: PagoResponse) => {
+        this.verificandoId = null;
+        this.pagoResponseData = response;
+        this.mensajeExito = response.mensaje;
+
+        fireSuccessAlert(
+          'Pago verificado',
+          `Pago de $${response.monto} verificado. Reserva ${response.numeroReserva} ahora ${response.estadoReserva}`
+        );
+
+        // Recargar lista de pagos pendientes
+        this.cargarPagosPendientes();
+      },
+      error: (err: any) => {
+        this.verificandoId = null;
+        const errorMsg = err?.error?.mensaje || err?.error?.message || 'Error al verificar pago';
+        this.mensajeError = errorMsg;
+
+        fireErrorAlert(
+          'Error al verificar pago',
+          errorMsg
+        );
+      }
+    });
   }
 
   /**
