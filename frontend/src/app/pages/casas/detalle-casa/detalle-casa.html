@@ -1,77 +1,175 @@
-<section>
-  <h2>Detalle de casa</h2>
-
-  <button (click)="volver()">Volver</button>
-
-  <div *ngIf="cargando">
+<div class="dc-shell">
+  <!-- Estado de carga -->
+  <section class="dc-loading-state" *ngIf="cargando">
+    <div class="dc-loading-state__spinner"></div>
     <p>Cargando información de la casa...</p>
-  </div>
+  </section>
 
-  <div *ngIf="mensajeError && !cargando">
-    <p style="color: red;">{{ mensajeError }}</p>
-  </div>
+  <!-- Estado de error -->
+  <section class="dc-error-state" *ngIf="mensajeError && !cargando">
+    <div class="dc-error-state__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        <path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h3>Error al cargar la casa</h3>
+    <p>{{ mensajeError }}</p>
+    <button type="button" class="dc-btn dc-btn--primary" (click)="volver()">
+      Volver
+    </button>
+  </section>
 
-  <div *ngIf="casa && !cargando">
-    <h3>{{ casa.nombre || 'Casa sin nombre' }}</h3>
+  <!-- Contenido principal -->
+  <div *ngIf="casa && !cargando" class="dc-content">
+    <!-- Header con información básica -->
+    <header class="dc-header">
+      <div class="dc-header__content">
+        <p class="dc-section-mini">Detalles del alojamiento</p>
+        <h1 class="dc-header__title">{{ casa.nombre || 'Casa sin nombre' }}</h1>
+        <div class="dc-header__info">
+          <span class="dc-location-pill" *ngIf="casa.poblacion">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+              <path d="M12 21s6-5.4 6-11a6 6 0 10-12 0c0 5.6 6 11 6 11Z" stroke-linejoin="round"/>
+              <circle cx="12" cy="10" r="2"/>
+            </svg>
+            {{ casa.poblacion }}
+          </span>
+          <span class="dc-info-text" *ngIf="casa.direccion">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+              <path d="M9 22v-12h6v12"/>
+            </svg>
+            {{ casa.direccion }}
+          </span>
+        </div>
+        <p class="dc-header__description" *ngIf="casa.descripcion">
+          {{ casa.descripcion }}
+        </p>
+      </div>
+    </header>
 
-    <p>
-      <strong>Dirección:</strong> {{ casa.direccion || 'No disponible' }}
-    </p>
+    <!-- Galería de fotos -->
+    <section class="dc-gallery-section">
+      <h2 class="dc-section-title">Galería</h2>
+      <ng-container *ngIf="tieneFotos(); else sinFotos">
+        <div class="dc-gallery">
+          <img
+            *ngFor="let foto of casa.fotos"
+            [src]="foto"
+            [alt]="casa.nombre || 'Foto de la casa'"
+            class="dc-gallery__image"
+          />
+        </div>
+      </ng-container>
+      <ng-template #sinFotos>
+        <div class="dc-gallery-placeholder">
+          <div class="dc-gallery-placeholder__icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9 22v-12h6v12" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <circle cx="8" cy="7" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <p>No hay fotos disponibles</p>
+        </div>
+      </ng-template>
+    </section>
 
-    <p>
-      <strong>Población:</strong> {{ casa.poblacion || 'No disponible' }}
-    </p>
-
-    <p>
-      <strong>Descripción:</strong> {{ casa.descripcion || 'Sin descripción' }}
-    </p>
-
-    <div>
-      <h4>Galería de fotos</h4>
-      <div *ngIf="tieneFotos(); else sinFotos">
-        <div *ngFor="let foto of casa.fotos">
-          <img [src]="foto" [alt]="casa.nombre" style="max-width: 200px; margin: 10px;" />
+    <!-- Características principales -->
+    <section class="dc-features-section">
+      <h2 class="dc-section-title">Características principales</h2>
+      <div class="dc-features-grid">
+        <div class="dc-feature-card">
+          <span class="dc-feature-emoji">🛏</span>
+          <div>
+            <strong>{{ casa.numeroHabitaciones || 0 }}</strong>
+            <small>Habitaciones</small>
+          </div>
+        </div>
+        <div class="dc-feature-card">
+          <span class="dc-feature-emoji">🚿</span>
+          <div>
+            <strong>{{ casa.numeroBanos || 0 }}</strong>
+            <small>Baños</small>
+          </div>
+        </div>
+        <div class="dc-feature-card">
+          <span class="dc-feature-emoji">🍳</span>
+          <div>
+            <strong>{{ casa.numeroCocinas || 0 }}</strong>
+            <small>Cocinas</small>
+          </div>
+        </div>
+        <div class="dc-feature-card">
+          <span class="dc-feature-emoji">🍽</span>
+          <div>
+            <strong>{{ casa.numeroComedores || 0 }}</strong>
+            <small>Comedores</small>
+          </div>
+        </div>
+        <div class="dc-feature-card">
+          <span class="dc-feature-emoji">🚗</span>
+          <div>
+            <strong>{{ casa.numeroGarajes || 0 }}</strong>
+            <small>Garajes</small>
+          </div>
         </div>
       </div>
-      <ng-template #sinFotos>
-        <p>No hay fotos disponibles</p>
-      </ng-template>
-    </div>
+    </section>
 
-    <div>
-      <h4>Características</h4>
-      <p>Habitaciones: {{ casa.numeroHabitaciones || 0 }}</p>
-      <p>Baños: {{ casa.numeroBanos || 0 }}</p>
-      <p>Cocinas: {{ casa.numeroCocinas || 0 }}</p>
-      <p>Comedores: {{ casa.numeroComedores || 0 }}</p>
-      <p>Garajes: {{ casa.numeroGarajes || 0 }}</p>
-    </div>
-
-    <div>
-      <h4>Habitaciones</h4>
-      <div *ngIf="tieneHabitaciones(); else sinHabitaciones">
-        <table border="1" cellpadding="8" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Número de camas</th>
-              <th>Tipo de cama</th>
-              <th>Tiene baño</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let hab of casa.habitaciones">
-              <td>{{ hab.codigoHabitacion || 'N/A' }}</td>
-              <td>{{ hab.numeroCamas || 0 }}</td>
-              <td>{{ hab.tipoCama || 'N/A' }}</td>
-              <td>{{ hab.tieneBano ? 'Sí' : 'No' }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Habitaciones -->
+    <section class="dc-rooms-section" *ngIf="tieneHabitaciones(); else sinHabitaciones">
+      <h2 class="dc-section-title">Habitaciones</h2>
+      <div class="dc-rooms-grid">
+        <article class="dc-room-card" *ngFor="let habitacion of casa.habitaciones; let i = index">
+          <div class="dc-room-card__header">
+            <h3 class="dc-room-card__title">
+              Habitación {{ (i + 1) }}
+              <span class="dc-room-card__code" *ngIf="habitacion.codigoHabitacion">
+                {{ habitacion.codigoHabitacion }}
+              </span>
+            </h3>
+          </div>
+          <div class="dc-room-card__details">
+            <div class="dc-room-detail">
+              <span class="dc-room-detail__label">Número de camas</span>
+              <span class="dc-room-detail__value">{{ habitacion.numeroCamas || 0 }}</span>
+            </div>
+            <div class="dc-room-detail">
+              <span class="dc-room-detail__label">Tipo de cama</span>
+              <span class="dc-room-detail__value">
+                {{ habitacion.tipoCama ? (habitacion.tipoCama === 'SIMPLE' ? 'Sencilla' : habitacion.tipoCama) : 'N/A' }}
+              </span>
+            </div>
+            <div class="dc-room-detail">
+              <span class="dc-room-detail__label">¿Tiene baño?</span>
+              <span class="dc-room-detail__value">
+                <span class="dc-badge" [class.dc-badge--yes]="habitacion.tieneBano">
+                  {{ habitacion.tieneBano ? 'Sí' : 'No' }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </article>
       </div>
-      <ng-template #sinHabitaciones>
-        <p>No hay habitaciones registradas</p>
-      </ng-template>
-    </div>
+    </section>
+
+    <ng-template #sinHabitaciones>
+      <section class="dc-rooms-section">
+        <h2 class="dc-section-title">Habitaciones</h2>
+        <div class="dc-empty-message">
+          <p>No hay habitaciones registradas</p>
+        </div>
+      </section>
+    </ng-template>
+
+    <!-- Acciones -->
+    <section class="dc-actions">
+      <button type="button" class="dc-btn dc-btn--secondary" (click)="volver()">
+        ← Volver
+      </button>
+    </section>
   </div>
-</section>
+</div>
+
