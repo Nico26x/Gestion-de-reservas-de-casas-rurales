@@ -21,6 +21,7 @@ export class ReservasRecibidasComponent implements OnInit {
 
   reservas: ReservaNotificacion[] = [];
   loading = false;
+  cancelandoId: number | null = null;
 
   ngOnInit(): void {
     this.cargarReservas();
@@ -49,6 +50,31 @@ export class ReservasRecibidasComponent implements OnInit {
 
   irARegistrarPago(numeroReserva: number): void {
     this.router.navigate(['/pagos/registrar'], { queryParams: { numeroReserva } });
+  }
+
+  cancelarReserva(reserva: ReservaNotificacion): void {
+    const confirmacion = window.confirm(
+      `¿Estás seguro de que deseas cancelar la reserva ${reserva.numeroReserva}?`
+    );
+
+    if (!confirmacion) {
+      return;
+    }
+
+    this.cancelandoId = reserva.reservaId;
+
+    this.reservasService.cancelarReserva(reserva.reservaId).subscribe({
+      next: (response) => {
+        fireSuccessAlert('Éxito', 'Reserva cancelada correctamente');
+        reserva.estadoReserva = 'CANCELADA';
+        this.cancelandoId = null;
+      },
+      error: (error) => {
+        const mensajeError = error.error || 'No se pudo cancelar la reserva';
+        fireErrorAlert('Error', mensajeError);
+        this.cancelandoId = null;
+      }
+    });
   }
 
   obtenerColorEstado(estado: string): string {

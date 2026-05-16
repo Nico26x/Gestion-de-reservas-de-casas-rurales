@@ -15,4 +15,12 @@ export class ReservasService {
   obtenerNotificacionesReservas(): Observable<ReservaNotificacion[]> {
     return this.http.get<ReservaNotificacion[]>(`${this.apiUrl}/propietario`);
   }
+
+  cancelarReserva(reservaId: number): Observable<string> {
+    return this.http.put(
+      `${this.apiUrl}/${reservaId}/cancelar`,
+      {},
+      { responseType: 'text' }
+    );
+  }
 }

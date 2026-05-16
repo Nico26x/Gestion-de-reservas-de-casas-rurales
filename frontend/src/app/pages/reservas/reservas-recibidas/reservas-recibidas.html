@@ -51,6 +51,14 @@
               class="btn-pago">
               Registrar Pago
             </button>
+            <button 
+              type="button" 
+              (click)="cancelarReserva(reserva)"
+              [disabled]="cancelandoId === reserva.reservaId"
+              *ngIf="reserva.estadoReserva !== 'CANCELADA'"
+              class="btn-cancelar">
+              {{ cancelandoId === reserva.reservaId ? 'Cancelando...' : 'Cancelar' }}
+            </button>
           </td>
         </tr>
       </tbody>
