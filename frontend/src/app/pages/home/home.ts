@@ -28,4 +28,8 @@ export class HomeComponent {
   get esCliente(): boolean {
     return this.rol === 'CLIENTE' || this.rol === 'ROLE_CLIENTE';
   }
+
+  get esPropietario(): boolean {
+    return this.rol === 'PROPIETARIO' || this.rol === 'ROLE_PROPIETARIO';
+  }
 }

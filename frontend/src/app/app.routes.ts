@@ -40,10 +40,10 @@ export const routes: Routes = [
   { path: 'paquetes', component: MisPaquetesComponent, canActivate: [ownerGuard] },
   { path: 'reservas/crear', component: CrearReservaComponent, canActivate: [authGuard] },
   { path: 'reservas/recibidas', component: ReservasRecibidasComponent, canActivate: [ownerGuard] },
-  { path: 'reservas/vencidas', component: ReservasVencidasComponent, canActivate: [authGuard] },
+  { path: 'reservas/vencidas', component: ReservasVencidasComponent, canActivate: [ownerGuard] },
   { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
-  { path: 'pagos/registrar', component: RegistrarPagoComponent, canActivate: [authGuard] },
+  { path: 'pagos/registrar', component: RegistrarPagoComponent, canActivate: [ownerGuard] },
 
   { path: '**', component: NotFoundComponent }
 ];

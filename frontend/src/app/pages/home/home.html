@@ -42,7 +42,7 @@
         <a class="action-card__link" routerLink="/casas/crear">Ir a crear casa</a>
       </article>
 
-      <article class="action-card action-card--tinted" *ngIf="!esCliente">
+      <article class="action-card action-card--tinted">
         <div class="action-card__body">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none">
@@ -188,8 +188,8 @@
         <a class="action-card__link" routerLink="/reservas/recibidas">Ir a reservas recibidas</a>
       </article>
 
-      <!-- Reservas Vencidas: todos los usuarios autenticados -->
-      <article class="action-card action-card--tinted">
+      <!-- Reservas Vencidas: solo propietarios -->
+      <article class="action-card action-card--tinted" *ngIf="esPropietario">
         <div class="action-card__body">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none">
@@ -206,24 +206,6 @@
           </div>
         </div>
         <a class="action-card__link" routerLink="/reservas/vencidas">Ir a reservas vencidas</a>
-      </article>
-
-      <!-- Registrar Pago: todos los usuarios autenticados -->
-      <article class="action-card action-card--tinted">
-        <div class="action-card__body">
-          <div class="feature-icon">
-            <svg viewBox="0 0 24 24" fill="none">
-              <rect x="2.5" y="6.5" width="19" height="13" rx="2.5" stroke="currentColor" stroke-width="1.8"/>
-              <path d="M2.5 10.5h19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-              <path d="M6.5 15h3M15 15h2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <h3>Registrar Pago</h3>
-            <p>Registra el pago asociado a una reserva activa.</p>
-          </div>
-        </div>
-        <a class="action-card__link" routerLink="/pagos/registrar">Ir a registrar pago</a>
       </article>
 
     </div>
