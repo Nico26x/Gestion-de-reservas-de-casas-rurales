@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservasService, ReservaResponseDTO } from '../../../core/services/reservas/reservas.service';
+import Swal from 'sweetalert2';
 import {
   fireErrorAlert,
   fireSuccessAlert
@@ -49,32 +50,45 @@ export class ReservasVencidasComponent implements OnInit {
       return;
     }
 
+    const reservaId = reserva.reservaId;
+    const titulo = accion === 'ANULAR' ? '¿Anular esta reserva?' : '¿Mantener esta reserva?';
     const mensaje = accion === 'ANULAR'
-      ? '¿Estás seguro de que deseas anular esta reserva vencida? Esta acción liberará la disponibilidad.'
-      : '¿Estás seguro de que deseas mantener esta reserva pendiente?';
+      ? 'Estás a punto de anular esta reserva vencida. Esta acción liberará la disponibilidad.'
+      : 'Mantenerás esta reserva como pendiente de gestionar.';
+    const confirmText = accion === 'ANULAR' ? 'Sí, anular' : 'Sí, mantener';
+    const confirmButtonColor = accion === 'ANULAR' ? '#c33a3a' : '#3274dc';
 
-    const confirmacion = window.confirm(mensaje);
-
-    if (!confirmacion) {
-      return;
-    }
-
-    this.procesandoId = reserva.reservaId;
-
-    this.reservasService.gestionarReservaVencida(reserva.reservaId, accion).subscribe({
-      next: (response) => {
-        const mensaje = accion === 'ANULAR'
-          ? 'Reserva vencida anulada correctamente'
-          : 'Reserva vencida mantenida correctamente';
-        fireSuccessAlert('Éxito', mensaje);
-        this.reservas = this.reservas.filter(r => r.reservaId !== reserva.reservaId);
-        this.procesandoId = null;
-      },
-      error: (error) => {
-        const mensajeError = this.obtenerMensajeError(error);
-        fireErrorAlert('Error', mensajeError);
-        this.procesandoId = null;
+    Swal.fire({
+      title: titulo,
+      text: mensaje,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: confirmButtonColor,
+      cancelButtonColor: '#999999',
+      confirmButtonText: confirmText,
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
       }
+
+      this.procesandoId = reservaId;
+
+      this.reservasService.gestionarReservaVencida(reservaId, accion).subscribe({
+        next: (response) => {
+          const mensaje = accion === 'ANULAR'
+            ? 'Reserva vencida anulada correctamente'
+            : 'Reserva vencida mantenida correctamente';
+          fireSuccessAlert('Éxito', mensaje);
+          this.reservas = this.reservas.filter(r => r.reservaId !== reservaId);
+          this.procesandoId = null;
+        },
+        error: (error) => {
+          const mensajeError = this.obtenerMensajeError(error);
+          fireErrorAlert('Error', mensajeError);
+          this.procesandoId = null;
+        }
+      });
     });
   }
 

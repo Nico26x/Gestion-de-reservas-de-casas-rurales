@@ -1,0 +1,571 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.rv-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(180deg, #f8fbff 0%, #eff6ff 54%, #edf4ff 100%);
+  min-height: 100vh;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+.rv-loading-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rv-loading-state__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid #d9e8fb;
+  border-top-color: #3274dc;
+  animation: spin 0.9s linear infinite;
+}
+
+.rv-loading-state p {
+  margin: 0;
+  color: #58749a;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.rv-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.rv-header {
+  border-radius: 24px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.rv-header-content {
+  flex: 1;
+}
+
+.rv-section-mini {
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #3f77ca;
+}
+
+.rv-header__title {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #153761;
+  line-height: 1.2;
+}
+
+.rv-header__description {
+  margin: 0;
+  color: #5e789d;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+.rv-alert {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  border: 1px solid;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rv-alert--error {
+  background: #ffe5e5;
+  border-color: #f0d5d5;
+}
+
+.rv-alert--error .rv-alert__icon {
+  color: #c33a3a;
+  font-weight: 800;
+}
+
+.rv-alert__icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.rv-alert__content {
+  flex: 1;
+}
+
+.rv-alert__title {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.rv-alert__message {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+.rv-empty-state {
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(124, 160, 220, 0.18);
+  box-shadow: 0 16px 40px rgba(35, 70, 125, 0.08);
+}
+
+.rv-empty-state__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #4a7dca;
+  border: 1px solid #dae8fb;
+}
+
+.rv-empty-state__icon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.rv-empty-state h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #173863;
+  font-weight: 800;
+}
+
+.rv-empty-state p {
+  margin: 0;
+  color: #5e789d;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+.rv-table-wrapper {
+  border-radius: 24px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(123, 159, 220, 0.18);
+  box-shadow: 0 20px 48px rgba(35, 70, 125, 0.08);
+}
+
+.rv-table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rv-tabla-vencidas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.rv-tabla-vencidas thead {
+  background: linear-gradient(180deg, #f0f7ff 0%, #e6f0ff 100%);
+  border-bottom: 2px solid #d9e8fb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.rv-tabla-vencidas th {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  color: #153761;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.rv-tabla-vencidas tbody tr {
+  border-bottom: 1px solid #e6f0ff;
+  transition: background-color 0.2s ease;
+}
+
+.rv-tabla-vencidas tbody tr:hover {
+  background: linear-gradient(90deg, rgba(52, 116, 220, 0.04), transparent);
+}
+
+.rv-tabla-vencidas td {
+  padding: 1rem;
+  color: #2b5c8c;
+  word-break: break-word;
+}
+
+.rv-cell-numero {
+  font-weight: 700;
+}
+
+.rv-numero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #eef6ff 0%, #e5f0ff 100%);
+  color: #2f67b6;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid #dae8fb;
+}
+
+.rv-fecha,
+.rv-noches,
+.rv-telefono {
+  font-size: 0.85rem;
+  color: #5a7a9d;
+}
+
+.rv-importe,
+.rv-anticipo {
+  font-weight: 600;
+  color: #163a6d;
+}
+
+/* =========================================================
+   BADGES (Estado)
+   ========================================================= */
+.rv-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  min-width: 90px;
+}
+
+.rv-badge--pendiente {
+  background: #fff8e5;
+  color: #b89600;
+  border: 1px solid #ffe4a0;
+}
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+.rv-acciones {
+  position: relative;
+}
+
+.rv-acciones-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.rv-btn {
+  padding: 0.55rem 0.85rem;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.rv-btn--refresh {
+  background: rgba(255, 255, 255, 0.5);
+  color: #3274dc;
+  border: 1.5px solid #d9e8fb;
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.rv-btn--refresh:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #b3d9ff;
+  box-shadow: 0 2px 8px rgba(50, 116, 220, 0.15);
+  transform: rotate(-15deg);
+}
+
+.rv-btn--primary {
+  background: linear-gradient(180deg, #4a9ef5 0%, #3274dc 100%);
+  color: #ffffff;
+  border: 1px solid #2d6bc4;
+}
+
+.rv-btn--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 135, 240, 0.25);
+}
+
+.rv-btn--secondary {
+  background: rgba(255, 255, 255, 0.7);
+  color: #3274dc;
+  border: 1.5px solid #d9e8fb;
+}
+
+.rv-btn--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #3274dc;
+  box-shadow: 0 2px 8px rgba(50, 116, 220, 0.1);
+}
+
+.rv-btn--danger {
+  background: #fff5f5;
+  color: #c33a3a;
+  border: 1.5px solid #f0d5d5;
+}
+
+.rv-btn--danger:hover:not(:disabled) {
+  background: #ffe5e5;
+  border-color: #e24b4a;
+}
+
+.rv-btn--danger:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.rv-btn--small {
+  padding: 0.45rem 0.7rem;
+  font-size: 0.75rem;
+}
+
+.rv-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1024px) {
+  .rv-shell {
+    padding: 1.5rem;
+  }
+
+  .rv-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .rv-tabla-vencidas th {
+    padding: 1rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .rv-tabla-vencidas td {
+    padding: 0.9rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .rv-acciones-group {
+    gap: 0.35rem;
+  }
+
+  .rv-btn--small {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .rv-shell {
+    padding: 1rem;
+  }
+
+  .rv-header {
+    padding: 1.5rem;
+    flex-direction: column;
+  }
+
+  .rv-header__title {
+    font-size: 1.5rem;
+  }
+
+  .rv-tabla-vencidas th {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .rv-tabla-vencidas td {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .rv-numero-badge {
+    min-width: 50px;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .rv-badge {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.7rem;
+    min-width: 75px;
+  }
+
+  .rv-acciones-group {
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+  }
+
+  .rv-btn--small {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.65rem;
+  }
+
+  .rv-btn--refresh {
+    padding: 0.5rem 0.65rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rv-shell {
+    padding: 0.75rem;
+  }
+
+  .rv-header {
+    padding: 1.25rem;
+  }
+
+  .rv-header__title {
+    font-size: 1.3rem;
+  }
+
+  .rv-header__description {
+    font-size: 0.85rem;
+  }
+
+  .rv-section-mini {
+    font-size: 0.65rem;
+  }
+
+  .rv-tabla-vencidas {
+    font-size: 0.75rem;
+  }
+
+  .rv-tabla-vencidas th {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .rv-tabla-vencidas td {
+    padding: 0.7rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .rv-numero-badge {
+    min-width: 45px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .rv-badge {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.65rem;
+    min-width: 65px;
+  }
+
+  .rv-acciones-group {
+    gap: 0.2rem;
+  }
+
+  .rv-btn--small {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.6rem;
+  }
+
+  .rv-btn--refresh {
+    padding: 0.45rem 0.55rem;
+    font-size: 0.85rem;
+  }
+
+  .rv-empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .rv-empty-state h3 {
+    font-size: 1.1rem;
+  }
+
+  .rv-empty-state p {
+    font-size: 0.9rem;
+  }
+}

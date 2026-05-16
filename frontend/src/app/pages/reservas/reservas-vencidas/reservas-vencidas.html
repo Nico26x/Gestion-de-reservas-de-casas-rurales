@@ -1,65 +1,105 @@
-<div class="container">
-  <h1>Reservas vencidas</h1>
+<div class="rv-shell">
+  <!-- Estado de carga -->
+  <section class="rv-loading-state" *ngIf="cargando">
+    <div class="rv-loading-state__spinner"></div>
+    <p>Cargando reservas vencidas...</p>
+  </section>
 
-  <button type="button" (click)="cargarReservasVencidas()" class="btn-actualizar">
-    Actualizar
-  </button>
+  <!-- Contenido principal -->
+  <div *ngIf="!cargando" class="rv-content">
+    <!-- Header -->
+    <header class="rv-header">
+      <div class="rv-header-content">
+        <p class="rv-section-mini">Gestión de reservas</p>
+        <h1 class="rv-header__title">Reservas vencidas</h1>
+        <p class="rv-header__description">Gestiona las reservas pendientes cuyo plazo de pago ya expiró</p>
+      </div>
+      <button
+        type="button"
+        (click)="cargarReservasVencidas()"
+        class="rv-btn rv-btn--refresh"
+        title="Actualizar lista">
+        🔄
+      </button>
+    </header>
 
-  <div *ngIf="cargando" class="loading">
-    Cargando reservas vencidas...
-  </div>
+    <!-- Alerta de error -->
+    <div *ngIf="error" class="rv-alert rv-alert--error">
+      <div class="rv-alert__icon">✕</div>
+      <div class="rv-alert__content">
+        <div class="rv-alert__title">Error</div>
+        <div class="rv-alert__message">{{ error }}</div>
+      </div>
+    </div>
 
-  <div *ngIf="error" class="error">
-    {{ error }}
-  </div>
+    <!-- Estado vacío -->
+    <section class="rv-empty-state" *ngIf="reservas.length === 0 && !error">
+      <div class="rv-empty-state__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h3>No hay reservas vencidas</h3>
+      <p>No tienes reservas pendientes cuyo plazo de pago haya expirado.</p>
+    </section>
 
-  <div *ngIf="!cargando && reservas.length === 0 && !error" class="no-reservas">
-    <p>No hay reservas vencidas pendientes de gestionar.</p>
-  </div>
-
-  <div *ngIf="!cargando && reservas.length > 0" class="tabla-container">
-    <table class="tabla-vencidas">
-      <thead>
-        <tr>
-          <th>Número Reserva</th>
-          <th>Casa</th>
-          <th>Fecha Entrada</th>
-          <th>Noches</th>
-          <th>Teléfono Cliente</th>
-          <th>Importe</th>
-          <th>Anticipo</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reserva of reservas">
-          <td>{{ reserva.numeroReserva }}</td>
-          <td>{{ reserva.nombreCasa }}</td>
-          <td>{{ reserva.fechaEntrada }}</td>
-          <td>{{ reserva.numeroNoches }}</td>
-          <td>{{ reserva.telefonoCliente }}</td>
-          <td>{{ reserva.importe | currency }}</td>
-          <td>{{ reserva.anticipo | currency }}</td>
-          <td>{{ obtenerEstado(reserva) }}</td>
-          <td>
-            <button 
-              type="button"
-              (click)="gestionarReserva(reserva, 'ANULAR')"
-              [disabled]="procesandoId === reserva.reservaId"
-              class="btn-accion btn-anular">
-              {{ procesandoId === reserva.reservaId ? 'Procesando...' : 'Anular' }}
-            </button>
-            <button 
-              type="button"
-              (click)="gestionarReserva(reserva, 'MANTENER')"
-              [disabled]="procesandoId === reserva.reservaId"
-              class="btn-accion btn-mantener">
-              {{ procesandoId === reserva.reservaId ? 'Procesando...' : 'Mantener' }}
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Tabla de reservas vencidas -->
+    <section class="rv-table-wrapper" *ngIf="reservas.length > 0">
+      <div class="rv-table-container">
+        <table class="rv-tabla-vencidas">
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Casa</th>
+              <th>Entrada</th>
+              <th>Noches</th>
+              <th>Teléfono</th>
+              <th>Importe</th>
+              <th>Anticipo</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reserva of reservas">
+              <td class="rv-cell-numero">
+                <span class="rv-numero-badge">{{ reserva.numeroReserva }}</span>
+              </td>
+              <td>{{ reserva.nombreCasa }}</td>
+              <td class="rv-fecha">{{ reserva.fechaEntrada }}</td>
+              <td class="rv-noches">{{ reserva.numeroNoches }}</td>
+              <td class="rv-telefono">{{ reserva.telefonoCliente }}</td>
+              <td class="rv-importe">{{ reserva.importe | currency }}</td>
+              <td class="rv-anticipo">{{ reserva.anticipo | currency }}</td>
+              <td>
+                <span class="rv-badge rv-badge--pendiente">
+                  {{ obtenerEstado(reserva) }}
+                </span>
+              </td>
+              <td class="rv-acciones">
+                <div class="rv-acciones-group">
+                  <button
+                    type="button"
+                    (click)="gestionarReserva(reserva, 'ANULAR')"
+                    [disabled]="procesandoId === reserva.reservaId"
+                    title="Anular reserva"
+                    class="rv-btn rv-btn--danger rv-btn--small">
+                    {{ procesandoId === reserva.reservaId ? '...' : 'Anular' }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="gestionarReserva(reserva, 'MANTENER')"
+                    [disabled]="procesandoId === reserva.reservaId"
+                    title="Mantener reserva"
+                    class="rv-btn rv-btn--secondary rv-btn--small">
+                    {{ procesandoId === reserva.reservaId ? '...' : 'Mantener' }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </div>
