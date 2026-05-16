@@ -63,6 +63,11 @@ export class EditarCasaComponent implements OnInit {
 
     this.casasService.obtenerCasaPorId(this.casaId).subscribe({
       next: (casa: Casa) => {
+        // Obtener tipoCama de la primera habitación si existe
+        const tipoCama = casa.habitaciones && casa.habitaciones.length > 0 
+          ? casa.habitaciones[0].tipoCama || ''
+          : '';
+
         this.formulario.patchValue({
           nombre: casa.nombre || '',
           direccion: casa.direccion || '',
@@ -75,7 +80,7 @@ export class EditarCasaComponent implements OnInit {
           numeroCamas: casa.numeroHabitaciones || 0,
           numeroGarajes: casa.numeroGarajes || 0,
           tieneBano: casa.fotos && casa.fotos.length > 0 ? true : false,
-          tipoCama: ''
+          tipoCama: tipoCama
         });
 
         if (casa.fotos && casa.fotos.length > 0) {
