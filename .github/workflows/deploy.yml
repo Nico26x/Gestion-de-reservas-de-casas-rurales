@@ -68,8 +68,8 @@ jobs:
 
       - name: Deploy to S3
         working-directory: frontend
-        # Revisa que 'dist/' sea la ruta correcta donde queda tu build de Angular (puede ser dist/frontend o dist/frontend/browser)
-        run: aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        # Actualizado para que apunte a la carpeta correcta de Angular 17+
+        run: aws s3 sync dist/frontend/browser/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
