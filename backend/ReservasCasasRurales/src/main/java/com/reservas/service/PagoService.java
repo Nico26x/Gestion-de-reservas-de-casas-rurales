@@ -48,9 +48,19 @@ public class PagoService {
         Reserva reserva = reservaRepository.findByNumeroReserva(dto.getNumeroReserva())
                 .orElseThrow(() -> new RuntimeException("No existe una reserva con el número: " + dto.getNumeroReserva()));
 
+        //Verificar que la reserva NO esté CONFIRMADA
+        if (reserva.getEstadoReserva() == EstadoReserva.CONFIRMADA) {
+            throw new RuntimeException("No se puede registrar pago porque la reserva ya está confirmada.");
+        }
+
         //Verificar que la reserva no esté CANCELADA
         if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
-            throw new RuntimeException("No se puede registrar un pago en una reserva cancelada");
+            throw new RuntimeException("No se puede registrar pago porque la reserva está cancelada.");
+        }
+
+        //Verificar que no exista otro pago registrado para esta reserva
+        if (pagoRepository.existsByReservaIdAndNotCanceled(reserva.getId())) {
+            throw new RuntimeException("Ya existe un pago registrado para esta reserva.");
         }
 
         //Calcular cuánto se ha pagado, solo pagos VERIFICADOS
@@ -133,14 +143,24 @@ public class PagoService {
 
         //Verificar que el pago esté pendiente de verificación
         if (pago.getEstadoPago() == EstadoPago.VERIFICADO) {
-            throw new RuntimeException("Este pago ya fue verificado anteriormente");
+            throw new RuntimeException("El pago ya fue verificado.");
+        }
+
+        Reserva reserva = pago.getReserva();
+
+        //Verificar que la reserva NO esté CONFIRMADA
+        if (reserva.getEstadoReserva() == EstadoReserva.CONFIRMADA) {
+            throw new RuntimeException("No se puede verificar el pago porque la reserva ya está confirmada.");
+        }
+
+        //Verificar que la reserva no esté CANCELADA
+        if (reserva.getEstadoReserva() == EstadoReserva.CANCELADA) {
+            throw new RuntimeException("No se puede verificar el pago porque la reserva está cancelada.");
         }
 
         //Actualizar estado del pago a VERIFICADO
         pago.setEstadoPago(EstadoPago.VERIFICADO);
         pagoRepository.save(pago);
-
-        Reserva reserva = pago.getReserva();
 
         //Si es el primer pago verificado la reserva pasa a CONFIRMADA
         if (reserva.getEstadoReserva() == EstadoReserva.PENDIENTE ||

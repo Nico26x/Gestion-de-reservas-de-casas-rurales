@@ -25,4 +25,9 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
 
     //Buscar pagos pendientes de verificación del propietario
     List<Pago> findByEstadoPagoAndReserva_CasaId_Propietario_NombreCuenta(EstadoPago estadoPago, String nombreCuenta);
+
+    //Verificar si existe un pago no cancelado para una reserva
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Pago p " +
+            "WHERE p.reserva.id = :reservaId AND p.estadoPago IN ('PENDIENTE_VERIFICACION', 'VERIFICADO')")
+    boolean existsByReservaIdAndNotCanceled(@Param("reservaId") Long reservaId);
 }

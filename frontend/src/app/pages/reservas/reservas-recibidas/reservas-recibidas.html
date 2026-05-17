@@ -74,8 +74,9 @@
                   </button>
                   <button 
                     type="button" 
-                    (click)="irARegistrarPago(reserva.numeroReserva)"
-                    title="Registrar pago"
+                    (click)="irARegistrarPago(reserva)"
+                    [disabled]="!puedeRegistrarPago(reserva.estadoReserva)"
+                    [title]="puedeRegistrarPago(reserva.estadoReserva) ? 'Registrar pago' : 'No se puede registrar pago para esta reserva'"
                     class="rr-btn rr-btn--primary rr-btn--small">
                     Pago
                   </button>
