@@ -71,8 +71,8 @@ jobs:
 
       - name: Deploy to S3
         working-directory: frontend
-        # Actualizado para que apunte a la carpeta correcta de Angular
-        run: aws s3 sync dist/frontend/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+        # Actualizado para subir directamente el contenido de la carpeta browser
+        run: aws s3 sync dist/frontend/browser/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} --paths "/*"
