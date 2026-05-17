@@ -22,6 +22,14 @@ export class NavbarComponent {
     return this.authService.getNombreCuenta();
   }
 
+  get rol(): string | null {
+    return this.authService.getRol();
+  }
+
+  get esPropietario(): boolean {
+    return this.rol === 'PROPIETARIO' || this.rol === 'ROLE_PROPIETARIO';
+  }
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);
