@@ -3,6 +3,7 @@ package com.reservas.repository;
 import com.reservas.model.EstadoPago;
 import com.reservas.model.Pago;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,17 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END FROM Pago p " +
             "WHERE p.reserva.id = :reservaId AND p.estadoPago IN ('PENDIENTE_VERIFICACION', 'VERIFICADO')")
     boolean existsByReservaIdAndNotCanceled(@Param("reservaId") Long reservaId);
+
+    //Eliminar pagos de reservas CANCELADAS de una casa
+    @Modifying
+    @Query("""
+            DELETE FROM Pago p
+            WHERE p.reserva.id IN (
+                SELECT r.id
+                FROM Reserva r
+                WHERE r.casaId.id = :casaId
+                  AND r.estadoReserva = com.reservas.model.EstadoReserva.CANCELADA
+            )
+            """)
+    void deleteByReservasCanceladasDeCasa(@Param("casaId") Long casaId);
 }

@@ -22,4 +22,8 @@ public class CasaRequestDTO {
     private Integer numeroCamas;
     private Boolean tieneBano;
     private TipoCama tipoCama;
+
+    // Nuevos campos opcionales para HU3 - Detalles individualizados
+    private String habitacionesJson;
+    private String cocinasJson;
 }

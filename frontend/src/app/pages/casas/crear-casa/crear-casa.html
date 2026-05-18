@@ -160,50 +160,109 @@
         </div>
       </div>
 
-      <p class="cl-section-label">Configuración base de habitaciones</p>
+      <p class="cl-section-label">Habitaciones</p>
 
-      <div class="cl-field">
-        <label class="cl-lbl" for="numeroCamas">Número de camas por habitación</label>
-        <input
-          id="numeroCamas"
-          class="cl-inp"
-          [class.cl-inp--error]="numeroCamas?.invalid && numeroCamas?.touched"
-          type="number"
-          min="1"
-          formControlName="numeroCamas"
-        />
-        <span class="cl-error" *ngIf="numeroCamas?.invalid && numeroCamas?.touched">
-          Mínimo 1 cama
-        </span>
+      <div formArrayName="habitaciones" class="cl-details-section">
+        <div *ngFor="let habitacion of habitacionesFormArray.controls; let i = index" 
+             class="cl-detail-card"
+             [formGroupName]="i">
+          
+          <div class="cl-detail-header">
+            <h4 class="cl-detail-title">Habitación {{ i + 1 }}</h4>
+            <button 
+              type="button"
+              class="cl-detail-delete-btn"
+              *ngIf="habitacionesFormArray.length > 3"
+              (click)="eliminarHabitacion(i)"
+              title="Eliminar habitación">
+              ✕
+            </button>
+          </div>
+
+          <div class="cl-detail-fields">
+            <div class="cl-field">
+              <label class="cl-lbl" [for]="'numeroCamas-' + i">Número de camas</label>
+              <input
+                [id]="'numeroCamas-' + i"
+                class="cl-inp"
+                type="number"
+                min="1"
+                formControlName="numeroCamas"
+              />
+            </div>
+
+            <div class="cl-field">
+              <label class="cl-lbl" [for]="'tipoCama-' + i">Tipo de cama</label>
+              <select
+                [id]="'tipoCama-' + i"
+                class="cl-inp"
+                formControlName="tipoCama"
+              >
+                <option value="SIMPLE">Sencilla</option>
+                <option value="DOBLE">Doble</option>
+              </select>
+            </div>
+
+            <div class="cl-field">
+              <label class="cl-lbl" [for]="'tieneBano-' + i">¿Tiene baño?</label>
+              <select
+                [id]="'tieneBano-' + i"
+                class="cl-inp"
+                formControlName="tieneBano"
+              >
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="cl-field">
-        <label class="cl-lbl" for="tipoCama">Tipo de cama</label>
-        <select
-          id="tipoCama"
-          class="cl-inp"
-          [class.cl-inp--error]="tipoCama?.invalid && tipoCama?.touched"
-          formControlName="tipoCama"
-        >
-          <option value="">Seleccione una opción</option>
-          <option value="SIMPLE">SIMPLE</option>
-          <option value="DOBLE">DOBLE</option>
-        </select>
-        <span class="cl-error" *ngIf="tipoCama?.invalid && tipoCama?.touched">
-          Este campo es obligatorio
-        </span>
-      </div>
+      <p class="cl-section-label">Cocinas</p>
 
-      <div class="cl-field">
-        <label class="cl-lbl" for="tieneBano">¿La habitación tiene baño?</label>
-        <select
-          id="tieneBano"
-          class="cl-inp"
-          formControlName="tieneBano"
-        >
-          <option [ngValue]="true">Sí</option>
-          <option [ngValue]="false">No</option>
-        </select>
+      <div formArrayName="cocinas" class="cl-details-section">
+        <div *ngFor="let cocina of cocinasFormArray.controls; let i = index" 
+             class="cl-detail-card"
+             [formGroupName]="i">
+          
+          <div class="cl-detail-header">
+            <h4 class="cl-detail-title">Cocina {{ i + 1 }}</h4>
+            <button 
+              type="button"
+              class="cl-detail-delete-btn"
+              *ngIf="cocinasFormArray.length > 1"
+              (click)="eliminarCocina(i)"
+              title="Eliminar cocina">
+              ✕
+            </button>
+          </div>
+
+          <div class="cl-detail-fields">
+            <div class="cl-field">
+              <label class="cl-lbl" [for]="'lavavajillas-' + i">¿Tiene lavavajillas?</label>
+              <select
+                [id]="'lavavajillas-' + i"
+                class="cl-inp"
+                formControlName="lavavajillas"
+              >
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="cl-field">
+              <label class="cl-lbl" [for]="'lavadora-' + i">¿Tiene lavadora?</label>
+              <select
+                [id]="'lavadora-' + i"
+                class="cl-inp"
+                formControlName="lavadora"
+              >
+                <option [ngValue]="true">Sí</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="cl-field">

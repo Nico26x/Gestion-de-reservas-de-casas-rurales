@@ -4,6 +4,7 @@ import com.reservas.model.Casa;
 import com.reservas.model.EstadoReserva;
 import com.reservas.model.Reserva;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,8 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     List<Reserva> findByCasaIdAndEstadoReserva(Casa casaId, EstadoReserva estadoReserva);
 
     //Buscar reservas activas de una casa (PENDIENTE o CONFIRMADA)
-    List<Reserva> findByCasaIdAndEstadoReservaIn(Casa casaId, List<EstadoReserva> estadosReservas);
+    @Query("SELECT r FROM Reserva r WHERE r.casaId = :casaId AND r.estadoReserva IN :estados")
+    List<Reserva> findByCasaIdAndEstadoReservaIn(@Param("casaId") Casa casaId, @Param("estados") List<EstadoReserva> estadosReservas);
 
     //Buscar reservas que se solapan con el rango de fechas especificado
     List<Reserva> findByCasaIdAndFechaEntradaLessThanAndEstadoReservaIn(
@@ -52,5 +54,25 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
         @Param("estado") EstadoReserva estado,
         @Param("fechaLimite") LocalDate fechaLimite,
         @Param("nombreCuenta") String nombreCuenta
-);
+    );
+
+    //Eliminar la tabla intermedia reserva_habitacion de reservas CANCELADAS de una casa
+    @Modifying
+    @Query(value = """
+            DELETE FROM reserva_habitacion
+            WHERE reserva_id IN (
+                SELECT id FROM reserva
+                WHERE casa_id = :casaId AND estado_reserva = 'CANCELADA'
+            )
+            """, nativeQuery = true)
+    void deleteHabitacionesDeReservasCanceladasPorCasa(@Param("casaId") Long casaId);
+
+    //Eliminar reservas CANCELADAS de una casa
+    @Modifying
+    @Query("""
+            DELETE FROM Reserva r
+            WHERE r.casaId.id = :casaId
+              AND r.estadoReserva = com.reservas.model.EstadoReserva.CANCELADA
+            """)
+    void deleteCanceladasByCasaId(@Param("casaId") Long casaId);
 }

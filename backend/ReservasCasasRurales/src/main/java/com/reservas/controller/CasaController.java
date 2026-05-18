@@ -42,6 +42,8 @@ public class CasaController {
             @RequestParam("numeroGarajes") Integer numeroGarajes,
             @RequestParam("tieneBano") Boolean tieneBano,
             @RequestParam("tipoCama") TipoCama tipoCama,
+            @RequestParam(value = "habitacionesJson", required = false) String habitacionesJson,
+            @RequestParam(value = "cocinasJson", required = false) String cocinasJson,
             @RequestParam("fotos") List<MultipartFile> fotos,
             Authentication authentication) throws Exception {
 
@@ -97,6 +99,8 @@ public class CasaController {
         dto.setNumeroGarajes(numeroGarajes);
         dto.setTieneBano(tieneBano);
         dto.setTipoCama(tipoCama);
+        dto.setHabitacionesJson(habitacionesJson);
+        dto.setCocinasJson(cocinasJson);
 
         Casa casa = casaService.crearCasa(dto, fotos, propietario);
 
@@ -155,7 +159,7 @@ public class CasaController {
 
     //PUT /api/casas/{id} — Modificar casa
     @PutMapping(value = "/{id}", consumes = "multipart/form-data")
-    public ResponseEntity<?> modificarCasa(@PathVariable Long id, @RequestParam("nombre") String nombre, @RequestParam("direccion") String direccion, @RequestParam("poblacion") String poblacion, @RequestParam(value = "descripcion", required = false) String descripcion, @RequestParam("numeroHabitaciones") int numeroHabitaciones, @RequestParam("numeroBanos") int numeroBanos, @RequestParam("numeroCocinas") int numeroCocinas, @RequestParam("numeroComedores") int numeroComedores, @RequestParam("numeroCamas") Integer numeroCamas, @RequestParam("numeroGarajes") Integer numeroGarajes, @RequestParam("tieneBano") Boolean tieneBano, @RequestParam("tipoCama") TipoCama tipoCama,
+    public ResponseEntity<?> modificarCasa(@PathVariable Long id, @RequestParam("nombre") String nombre, @RequestParam("direccion") String direccion, @RequestParam("poblacion") String poblacion, @RequestParam(value = "descripcion", required = false) String descripcion, @RequestParam("numeroHabitaciones") int numeroHabitaciones, @RequestParam("numeroBanos") int numeroBanos, @RequestParam("numeroCocinas") int numeroCocinas, @RequestParam("numeroComedores") int numeroComedores, @RequestParam("numeroCamas") Integer numeroCamas, @RequestParam("numeroGarajes") Integer numeroGarajes, @RequestParam("tieneBano") Boolean tieneBano, @RequestParam("tipoCama") TipoCama tipoCama, @RequestParam(value = "habitacionesJson", required = false) String habitacionesJson, @RequestParam(value = "cocinasJson", required = false) String cocinasJson,
             // Fotos opcionales: si se envían reemplazan las actuales, si no se mantienen
             @RequestParam(value = "fotos", required = false) List<MultipartFile> fotos,
             Authentication authentication) throws Exception {
@@ -180,6 +184,8 @@ public class CasaController {
             dto.setNumeroGarajes(numeroGarajes);
             dto.setTieneBano(tieneBano);
             dto.setTipoCama(tipoCama);
+            dto.setHabitacionesJson(habitacionesJson);
+            dto.setCocinasJson(cocinasJson);
 
             CasaResponseDTO response = casaService.modificarCasa(id, dto, fotos, username);
             return ResponseEntity.ok(response);

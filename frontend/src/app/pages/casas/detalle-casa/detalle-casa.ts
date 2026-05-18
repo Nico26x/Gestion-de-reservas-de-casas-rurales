@@ -78,4 +78,8 @@ export class DetalleCasaComponent implements OnInit {
   tieneHabitaciones(): boolean {
     return this.casa?.habitaciones !== undefined && this.casa.habitaciones.length > 0;
   }
+
+  tieneCocinas(): boolean {
+    return this.casa?.cocinas !== undefined && this.casa.cocinas.length > 0;
+  }
 }
