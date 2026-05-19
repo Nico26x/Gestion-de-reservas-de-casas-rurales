@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, ElementRef, ViewChild, inject, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { CasasService } from '../../../core/services/casas/casas.service';
 import { CrearCasaRequest } from '../../../core/models/casas/crear-casa-request.model';
 import {
@@ -16,7 +16,7 @@ import {
   templateUrl: './crear-casa.html',
   styleUrl: './crear-casa.css'
 })
-export class CrearCasaComponent {
+export class CrearCasaComponent implements OnInit {
   @ViewChild('fotoInput') fotoInput?: ElementRef<HTMLInputElement>;
 
   private fb = inject(FormBuilder);
@@ -37,10 +37,162 @@ export class CrearCasaComponent {
     numeroCocinas: [1, [Validators.required, Validators.min(1)]],
     numeroComedores: [1, [Validators.required, Validators.min(1)]],
     numeroGarajes: [0, [Validators.required, Validators.min(0)]],
-    numeroCamas: [1, [Validators.required, Validators.min(1)]],
-    tieneBano: [false, [Validators.required]],
-    tipoCama: ['', [Validators.required]]
+    numeroCamas: [1],
+    tieneBano: [false],
+    tipoCama: ['SIMPLE'],
+    habitaciones: this.fb.array([]),
+    cocinas: this.fb.array([])
   });
+
+  constructor() {
+    this.inicializarFormArrays();
+  }
+
+  ngOnInit(): void {
+    this.suscribirseACambiosDeContadores();
+  }
+
+  private suscribirseACambiosDeContadores(): void {
+    // Suscribirse a cambios de numeroHabitaciones
+    this.crearCasaForm.get('numeroHabitaciones')?.valueChanges.subscribe(valor => {
+      this.sincronizarHabitacionesConCantidad(Number(valor));
+    });
+
+    // Suscribirse a cambios de numeroCocinas
+    this.crearCasaForm.get('numeroCocinas')?.valueChanges.subscribe(valor => {
+      this.sincronizarCocinasConCantidad(Number(valor));
+    });
+  }
+
+  private sincronizarHabitacionesConCantidad(cantidad: number): void {
+    // Normalizar a mínimo 3
+    cantidad = Math.max(cantidad, 3);
+
+    // Actualizar el control sin emitir evento para evitar bucles
+    const currentValue = this.crearCasaForm.get('numeroHabitaciones')?.value;
+    if (currentValue !== cantidad) {
+      this.crearCasaForm.patchValue(
+        { numeroHabitaciones: cantidad },
+        { emitEvent: false }
+      );
+    }
+
+    // Agregar habitaciones si hay menos de las requeridas
+    while (this.habitacionesFormArray.length < cantidad) {
+      this.habitacionesFormArray.push(this.crearHabitacionFormGroup());
+    }
+
+    // Eliminar habitaciones desde el final si hay más de las requeridas
+    while (this.habitacionesFormArray.length > cantidad) {
+      this.habitacionesFormArray.removeAt(this.habitacionesFormArray.length - 1);
+    }
+  }
+
+  private sincronizarCocinasConCantidad(cantidad: number): void {
+    // Normalizar a mínimo 1
+    cantidad = Math.max(cantidad, 1);
+
+    // Actualizar el control sin emitir evento para evitar bucles
+    const currentValue = this.crearCasaForm.get('numeroCocinas')?.value;
+    if (currentValue !== cantidad) {
+      this.crearCasaForm.patchValue(
+        { numeroCocinas: cantidad },
+        { emitEvent: false }
+      );
+    }
+
+    // Agregar cocinas si hay menos de las requeridas
+    while (this.cocinasFormArray.length < cantidad) {
+      this.cocinasFormArray.push(this.crearCocinaFormGroup());
+    }
+
+    // Eliminar cocinas desde el final si hay más de las requeridas
+    while (this.cocinasFormArray.length > cantidad) {
+      this.cocinasFormArray.removeAt(this.cocinasFormArray.length - 1);
+    }
+  }
+
+  private inicializarFormArrays(): void {
+    // Inicializar 3 habitaciones por defecto
+    for (let i = 0; i < 3; i++) {
+      this.habitacionesFormArray.push(this.crearHabitacionFormGroup());
+    }
+    // Inicializar 1 cocina por defecto
+    this.cocinasFormArray.push(this.crearCocinaFormGroup());
+  }
+
+  crearHabitacionFormGroup() {
+    return this.fb.group({
+      numeroCamas: [1, [Validators.required, Validators.min(1)]],
+      tipoCama: ['SIMPLE', [Validators.required]],
+      tieneBano: [false]
+    });
+  }
+
+  crearCocinaFormGroup() {
+    return this.fb.group({
+      lavavajillas: [false],
+      lavadora: [false]
+    });
+  }
+
+  get habitacionesFormArray(): FormArray {
+    return this.crearCasaForm.get('habitaciones') as FormArray;
+  }
+
+  get cocinasFormArray(): FormArray {
+    return this.crearCasaForm.get('cocinas') as FormArray;
+  }
+
+  agregarHabitacion(): void {
+    this.habitacionesFormArray.push(this.crearHabitacionFormGroup());
+    // Actualizar el contador de habitaciones sin emitir evento
+    this.crearCasaForm.patchValue(
+      { numeroHabitaciones: this.habitacionesFormArray.length },
+      { emitEvent: false }
+    );
+  }
+
+  eliminarHabitacion(index: number): void {
+    if (this.habitacionesFormArray.length > 3) {
+      this.habitacionesFormArray.removeAt(index);
+      // Actualizar el contador de habitaciones sin emitir evento
+      this.crearCasaForm.patchValue(
+        { numeroHabitaciones: this.habitacionesFormArray.length },
+        { emitEvent: false }
+      );
+    } else {
+      fireWarningAlert(
+        'Mínimo de habitaciones',
+        'Debe mantener al menos 3 habitaciones.'
+      );
+    }
+  }
+
+  agregarCocina(): void {
+    this.cocinasFormArray.push(this.crearCocinaFormGroup());
+    // Actualizar el contador de cocinas sin emitir evento
+    this.crearCasaForm.patchValue(
+      { numeroCocinas: this.cocinasFormArray.length },
+      { emitEvent: false }
+    );
+  }
+
+  eliminarCocina(index: number): void {
+    if (this.cocinasFormArray.length > 1) {
+      this.cocinasFormArray.removeAt(index);
+      // Actualizar el contador de cocinas sin emitir evento
+      this.crearCasaForm.patchValue(
+        { numeroCocinas: this.cocinasFormArray.length },
+        { emitEvent: false }
+      );
+    } else {
+      fireWarningAlert(
+        'Mínimo de cocinas',
+        'Debe mantener al menos 1 cocina.'
+      );
+    }
+  }
 
   get nombre() {
     return this.crearCasaForm.get('nombre');
@@ -177,8 +329,20 @@ export class CrearCasaComponent {
       numeroGarajes: 0,
       numeroCamas: 1,
       tieneBano: false,
-      tipoCama: ''
+      tipoCama: 'SIMPLE'
     });
+
+    // Limpiar FormArrays
+    while (this.habitacionesFormArray.length > 0) {
+      this.habitacionesFormArray.removeAt(0);
+    }
+    while (this.cocinasFormArray.length > 0) {
+      this.cocinasFormArray.removeAt(0);
+    }
+
+    // Reinicializar con valores por defecto
+    this.inicializarFormArrays();
+
     this.selectedFiles = [];
     this.imagePreview = null;
 
@@ -193,33 +357,103 @@ export class CrearCasaComponent {
   }
 
   onSubmit(): void {
-    if (this.crearCasaForm.invalid || this.selectedFiles.length === 0) {
+    // Validar formulario básico
+    if (this.crearCasaForm.invalid) {
       this.crearCasaForm.markAllAsTouched();
-
       fireWarningAlert(
         'Formulario incompleto',
-        'Debes completar todos los campos y seleccionar al menos una foto.'
+        'Debes completar todos los campos requeridos.'
       );
-
       return;
     }
 
+    // Validar que haya fotos seleccionadas
+    if (this.selectedFiles.length === 0) {
+      fireWarningAlert(
+        'Fotos requeridas',
+        'Debes seleccionar al menos una foto.'
+      );
+      return;
+    }
+
+    // Validar que haya mínimo 3 habitaciones
+    if (this.habitacionesFormArray.length < 3) {
+      fireWarningAlert(
+        'Habitaciones insuficientes',
+        'Debe haber al menos 3 habitaciones.'
+      );
+      return;
+    }
+
+    // Validar que haya mínimo 1 cocina
+    if (this.cocinasFormArray.length < 1) {
+      fireWarningAlert(
+        'Cocinas insuficientes',
+        'Debe haber al menos 1 cocina.'
+      );
+      return;
+    }
+
+    // Validar que las habitaciones sean válidas
+    for (let i = 0; i < this.habitacionesFormArray.length; i++) {
+      const hab = this.habitacionesFormArray.at(i);
+      if (hab?.invalid) {
+        fireWarningAlert(
+          'Habitación incompleta',
+          `Habitación ${i + 1} tiene campos vacíos o inválidos.`
+        );
+        return;
+      }
+    }
+
+    // Validar que las cocinas sean válidas
+    for (let i = 0; i < this.cocinasFormArray.length; i++) {
+      const cocina = this.cocinasFormArray.at(i);
+      if (cocina?.invalid) {
+        fireWarningAlert(
+          'Cocina incompleta',
+          `Cocina ${i + 1} tiene campos vacíos o inválidos.`
+        );
+        return;
+      }
+    }
+
     this.loading = true;
+
+    // Construir arrays de habitaciones y cocinas
+    const habitaciones = this.habitacionesFormArray.value.map((h: any) => ({
+      numeroCamas: Number(h.numeroCamas),
+      tipoCama: h.tipoCama,
+      tieneBano: Boolean(h.tieneBano)
+    }));
+
+    const cocinas = this.cocinasFormArray.value.map((c: any) => ({
+      lavavajillas: Boolean(c.lavavajillas),
+      lavadora: Boolean(c.lavadora)
+    }));
+
+    // Obtener valores de compatibilidad desde la primera habitación
+    const primeraHabitacion = this.habitacionesFormArray.at(0)?.value;
+    const numeroCamasCompatibilidad = Number(primeraHabitacion?.numeroCamas ?? 1);
+    const tipoCamaCompatibilidad = primeraHabitacion?.tipoCama ?? 'SIMPLE';
+    const tieneBanoCompatibilidad = Boolean(primeraHabitacion?.tieneBano);
 
     const casaData: CrearCasaRequest = {
       nombre: this.crearCasaForm.value.nombre!,
       direccion: this.crearCasaForm.value.direccion!,
       poblacion: this.crearCasaForm.value.poblacion!,
       descripcion: this.crearCasaForm.value.descripcion || undefined,
-      numeroHabitaciones: Number(this.crearCasaForm.value.numeroHabitaciones),
+      numeroHabitaciones: this.habitacionesFormArray.length,
       numeroBanos: Number(this.crearCasaForm.value.numeroBanos),
-      numeroCocinas: Number(this.crearCasaForm.value.numeroCocinas),
+      numeroCocinas: this.cocinasFormArray.length,
       numeroComedores: Number(this.crearCasaForm.value.numeroComedores),
       numeroGarajes: Number(this.crearCasaForm.value.numeroGarajes),
-      numeroCamas: Number(this.crearCasaForm.value.numeroCamas),
-      tieneBano: Boolean(this.crearCasaForm.value.tieneBano),
-      tipoCama: this.crearCasaForm.value.tipoCama!,
-      fotos: this.selectedFiles
+      numeroCamas: numeroCamasCompatibilidad,
+      tieneBano: tieneBanoCompatibilidad,
+      tipoCama: tipoCamaCompatibilidad,
+      fotos: this.selectedFiles,
+      habitacionesJson: JSON.stringify(habitaciones),
+      cocinasJson: JSON.stringify(cocinas)
     };
 
     this.casasService.crearCasa(casaData).subscribe({

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -153,15 +154,19 @@ public class DisponibilidadService {
 
                 List<HabitacionDisponibilidadResponseDTO> habitaciones = new ArrayList<>();
                 if (casa.getHabitaciones() != null) {
-                    for (Habitacion habitacion : casa.getHabitaciones()) {
-                        habitaciones.add(
+                    casa.getHabitaciones().stream()
+                        .sorted(
+                            Comparator
+                                .comparingInt(this::obtenerNumeroHabitacion)
+                                .thenComparing(Habitacion::getId)
+                        )
+                        .forEach(habitacion -> habitaciones.add(
                                 new HabitacionDisponibilidadResponseDTO(
                                         habitacion.getId(),
                                         habitacion.getCodigoHabitacion(),
                                         EstadoDisponibilidad.NO_DISPONIBLE.name()
                                 )
-                        );
-                    }
+                        ));
                 }
                 dia.setHabitaciones(habitaciones);
             } else {
@@ -170,6 +175,17 @@ public class DisponibilidadService {
 
                 List<DisponibilidadHabitacion> habitacionesDb =
                         disponibilidadHabitacionRepository.findByDisponibilidadIdOrderByHabitacionIdAsc(disponibilidad.getId());
+
+                // Ordenar por número de habitación
+                habitacionesDb.sort((dh1, dh2) -> {
+                    int num1 = obtenerNumeroHabitacion(dh1.getHabitacion());
+                    int num2 = obtenerNumeroHabitacion(dh2.getHabitacion());
+                    if (num1 != num2) {
+                        return Integer.compare(num1, num2);
+                    }
+                    return Long.compare(dh1.getHabitacion().getId() != null ? dh1.getHabitacion().getId() : 0,
+                                        dh2.getHabitacion().getId() != null ? dh2.getHabitacion().getId() : 0);
+                });
 
                 List<HabitacionDisponibilidadResponseDTO> habitaciones = new ArrayList<>();
                 for (DisponibilidadHabitacion dh : habitacionesDb) {
@@ -278,5 +294,19 @@ public class DisponibilidadService {
         }
         // Si es HABITACIONES o AMBAS, devolver el estado como está
         return estadoHabitaciones;
+    }
+
+    private int obtenerNumeroHabitacion(Habitacion habitacion) {
+        if (habitacion == null || habitacion.getCodigoHabitacion() == null) {
+            return Integer.MAX_VALUE;
+        }
+
+        try {
+            return Integer.parseInt(
+                habitacion.getCodigoHabitacion().replaceAll("\\D+", "")
+            );
+        } catch (NumberFormatException e) {
+            return Integer.MAX_VALUE;
+        }
     }
 }

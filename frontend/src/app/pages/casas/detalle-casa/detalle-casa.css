@@ -409,6 +409,83 @@
 }
 
 /* =========================================================
+   KITCHENS
+   ========================================================= */
+.dc-kitchens-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.dc-kitchens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.dc-kitchen-card {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(123, 159, 220, 0.15);
+  box-shadow: 0 12px 32px rgba(35, 70, 125, 0.06);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dc-kitchen-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(35, 70, 125, 0.1);
+}
+
+.dc-kitchen-card__header {
+  padding: 1.25rem;
+  background: linear-gradient(180deg, #fff0e6 0%, #ffe6cc 100%);
+  border-bottom: 1px solid #ffe0c7;
+}
+
+.dc-kitchen-card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #8b4513;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.dc-kitchen-card__details {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.dc-kitchen-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f5ede5;
+}
+
+.dc-kitchen-detail:last-child {
+  border-bottom: none;
+}
+
+.dc-kitchen-detail__label {
+  display: block;
+  font-size: 0.85rem;
+  color: #6c89ad;
+  font-weight: 600;
+}
+
+.dc-kitchen-detail__value {
+  display: block;
+  font-size: 0.95rem;
+  color: #163a6d;
+  font-weight: 700;
+}
+
+/* =========================================================
    BUTTONS / ACTIONS
    ========================================================= */
 .dc-actions {
@@ -502,6 +579,16 @@
   }
 
   .dc-room-detail {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .dc-kitchens-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dc-kitchen-detail {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.3rem;

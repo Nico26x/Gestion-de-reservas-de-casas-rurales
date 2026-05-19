@@ -3,6 +3,7 @@ package com.reservas.repository;
 import com.reservas.model.DisponibilidadHabitacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,14 @@ public interface DisponibilidadHabitacionRepository extends JpaRepository<Dispon
     void deleteByDisponibilidadId(Long disponibilidadId);
 
     List<DisponibilidadHabitacion> findByDisponibilidadId(Long disponibilidadId);
+
+    // Eliminar DisponibilidadHabitacion por casaId (para limpiar FK antes de eliminar Habitación)
+    @Modifying
+    @Query("""
+        DELETE FROM DisponibilidadHabitacion dh
+        WHERE dh.disponibilidad.casa.id = :casaId
+    """)
+    void deleteByCasaId(@Param("casaId") Long casaId);
 
     // Buscar el estado de una habitación específica en un día específico
     // Usado en la validación de disponibilidad al momento de reservar

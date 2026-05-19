@@ -232,11 +232,14 @@
           <ng-container *ngIf="casaSeleccionada; else noCasa">
             <div class="house-preview">
               <div class="house-preview__media">
-                <img
-                  *ngIf="casaSeleccionada.foto; else housePlaceholder"
-                  [src]="casaSeleccionada.foto"
-                  [alt]="casaSeleccionada.nombre || 'Casa rural'"
-                />
+                <ng-container *ngIf="casaSeleccionada.fotos?.[0]; then mostrarFoto; else housePlaceholder"></ng-container>
+
+                <ng-template #mostrarFoto>
+                  <img
+                    [src]="casaSeleccionada.fotos?.[0]"
+                    [alt]="casaSeleccionada.nombre || 'Casa rural'"
+                  />
+                </ng-template>
 
                 <ng-template #housePlaceholder>
                   <div class="house-preview__placeholder">

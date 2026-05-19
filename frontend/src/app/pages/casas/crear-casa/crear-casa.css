@@ -391,6 +391,100 @@
 }
 
 /* =========================================================
+   DETALLES - HABITACIONES Y COCINAS
+   ========================================================= */
+.cl-details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.cl-detail-card {
+  border: 1.5px solid #d0e0f4;
+  border-radius: 10px;
+  padding: 14px;
+  background: #f7faff;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.cl-detail-card:hover {
+  border-color: #85B7EB;
+  background: #f0f7ff;
+}
+
+.cl-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e4eef8;
+}
+
+.cl-detail-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #185FA5;
+  margin: 0;
+}
+
+.cl-detail-delete-btn {
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #d0e0f4;
+  border-radius: 6px;
+  background: white;
+  color: #e24b4a;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.cl-detail-delete-btn:hover {
+  background: #fff0f0;
+  border-color: #e24b4a;
+}
+
+.cl-detail-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.cl-add-btn {
+  width: 100%;
+  background: #378ADD;
+  color: white;
+  border: 1.5px solid #378ADD;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cl-add-btn:hover {
+  background: #2a7ec7;
+  border-color: #2a7ec7;
+}
+
+.cl-add-btn:active {
+  transform: scale(0.99);
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 500px) {
@@ -400,4 +494,8 @@
   .cl-rooms-grid { gap: 7px; }
   .cl-room-card { padding: 10px 4px; }
   .cl-plane { display: none; }
+  
+  .cl-detail-fields {
+    grid-template-columns: 1fr;
+  }
 }

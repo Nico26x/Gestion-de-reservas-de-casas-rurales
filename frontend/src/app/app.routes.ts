@@ -30,18 +30,18 @@ export const routes: Routes = [
 
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
 
-  { path: 'casas/crear', component: CrearCasaComponent, canActivate: [authGuard] },
-  { path: 'casas/mis-casas', component: MisCasasComponent, canActivate: [authGuard] },
-  { path: 'casas/editar/:id', component: EditarCasaComponent, canActivate: [authGuard] },
+  { path: 'casas/crear', component: CrearCasaComponent, canActivate: [ownerGuard] },
+  { path: 'casas/mis-casas', component: MisCasasComponent, canActivate: [ownerGuard] },
+  { path: 'casas/editar/:id', component: EditarCasaComponent, canActivate: [ownerGuard] },
   { path: 'casas/buscar', component: BuscarCasasComponent },
   { path: 'casas/:id', component: DetalleCasaComponent },
-  { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [authGuard] },
+  { path: 'paquetes/crear', component: CrearPaqueteComponent, canActivate: [ownerGuard] },
   { path: 'paquetes/:id/editar', component: EditarPaqueteComponent, canActivate: [ownerGuard] },
   { path: 'paquetes', component: MisPaquetesComponent, canActivate: [ownerGuard] },
   { path: 'reservas/crear', component: CrearReservaComponent, canActivate: [authGuard] },
   { path: 'reservas/recibidas', component: ReservasRecibidasComponent, canActivate: [ownerGuard] },
   { path: 'reservas/vencidas', component: ReservasVencidasComponent, canActivate: [ownerGuard] },
-  { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [authGuard] },
+  { path: 'disponibilidad/definir', component: DefinirDisponibilidadComponent, canActivate: [ownerGuard] },
   { path: 'disponibilidad/consultar', component: ConsultarDisponibilidadComponent, canActivate: [authGuard] },
   { path: 'pagos/registrar', component: RegistrarPagoComponent, canActivate: [ownerGuard] },
 

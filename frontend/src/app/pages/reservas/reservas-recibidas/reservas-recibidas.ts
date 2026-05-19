@@ -49,8 +49,19 @@ export class ReservasRecibidasComponent implements OnInit {
     });
   }
 
-  irARegistrarPago(numeroReserva: number): void {
-    this.router.navigate(['/pagos/registrar'], { queryParams: { numeroReserva } });
+  irARegistrarPago(reserva: ReservaNotificacion): void {
+    // Validar que la reserva pueda recibir un pago
+    if (reserva.estadoReserva === 'CONFIRMADA') {
+      fireErrorAlert('Operación no permitida', 'No se puede registrar pago porque la reserva ya está confirmada.');
+      return;
+    }
+
+    if (reserva.estadoReserva === 'CANCELADA') {
+      fireErrorAlert('Operación no permitida', 'No se puede registrar pago porque la reserva está cancelada.');
+      return;
+    }
+
+    this.router.navigate(['/pagos/registrar'], { queryParams: { numeroReserva: reserva.numeroReserva } });
   }
 
   async cancelarReserva(reserva: ReservaNotificacion): Promise<void> {
@@ -115,5 +126,9 @@ export class ReservasRecibidasComponent implements OnInit {
       default:
         return 'default';
     }
+  }
+
+  puedeRegistrarPago(estadoReserva: string): boolean {
+    return estadoReserva === 'PENDIENTE' || estadoReserva === 'EXPIRADA';
   }
 }

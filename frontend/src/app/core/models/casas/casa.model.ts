@@ -6,6 +6,12 @@ export interface Habitacion {
   tieneBano?: boolean;
 }
 
+export interface Cocina {
+  id?: number;
+  lavavajillas?: boolean;
+  lavadora?: boolean;
+}
+
 export interface CasaFoto {
   id?: number;
   url?: string;
@@ -25,4 +31,5 @@ export interface Casa {
   foto?: string;
   fotos?: string[];
   habitaciones?: Habitacion[];
+  cocinas?: Cocina[];
 }

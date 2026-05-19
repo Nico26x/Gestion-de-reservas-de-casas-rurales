@@ -167,8 +167,9 @@
       </div>
     </section>
 
-    <!-- Sección: Pagos Pendientes de Verificación (para propietarios) -->
-    <section class="rp-pending-section" *ngIf="pagosPendientes.length > 0">
+    <!-- Sección: Pagos Pendientes de Verificación (OCULTA - Ya no es necesario verificar pagos) -->
+    <!-- HU13: El pago se verifica automáticamente al registrar, no necesita segundo paso -->
+    <section class="rp-pending-section" *ngIf="false">
       <div class="rp-pending-wrapper">
         <h2 class="rp-pending-title">Pagos pendientes de verificación</h2>
 
@@ -214,8 +215,8 @@
       </div>
     </section>
 
-    <!-- Estado vacío: Pagos pendientes -->
-    <section class="rp-empty-state" *ngIf="!cargandoPagos && pagosPendientes.length === 0">
+    <!-- Estado vacío: Pagos pendientes (OCULTO - Ya no es necesario) -->
+    <section class="rp-empty-state" *ngIf="false">
       <div class="rp-empty-state__icon">
         <svg viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
@@ -226,8 +227,8 @@
       <p>Los pagos verificados aparecerán aquí cuando estén listos</p>
     </section>
 
-    <!-- Estado de carga: Pagos pendientes -->
-    <div *ngIf="cargandoPagos" class="rp-loading-pending">
+    <!-- Estado de carga: Pagos pendientes (OCULTO - Ya no es necesario) -->
+    <div *ngIf="false">
       <div class="rp-loading-state__spinner"></div>
       <p>Cargando pagos pendientes...</p>
     </div>

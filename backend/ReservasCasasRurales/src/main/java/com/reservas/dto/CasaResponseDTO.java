@@ -21,4 +21,5 @@ public class CasaResponseDTO {
     private Integer numeroGarajes;
     
     private List<HabitacionDetalleDTO> habitaciones;
+    private List<CocinaResponseDTO> cocinas;
 }

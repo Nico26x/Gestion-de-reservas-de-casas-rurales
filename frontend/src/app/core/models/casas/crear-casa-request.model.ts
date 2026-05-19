@@ -12,4 +12,6 @@ export interface CrearCasaRequest {
   tieneBano: boolean;
   tipoCama: string;
   fotos: File[];
+  habitacionesJson?: string;
+  cocinasJson?: string;
 }

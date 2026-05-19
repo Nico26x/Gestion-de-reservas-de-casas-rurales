@@ -164,6 +164,47 @@
       </section>
     </ng-template>
 
+    <!-- Cocinas -->
+    <section class="dc-kitchens-section" *ngIf="tieneCocinas(); else sinCocinas">
+      <h2 class="dc-section-title">Cocinas</h2>
+      <div class="dc-kitchens-grid">
+        <article class="dc-kitchen-card" *ngFor="let cocina of casa.cocinas; let i = index">
+          <div class="dc-kitchen-card__header">
+            <h3 class="dc-kitchen-card__title">
+              Cocina {{ (i + 1) }}
+            </h3>
+          </div>
+          <div class="dc-kitchen-card__details">
+            <div class="dc-kitchen-detail">
+              <span class="dc-kitchen-detail__label">Lavavajillas</span>
+              <span class="dc-kitchen-detail__value">
+                <span class="dc-badge" [class.dc-badge--yes]="cocina.lavavajillas">
+                  {{ cocina.lavavajillas ? 'Sí' : 'No' }}
+                </span>
+              </span>
+            </div>
+            <div class="dc-kitchen-detail">
+              <span class="dc-kitchen-detail__label">Lavadora</span>
+              <span class="dc-kitchen-detail__value">
+                <span class="dc-badge" [class.dc-badge--yes]="cocina.lavadora">
+                  {{ cocina.lavadora ? 'Sí' : 'No' }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <ng-template #sinCocinas>
+      <section class="dc-kitchens-section">
+        <h2 class="dc-section-title">Cocinas</h2>
+        <div class="dc-empty-message">
+          <p>No hay información detallada de cocinas</p>
+        </div>
+      </section>
+    </ng-template>
+
     <!-- Acciones -->
     <section class="dc-actions">
       <button type="button" class="dc-btn dc-btn--secondary" (click)="volver()">

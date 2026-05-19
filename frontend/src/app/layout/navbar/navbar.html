@@ -16,7 +16,7 @@
 
   <div class="navbar-center">
     <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" class="nav-link">Inicio</a>
-    <a routerLink="/casas/crear" class="nav-link">Casas</a>
+    <a *ngIf="esPropietario" routerLink="/casas/crear" class="nav-link">Casas</a>
     <a routerLink="/reservas/crear" class="nav-link">Reservas</a>
     <button class="nav-dots" type="button">···</button>
   </div>

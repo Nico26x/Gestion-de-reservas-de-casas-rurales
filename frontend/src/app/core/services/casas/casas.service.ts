@@ -32,6 +32,14 @@ export class CasasService {
     formData.append('numeroCamas', String(data.numeroCamas));
     formData.append('tieneBano', String(data.tieneBano));
     formData.append('tipoCama', data.tipoCama);
+    
+    // Agregar JSON de habitaciones y cocinas
+    if (data.habitacionesJson) {
+      formData.append('habitacionesJson', data.habitacionesJson);
+    }
+    if (data.cocinasJson) {
+      formData.append('cocinasJson', data.cocinasJson);
+    }
 
     return this.http.post<Casa>(this.apiUrl, formData);
   }

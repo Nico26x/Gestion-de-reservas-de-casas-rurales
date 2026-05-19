@@ -136,8 +136,23 @@ export class CrearReservaComponent implements OnInit {
 
   onCasaChange(): void {
     const casaId = Number(this.reservaForm.value.casaId);
-    this.casaSeleccionada =
+    const casaBasica =
       this.casas.find((casa) => Number(casa.id) === casaId) ?? null;
+
+    if (casaBasica) {
+      // Obtener detalles completos incluyendo fotos
+      this.casasService.obtenerCasaPorId(casaBasica.id!).subscribe({
+        next: (casaDetalle) => {
+          this.casaSeleccionada = casaDetalle;
+        },
+        error: (error) => {
+          // Si falla la carga de detalles, usar la información básica
+          this.casaSeleccionada = casaBasica;
+        }
+      });
+    } else {
+      this.casaSeleccionada = null;
+    }
 
     this.habitacionesSeleccionadas = [];
     this.reservaForm.get('habitacionIds')?.setValue([]);
@@ -337,9 +352,16 @@ export class CrearReservaComponent implements OnInit {
       }
     }
 
-    // Convertir a array ordenado por id
+    // Convertir a array ordenado por número de habitación
     this.habitacionesDisponiblesSeleccionables = Array.from(habitacionesDisponibles.values()).sort(
-      (a, b) => a.id - b.id
+      (a, b) => {
+        const numA = this.obtenerNumeroHabitacion(a.codigoHabitacion);
+        const numB = this.obtenerNumeroHabitacion(b.codigoHabitacion);
+        if (numA !== numB) {
+          return numA - numB;
+        }
+        return a.id - b.id;
+      }
     );
 
     // Limpiar habitaciones seleccionadas que ya no sean válidas
@@ -537,5 +559,18 @@ export class CrearReservaComponent implements OnInit {
       error?.message ||
       fallback
     );
+  }
+
+  private obtenerNumeroHabitacion(codigo: string | undefined): number {
+    if (!codigo) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+
+    try {
+      const numero = codigo.replace(/\D+/g, '');
+      return numero ? parseInt(numero, 10) : Number.MAX_SAFE_INTEGER;
+    } catch (e) {
+      return Number.MAX_SAFE_INTEGER;
+    }
   }
 }
